@@ -1,9 +1,9 @@
 import userActions from './userActions';
-import testActions from './testActions';
+import configAction from './configAction';
 
 const allActions = {
   userActions,
-  testActions,
+  configAction,
 };
 
 export default allActions;

@@ -63,15 +63,14 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function SignIn(props) {
-  const count = useSelector((state) => state.test);
+  const count = useSelector((state) => state.config);
   const dispatch = useDispatch();
   const classes = useStyles();
   const { handleSubmit, register, errors } = useForm();
   const [snackbar, setSnackbar] = useState({});
 
   const onSubmit = (values) => {
-    console.log(count);
-    dispatch(allActions.testActions.decrement());
+    dispatch(allActions.configAction.decrement());
     props.history.push('/dashboard');
   };
 

@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useState, useEffect } from 'react';
 import 'antd/dist/antd.css';
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,9 +7,11 @@ import {
 import { PlusCircleOutlined, ExclamationCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { css } from 'emotion';
 import Axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
 import SourceForm from './Form/SourceForm';
 import RssForm from './Form/RssForm';
 import ArticleForm from './Form/ArticleForm';
+import allActions from '../../store/actions/allActions';
 
 const { confirm } = Modal;
 
@@ -21,6 +22,17 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const tableCSS = css({
+  backgroundColor: 'white',
+  '& table': {
+    borderCollapse: 'collapse',
+  },
+  '& thead > tr > th': {
+    backgroundColor: '#33b35a',
+    color: '#FFF',
+    fontWeight: 'bold',
+  },
+});
 
 const initRss = {
   version: 0,
@@ -82,8 +94,10 @@ const initArticle = {
 
 export default function Configuration() {
   const classes = useStyles();
+  const data = useSelector((state) => state.config.data);
+  const dispatch = useDispatch();
 
-  const [data, setData] = useState();
+  // const [data, setData] = useState();
   const [sourceVisible, setSourceVisible] = useState(false);
   const [rssVisible, setRssVisible] = useState(false);
   const [articleVisible, setArticleVisible] = useState(false);
@@ -142,6 +156,7 @@ export default function Configuration() {
   const handleRemoveRecord = (record) => {
     console.log(record);
   };
+
   const columns = [
     {
       title: 'Website',
@@ -247,34 +262,18 @@ export default function Configuration() {
     },
   ];
 
-
-  const tableCSS = css({
-    backgroundColor: 'white',
-    '& table': {
-      borderCollapse: 'collapse',
-    },
-    '& thead > tr > th': {
-      backgroundColor: '#33b35a',
-      color: '#FFF',
-      fontWeight: 'bold',
-    },
-  });
-
-
   useEffect(() => {
     Axios.post('http://localhost:8000/get-configuration')
       .then((res) => {
-        console.log(res.data);
         for (let i = 0; i < res.data.length; i += 1) {
           res.data[i].key = i;
         }
-        setData(res.data);
+        dispatch(allActions.configAction.fetchData(res.data));
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
-
+  }, [dispatch]);
 
   return (
     <div className={classes.root}>
