@@ -37,12 +37,11 @@ const SourceForm = ({
     >
       <Form
         form={form}
-        name="form_in_modal"
+        name="source_form"
         initialValues={{
           website: record.website.name,
           category: record.category.name,
           schedules: record.schedules,
-          demoLink: record.articleDemoLink,
           status: record.status === 0,
         }}
       >
@@ -53,9 +52,6 @@ const SourceForm = ({
           <Input />
         </Form.Item>
         <Form.Item name="schedules" label="Schedule">
-          <Input />
-        </Form.Item>
-        <Form.Item name="demoLink" label="Demo Link">
           <Input />
         </Form.Item>
         <Form.Item name="status" label="Status" valuePropName="checked">

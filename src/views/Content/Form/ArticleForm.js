@@ -30,7 +30,7 @@ const ArticleForm = ({
     <Modal
       forceRender
       visible={visible}
-      title="Rss Config"
+      title="Article Config"
       okText="Update"
       cancelText="Cancel"
       onCancel={onCancel}
@@ -48,7 +48,7 @@ const ArticleForm = ({
     >
       <Form
         form={form}
-        name="form_in_modal"
+        name="article_form"
         initialValues={{
           sapoSelector: record.sapoSelector,
           sapoRedundancySelectors: record.sapoRedundancySelectors,

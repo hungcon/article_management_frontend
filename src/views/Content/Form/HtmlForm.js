@@ -6,9 +6,10 @@ import {
   Modal, Form, Input,
 } from 'antd';
 
-const RssForm = ({
+const HtmlForm = ({
   visible, onCreate, onCancel, record,
 }) => {
+  console.log(record);
   const [form] = Form.useForm();
   // eslint-disable-next-line arrow-body-style
   useEffect(() => {
@@ -20,7 +21,7 @@ const RssForm = ({
     <Modal
       forceRender
       visible={visible}
-      title="Rss Config"
+      title="Html Config"
       okText={!record.url ? 'Add' : 'Update'}
       cancelText="Cancel"
       onCancel={onCancel}
@@ -38,32 +39,16 @@ const RssForm = ({
     >
       <Form
         form={form}
-        name="rss_form"
+        name="html_form"
         initialValues={{
           url: record.url,
-          itemSelector: record.configuration.itemSelector,
-          titleSelector: record.configuration.titleSelector,
-          linkSelector: record.configuration.linkSelector,
-          sapoSelector: record.configuration.sapoSelector,
-          publicDateSelector: record.configuration.publicDateSelector,
+          contentRedundancySelectors: record.contentRedundancySelectors,
         }}
       >
         <Form.Item name="url" label="URL">
           <Input />
         </Form.Item>
-        <Form.Item name="itemSelector" label="Item">
-          <Input />
-        </Form.Item>
-        <Form.Item name="titleSelector" label="Title">
-          <Input />
-        </Form.Item>
-        <Form.Item name="linkSelector" label="Link">
-          <Input />
-        </Form.Item>
-        <Form.Item name="sapoSelector" label="Sapo">
-          <Input />
-        </Form.Item>
-        <Form.Item name="publicDateSelector" label="Publish Date">
+        <Form.Item name="contentRedundancySelectors" label="Content Redundancy">
           <Input />
         </Form.Item>
       </Form>
@@ -71,4 +56,4 @@ const RssForm = ({
   );
 };
 
-export default RssForm;
+export default HtmlForm;

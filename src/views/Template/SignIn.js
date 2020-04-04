@@ -70,7 +70,7 @@ export default function SignIn(props) {
   const [snackbar, setSnackbar] = useState({});
 
   const onSubmit = (values) => {
-    dispatch(allActions.configAction.decrement());
+    // dispatch(allActions.configAction.decrement());
     props.history.push('/dashboard');
   };
 

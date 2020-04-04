@@ -8,7 +8,7 @@ import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import DashboardIcon from '@material-ui/icons/Dashboard';
+import BuildIcon from '@material-ui/icons/Build';
 import PeopleIcon from '@material-ui/icons/People';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import BarChartIcon from '@material-ui/icons/BarChart';
@@ -25,7 +25,7 @@ export default function ListItems(props) {
       <NavLink to="/dashboard/configuration" className={classes.link} activeClassName={classes.active}>
         <ListItem button className={clsx(props.open && classes.button)}>
           <ListItemIcon>
-            <DashboardIcon className={classes.icon} />
+            <BuildIcon className={classes.icon} />
           </ListItemIcon>
           <ListItemText primary="Configuration" className={classes.text} />
         </ListItem>

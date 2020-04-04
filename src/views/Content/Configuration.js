@@ -1,17 +1,17 @@
+/* eslint-disable no-underscore-dangle */
 import React, { useState, useEffect } from 'react';
 import 'antd/dist/antd.css';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Table, Button, Switch, Modal,
 } from 'antd';
-import { PlusCircleOutlined, ExclamationCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { css } from 'emotion';
 import Axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import SourceForm from './Form/SourceForm';
-import RssForm from './Form/RssForm';
-import ArticleForm from './Form/ArticleForm';
 import allActions from '../../store/actions/allActions';
+import MoreInfo from './MoreInfo';
 
 const { confirm } = Modal;
 
@@ -34,18 +34,6 @@ const tableCSS = css({
   },
 });
 
-const initRss = {
-  version: 0,
-  url: '',
-  configuration: {
-    itemSelector: '',
-    titleSelector: '',
-    linkSelector: '',
-    sapoSelector: '',
-    publicDateSelector: '',
-  },
-};
-
 const initSource = {
   category: {
     id: 0,
@@ -65,65 +53,22 @@ const initSource = {
   queue: 1,
 };
 
-const initArticle = {
-  sapoSelector: '',
-  sapoRedundancySelectors: [
-
-  ],
-  titleSelector: '',
-  titleRedundancySelectors: [
-
-  ],
-  thumbnailSelector: '',
-  thumbnailRedundancySelectors: [
-
-  ],
-  tagsSelector: '',
-  tagsRedundancySelectors: [
-
-  ],
-  contentSelector: '',
-  contentRedundancySelectors: [
-
-  ],
-  textRedundancySelectors: [
-    '',
-  ],
-};
-
-
 export default function Configuration() {
   const classes = useStyles();
   const data = useSelector((state) => state.config.data);
   const dispatch = useDispatch();
 
-  // const [data, setData] = useState();
   const [sourceVisible, setSourceVisible] = useState(false);
-  const [rssVisible, setRssVisible] = useState(false);
-  const [articleVisible, setArticleVisible] = useState(false);
   const [source, setSource] = useState(initSource);
-  const [rss, setRss] = useState(initRss);
-  const [article, setArticle] = useState(initArticle);
 
   const showSourceModal = (sourceVal) => {
     setSource(sourceVal);
     setSourceVisible(true);
   };
 
-  const showRSSModal = (rssVal) => {
-    setRss(rssVal);
-    setRssVisible(true);
-  };
-
-  const showArticleModal = (articleVal) => {
-    setArticle(articleVal);
-    setArticleVisible(true);
-  };
 
   const handleCancel = () => {
-    setRssVisible(false);
     setSourceVisible(false);
-    setArticleVisible(false);
   };
 
   const onCreate = (values) => {
@@ -131,30 +76,27 @@ export default function Configuration() {
     handleCancel();
   };
 
-  const onRssCreate = (values) => {
-    console.log('Rss values of form: ', values);
-    setRssVisible(false);
-  };
-
-  const showDeleteConfirm = (rssToDelete) => {
+  const showDeleteConfirm = (toDelete, type) => {
     confirm({
-      title: 'Are you sure delete this rss?',
+      title: `Are you sure delete this ${type}?`,
       // eslint-disable-next-line react/jsx-filename-extension
       icon: <ExclamationCircleOutlined />,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        console.log(rssToDelete);
+        if (type === 'rss') {
+          console.log('rss:', toDelete._id);
+          // call api xoá rss
+        } else {
+          console.log('config: ', toDelete._id);
+          // call api xoá config
+        }
       },
       onCancel() {
         console.log('Cancel');
       },
     });
-  };
-
-  const handleRemoveRecord = (record) => {
-    console.log(record);
   };
 
   const columns = [
@@ -163,28 +105,40 @@ export default function Configuration() {
       dataIndex: 'website',
       key: 'website',
       render: (value) => value.name,
+      filters: [{
+        text: 'VnExpress',
+        value: 'VnExpress',
+      },
+      {
+        text: 'Dân trí',
+        value: 'Dân trí',
+      },
+      {
+        text: 'Người đưa tin',
+        value: 'Người đưa tin',
+      },
+      {
+        text: 'SOHA',
+        value: 'SOHA',
+      },
+      ],
+      onFilter: (value, record) => record.website.name.indexOf(value) === 0,
     },
     {
       title: 'Category',
       dataIndex: 'category',
       key: 'category',
       render: (value) => value.name,
-    },
-    {
-      title: 'Create Time',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      render: (value) => new Intl.DateTimeFormat('en-GB', {
-        year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit',
-      }).format(value),
-    },
-    {
-      title: 'Update Time',
-      key: 'updatedAt',
-      dataIndex: 'updatedAt',
-      render: (value) => new Intl.DateTimeFormat('en-GB', {
-        year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit',
-      }).format(value),
+      filters: [{
+        text: 'Thế giới',
+        value: 'Thế giới',
+      },
+      {
+        text: 'Giải trí',
+        value: 'Giải trí',
+      },
+      ],
+      onFilter: (value, record) => record.category.name.indexOf(value) === 0,
     },
     {
       title: 'Status',
@@ -192,52 +146,14 @@ export default function Configuration() {
       dataIndex: 'status',
       width: '8%',
       render: (value) => {
-        const checked = value === 0;
+        const checked = value === '01';
         return <Switch checked={checked} />;
       },
     },
     {
-      title: 'RSS',
-      key: 'rss',
-      dataIndex: 'rss',
-      width: '12%',
-      render: (value) => (
-        <div>
-          {value.map((eachRss, index) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <div key={index}>
-              <Button
-                onClick={() => showRSSModal(eachRss)}
-                style={{ marginBottom: 10 }}
-              >
-                Rss
-                {' '}
-                {index + 1}
-              </Button>
-              <Button
-                danger
-                onClick={() => showDeleteConfirm(eachRss)}
-                icon={<MinusCircleOutlined />}
-              />
-            </div>
-          ))}
-          <Button type="primary" icon={<PlusCircleOutlined />} onClick={() => showRSSModal(initRss)} />
-        </div>
-      ),
-    },
-    {
-      title: 'Article',
-      key: 'article',
-      dataIndex: 'article',
-      width: '15%',
-      render: (value) => (
-        <Button
-          onClick={() => showArticleModal(value)}
-          style={{ marginRight: 10, marginBottom: 10 }}
-        >
-          Article Config
-        </Button>
-      ),
+      title: 'Crawl Type',
+      key: 'crawlType',
+      dataIndex: 'crawlType',
     },
     {
       title: 'Actions',
@@ -253,7 +169,7 @@ export default function Configuration() {
           </Button>
           <Button
             danger
-            onClick={() => handleRemoveRecord(record)}
+            onClick={() => showDeleteConfirm(record, 'config')}
           >
             Remove
           </Button>
@@ -263,16 +179,20 @@ export default function Configuration() {
   ];
 
   useEffect(() => {
-    Axios.post('http://localhost:8000/get-configuration')
-      .then((res) => {
-        for (let i = 0; i < res.data.length; i += 1) {
-          res.data[i].key = i;
-        }
-        dispatch(allActions.configAction.fetchData(res.data));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    let ignore = false;
+
+    async function fetchData() {
+      const result = await Axios.post('http://localhost:8000/get-configuration');
+      const configData = result.data;
+      for (let i = 0; i < configData.length; i += 1) {
+        configData[i].key = i;
+      }
+      if (!ignore) {
+        dispatch(allActions.configAction.fetchData(configData));
+      }
+    }
+    fetchData();
+    return () => { ignore = true; };
   }, [dispatch]);
 
   return (
@@ -281,6 +201,9 @@ export default function Configuration() {
         className={tableCSS}
         columns={columns}
         dataSource={data}
+        expandable={{
+          expandedRowRender: (record) => <MoreInfo record={record} />,
+        }}
         bordered
         scroll={{ y: 490 }}
       />
@@ -289,18 +212,6 @@ export default function Configuration() {
         onCreate={onCreate}
         onCancel={handleCancel}
         record={source}
-      />
-      <RssForm
-        visible={rssVisible}
-        onCreate={onRssCreate}
-        onCancel={handleCancel}
-        record={rss}
-      />
-      <ArticleForm
-        visible={articleVisible}
-        onCreate={onCreate}
-        onCancel={handleCancel}
-        record={article}
       />
     </div>
   );
