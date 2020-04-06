@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
   Table, Button, Switch, Modal,
 } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { css } from 'emotion';
 import Axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
@@ -76,22 +76,16 @@ export default function Configuration() {
     handleCancel();
   };
 
-  const showDeleteConfirm = (toDelete, type) => {
+  const showDeleteConfirm = (toDelete) => {
     confirm({
-      title: `Are you sure delete this ${type}?`,
+      title: 'Are you sure delete this config?',
       // eslint-disable-next-line react/jsx-filename-extension
       icon: <ExclamationCircleOutlined />,
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
       onOk() {
-        if (type === 'rss') {
-          console.log('rss:', toDelete._id);
-          // call api xoá rss
-        } else {
-          console.log('config: ', toDelete._id);
-          // call api xoá config
-        }
+        console.log(toDelete);
       },
       onCancel() {
         console.log('Cancel');
@@ -104,6 +98,7 @@ export default function Configuration() {
       title: 'Website',
       dataIndex: 'website',
       key: 'website',
+      width: '10%',
       render: (value) => value.name,
       filters: [{
         text: 'VnExpress',
@@ -128,6 +123,7 @@ export default function Configuration() {
       title: 'Category',
       dataIndex: 'category',
       key: 'category',
+      width: '10%',
       render: (value) => value.name,
       filters: [{
         text: 'Thế giới',
@@ -153,25 +149,40 @@ export default function Configuration() {
     {
       title: 'Crawl Type',
       key: 'crawlType',
+      width: '10%',
+      filters: [
+        {
+          text: 'HTML',
+          value: 'HTML',
+        },
+        {
+          text: 'RSS',
+          value: 'RSS',
+        },
+      ],
+      onFilter: (value, record) => record.crawlType.indexOf(value) === 0,
       dataIndex: 'crawlType',
     },
     {
       title: 'Actions',
       key: 'actions',
       width: '17%',
+      align: 'center',
       render: (value, record) => (
         <div>
           <Button
             onClick={() => showSourceModal(record)}
             style={{ marginRight: 10 }}
+            icon={<EditOutlined />}
           >
             Update
           </Button>
           <Button
             danger
-            onClick={() => showDeleteConfirm(record, 'config')}
+            onClick={() => showDeleteConfirm(record)}
+            icon={<DeleteOutlined />}
           >
-            Remove
+            Delete
           </Button>
         </div>
       ),

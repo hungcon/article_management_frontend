@@ -2,13 +2,18 @@
 /* eslint-disable react/jsx-filename-extension */
 import React, { useEffect } from 'react';
 import {
-  Modal, Form, Input, Switch,
+  Modal, Form, Input, Switch, Select,
 } from 'antd';
 
 const SourceForm = ({
   visible, onCreate, onCancel, record,
 }) => {
   const [form] = Form.useForm();
+  const renderSelectTag = (children) => (
+    <Select mode="tags" style={{ width: '100%' }} tokenSeparators={[',']}>
+      {children}
+    </Select>
+  );
   // eslint-disable-next-line arrow-body-style
   useEffect(() => {
     return () => {
@@ -42,7 +47,9 @@ const SourceForm = ({
           website: record.website.name,
           category: record.category.name,
           schedules: record.schedules,
-          status: record.status === 0,
+          crawlType: record.crawlType,
+          queue: record.queue,
+          status: record.status === '01',
         }}
       >
         <Form.Item name="website" label="Website">
@@ -51,8 +58,14 @@ const SourceForm = ({
         <Form.Item name="category" label="Category">
           <Input />
         </Form.Item>
-        <Form.Item name="schedules" label="Schedule">
+        <Form.Item name="crawlType" label="Crawl Type">
           <Input />
+        </Form.Item>
+        <Form.Item name="queue" label="Queue">
+          <Input />
+        </Form.Item>
+        <Form.Item name="schedules" label="Schedule">
+          {renderSelectTag(record.schedules)}
         </Form.Item>
         <Form.Item name="status" label="Status" valuePropName="checked">
           <Switch />

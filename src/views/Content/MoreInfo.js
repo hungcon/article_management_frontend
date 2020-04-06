@@ -30,15 +30,7 @@ const initRss = {
 const initHtml = {
   contentRedundancySelectors: [],
   url: '',
-  blocksConfiguration: [{
-    configuration: {
-      redundancySelectors: [],
-      itemSelector: '',
-      titleSelector: '',
-      linkSelector: '',
-    },
-    blockSelector: '',
-  }],
+  blocksConfiguration: [],
 };
 
 const initArticle = {
@@ -131,26 +123,24 @@ const MoreInfo = ({ record }) => {
   const showHTMLConfig = (htmlConfig) => (
     <Descriptions>
       <Descriptions.Item>
-        {
-      htmlConfig.map((eachHtml, index) => (
-        <div key={index}>
-          <Button
-            onClick={() => showHTMLModal(eachHtml)}
-            style={{ marginBottom: 10 }}
-            icon={<EditOutlined />}
-          >
-            HTML Config
-            {' '}
-            {index + 1}
-          </Button>
-          <Button
-            danger
-            onClick={() => showDeleteConfirm(eachHtml, 'html')}
-            icon={<DeleteOutlined />}
-          />
-        </div>
-      ))
-    }
+        {htmlConfig.map((eachHtml, index) => (
+          <div key={index}>
+            <Button
+              onClick={() => showHTMLModal(eachHtml)}
+              style={{ marginBottom: 10 }}
+              icon={<EditOutlined />}
+            >
+              HTML Config
+              {' '}
+              {index + 1}
+            </Button>
+            <Button
+              danger
+              onClick={() => showDeleteConfirm(eachHtml, 'html')}
+              icon={<DeleteOutlined />}
+            />
+          </div>
+        ))}
       </Descriptions.Item>
       <Descriptions.Item>
         <Button
@@ -213,12 +203,17 @@ const MoreInfo = ({ record }) => {
           }).format(record.updatedAt)}
         </Descriptions.Item>
         <br />
-        <Descriptions.Item label={record.crawlType === 'HTML' ? 'HTML Config' : 'RSS Config'}>
-          {
-            record.crawlType === 'HTML' ? showHTMLConfig(record.html) : showRSSConfig(record.rss)
-        }
+        <Descriptions.Item label="Queue">
+          {record.queue}
         </Descriptions.Item>
-        <Descriptions.Item label="Article Config">
+        <Descriptions.Item label="Schedule">
+          {record.schedules}
+        </Descriptions.Item>
+        <br />
+        <Descriptions.Item label={record.crawlType === 'HTML' ? 'HTML Config' : 'RSS Config'} span={3}>
+          {record.crawlType === 'HTML' ? showHTMLConfig(record.html) : showRSSConfig(record.rss)}
+        </Descriptions.Item>
+        <Descriptions.Item label="Article Config" span={3}>
           <Button
             onClick={() => showArticleModal(record.article)}
             style={{ marginRight: 10, marginBottom: 10 }}

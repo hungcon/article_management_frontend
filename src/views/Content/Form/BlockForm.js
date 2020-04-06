@@ -3,12 +3,15 @@
 /* eslint-disable react/jsx-filename-extension */
 import React, { useEffect } from 'react';
 import {
-  Modal, Form, Input,
+  Modal, Form, Input, Select,
 } from 'antd';
 
-const RssForm = ({
+const BlockForm = ({
   visible, onCreate, onCancel, record,
 }) => {
+  const renderSelectTag = () => (
+    <Select mode="tags" style={{ width: '100%' }} tokenSeparators={[',']} />
+  );
   const [form] = Form.useForm();
   // eslint-disable-next-line arrow-body-style
   useEffect(() => {
@@ -20,8 +23,8 @@ const RssForm = ({
     <Modal
       forceRender
       visible={visible}
-      title="Rss Config"
-      okText={!record.url ? 'Add' : 'Update'}
+      title="Block Config"
+      okText={!record.blockSelector ? 'Add' : 'Update'}
       cancelText="Cancel"
       onCancel={onCancel}
       onOk={() => {
@@ -39,17 +42,16 @@ const RssForm = ({
       <Form
         layout="vertical"
         form={form}
-        name="rss_form"
+        name="block_form"
         initialValues={{
-          url: record.url,
+          blockSelector: record.blockSelector,
           itemSelector: record.configuration.itemSelector,
           titleSelector: record.configuration.titleSelector,
           linkSelector: record.configuration.linkSelector,
-          sapoSelector: record.configuration.sapoSelector,
-          publicDateSelector: record.configuration.publicDateSelector,
+          redundancySelectors: record.configuration.redundancySelectors,
         }}
       >
-        <Form.Item name="url" label="URL">
+        <Form.Item name="blockSelector" label="Block">
           <Input />
         </Form.Item>
         <Form.Item name="itemSelector" label="Item">
@@ -61,15 +63,12 @@ const RssForm = ({
         <Form.Item name="linkSelector" label="Link">
           <Input />
         </Form.Item>
-        <Form.Item name="sapoSelector" label="Sapo">
-          <Input />
-        </Form.Item>
-        <Form.Item name="publicDateSelector" label="Publish Date">
-          <Input />
+        <Form.Item name="redundancySelectors" label="Redundancy">
+          {renderSelectTag()}
         </Form.Item>
       </Form>
     </Modal>
   );
 };
 
-export default RssForm;
+export default BlockForm;
