@@ -39,7 +39,7 @@ const RssForm = ({
       <Form
         layout="vertical"
         form={form}
-        name="rss_form"
+        id="rss_form"
         initialValues={{
           url: record.url,
           itemSelector: record.configuration.itemSelector,

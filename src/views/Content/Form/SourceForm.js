@@ -41,8 +41,8 @@ const SourceForm = ({
       }}
     >
       <Form
+        layout="vertical"
         form={form}
-        name="source_form"
         initialValues={{
           website: record.website.name,
           category: record.category.name,

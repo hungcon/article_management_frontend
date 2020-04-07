@@ -42,7 +42,6 @@ const BlockForm = ({
       <Form
         layout="vertical"
         form={form}
-        name="block_form"
         initialValues={{
           blockSelector: record.blockSelector,
           itemSelector: record.configuration.itemSelector,

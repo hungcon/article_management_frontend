@@ -5,13 +5,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
   Table, Button, Switch, Modal,
 } from 'antd';
-import { ExclamationCircleOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import {
+  ExclamationCircleOutlined, DeleteOutlined, EditOutlined,
+} from '@ant-design/icons';
 import { css } from 'emotion';
 import Axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import SourceForm from './Form/SourceForm';
 import allActions from '../../store/actions/allActions';
 import MoreInfo from './MoreInfo';
+import openNotification from '../Notifications';
 
 const { confirm } = Modal;
 
@@ -60,6 +63,7 @@ export default function Configuration() {
 
   const [sourceVisible, setSourceVisible] = useState(false);
   const [source, setSource] = useState(initSource);
+  const [reloadTable, setReloadTable] = useState(false);
 
   const showSourceModal = (sourceVal) => {
     setSource(sourceVal);
@@ -84,11 +88,17 @@ export default function Configuration() {
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
-      onOk() {
-        console.log(toDelete);
+      centered: true,
+      async onOk() {
+        const result = await Axios.post('http://localhost:8000/delete-config', { configId: toDelete._id });
+        if (result.data.status === 1) {
+          setReloadTable(!reloadTable);
+          openNotification('success');
+        } else {
+          openNotification('error');
+        }
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   };
@@ -204,7 +214,7 @@ export default function Configuration() {
     }
     fetchData();
     return () => { ignore = true; };
-  }, [dispatch]);
+  }, [reloadTable, dispatch]);
 
   return (
     <div className={classes.root}>

@@ -5,14 +5,16 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-filename-extension */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Descriptions, Button, Modal } from 'antd';
 import {
   DeleteOutlined, ExclamationCircleOutlined, PlusOutlined, EditOutlined,
 } from '@ant-design/icons';
+import Axios from 'axios';
 import RssForm from './Form/RssForm';
 import HtmlForm from './Form/HtmlForm';
 import ArticleForm from './Form/ArticleForm';
+import openNotification from '../Notifications';
 
 const { confirm } = Modal;
 
@@ -59,6 +61,7 @@ const initArticle = {
   ],
 };
 
+
 const MoreInfo = ({ record }) => {
   const [rssVisible, setRssVisible] = useState(false);
   const [rss, setRss] = useState(initRss);
@@ -66,12 +69,16 @@ const MoreInfo = ({ record }) => {
   const [html, setHtml] = useState(initHtml);
   const [articleVisible, setArticleVisible] = useState(false);
   const [article, setArticle] = useState(initArticle);
+  const [reload, setReload] = useState(false);
+
+  useEffect(() => {
+
+  }, [reload]);
 
   const onCreate = (values) => {
     console.log('Received values of form: ', values);
     setArticleVisible(false);
   };
-
 
   const onRssCreate = (values) => {
     console.log('Rss values of form: ', values);
@@ -97,7 +104,7 @@ const MoreInfo = ({ record }) => {
     setArticleVisible(true);
   };
 
-  const showDeleteConfirm = (toDelete, type) => {
+  const showDeleteConfirm = (type, deleteId, index) => {
     confirm({
       title: `Are you sure delete this ${type}?`,
       // eslint-disable-next-line react/jsx-filename-extension
@@ -105,13 +112,20 @@ const MoreInfo = ({ record }) => {
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
-      onOk() {
+      centered: true,
+      async onOk() {
         if (type === 'rss') {
-          console.log('rss:', toDelete);
+          console.log('rss:', deleteId, ' ', index);
           // call api xoá rss
         } else {
-          console.log('html: ', toDelete);
-          // call api xoá config
+          console.log('html: ', deleteId, ' ', index);
+          const result = await Axios.post('http://localhost:8000/delete-html-config', { htmlConfigId: deleteId, index });
+          if (result.data.status === 1) {
+            setReload(!reload);
+            openNotification('success');
+          } else {
+            openNotification('error');
+          }
         }
       },
       onCancel() {
@@ -120,7 +134,7 @@ const MoreInfo = ({ record }) => {
     });
   };
 
-  const showHTMLConfig = (htmlConfig) => (
+  const showHTMLConfig = (htmlConfig, deleteId) => (
     <Descriptions>
       <Descriptions.Item>
         {htmlConfig.map((eachHtml, index) => (
@@ -136,7 +150,7 @@ const MoreInfo = ({ record }) => {
             </Button>
             <Button
               danger
-              onClick={() => showDeleteConfirm(eachHtml, 'html')}
+              onClick={() => showDeleteConfirm('html', deleteId, index)}
               icon={<DeleteOutlined />}
             />
           </div>
@@ -154,7 +168,7 @@ const MoreInfo = ({ record }) => {
     </Descriptions>
   );
 
-  const showRSSConfig = (rssConfig) => (
+  const showRSSConfig = (rssConfig, deleteId) => (
     <Descriptions>
       <Descriptions.Item>
         {
@@ -171,7 +185,7 @@ const MoreInfo = ({ record }) => {
           </Button>
           <Button
             danger
-            onClick={() => showDeleteConfirm(eachRss, 'rss')}
+            onClick={() => showDeleteConfirm('rss', deleteId, index)}
             icon={<DeleteOutlined />}
           />
         </div>
@@ -211,7 +225,7 @@ const MoreInfo = ({ record }) => {
         </Descriptions.Item>
         <br />
         <Descriptions.Item label={record.crawlType === 'HTML' ? 'HTML Config' : 'RSS Config'} span={3}>
-          {record.crawlType === 'HTML' ? showHTMLConfig(record.html) : showRSSConfig(record.rss)}
+          {record.crawlType === 'HTML' ? showHTMLConfig(record.html, record._id) : showRSSConfig(record.rss, record._id)}
         </Descriptions.Item>
         <Descriptions.Item label="Article Config" span={3}>
           <Button

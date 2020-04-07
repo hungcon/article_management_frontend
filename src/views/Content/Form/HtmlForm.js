@@ -5,13 +5,14 @@
 /* eslint-disable react/jsx-filename-extension */
 import React, { useEffect, useState } from 'react';
 import {
-  Modal, Form, Input, Select, Button,
+  Modal, Form, Input, Select, Button, Tabs,
 } from 'antd';
 import {
   EditOutlined, DeleteOutlined, ExclamationCircleOutlined, PlusOutlined,
 } from '@ant-design/icons';
 import BlockForm from './BlockForm';
 
+const { TabPane } = Tabs;
 const { confirm } = Modal;
 
 const initBlock = {
@@ -28,9 +29,15 @@ const HtmlForm = ({
 }) => {
   const [block, setBlock] = useState(initBlock);
   const [blockVisible, setBlockVisible] = useState(false);
+
   const renderSelectTag = () => (
     <Select mode="tags" style={{ width: '100%' }} tokenSeparators={[',']} />
   );
+
+  const callback = (key) => {
+    console.log(key);
+  };
+
   const showDeleteConfirm = (toDelete) => {
     confirm({
       title: 'Are you sure delete this block config?',
@@ -86,53 +93,68 @@ const HtmlForm = ({
             });
         }}
       >
-        <Form
-          layout="vertical"
-          form={form}
-          name="html_form"
-          initialValues={{
-            url: record.url,
-            contentRedundancySelectors: record.contentRedundancySelectors,
-            blocksConfiguration: record.blocksConfiguration,
-          }}
-        >
-          <Form.Item name="url" label="URL">
-            <Input />
-          </Form.Item>
-          <Form.Item name="contentRedundancySelectors" label="Content Redundancy">
-            {renderSelectTag()}
-          </Form.Item>
-          <Form.Item label="Block Config">
-            <Input.Group>
-              {record.blocksConfiguration.map((config, index) => (
-              // eslint-disable-next-line react/no-array-index-key
-                <div key={index}>
+        <Tabs defaultActiveKey="1" onChange={callback}>
+          <TabPane tab="General" key="1">
+            <Form
+              layout="vertical"
+              form={form}
+              id="html_form"
+              initialValues={{
+                url: record.url,
+                contentRedundancySelectors: record.contentRedundancySelectors,
+                blocksConfiguration: record.blocksConfiguration,
+              }}
+            >
+              <Form.Item name="url" label="URL">
+                <Input />
+              </Form.Item>
+              <Form.Item name="contentRedundancySelectors" label="Content Redundancy">
+                {renderSelectTag()}
+              </Form.Item>
+            </Form>
+          </TabPane>
+          <TabPane tab="Block" key="2">
+            <Form
+              layout="vertical"
+              form={form}
+              id="block_form"
+              initialValues={{
+                blocksConfiguration: record.blocksConfiguration,
+              }}
+            >
+              <Form.Item label="Block Config">
+                <Input.Group>
+                  {record.blocksConfiguration.map((config, index) => (
+                  // eslint-disable-next-line react/no-array-index-key
+                    <div key={index}>
+                      <Button
+                        onClick={() => showBlockModal(config)}
+                        style={{ marginBottom: 10 }}
+                        icon={<EditOutlined />}
+                      >
+                        Block Config
+                        {' '}
+                        {index + 1}
+                      </Button>
+                      <Button
+                        danger
+                        onClick={() => showDeleteConfirm(config)}
+                        icon={<DeleteOutlined />}
+                      />
+                    </div>
+                  ))}
                   <Button
-                    onClick={() => showBlockModal(config)}
-                    style={{ marginBottom: 10 }}
-                    icon={<EditOutlined />}
+                    type="primary"
+                    onClick={() => showBlockModal(initBlock)}
+                    icon={<PlusOutlined />}
                   >
-                    Block Config
-                    {' '}
-                    {index + 1}
+                    Add Block
                   </Button>
-                  <Button
-                    danger
-                    onClick={() => showDeleteConfirm(config)}
-                    icon={<DeleteOutlined />}
-                  />
-                </div>
-              ))}
-              <Button
-                type="primary"
-                onClick={() => showBlockModal(initBlock)}
-                icon={<PlusOutlined />}
-              >
-                Add Block
-              </Button>
-            </Input.Group>
-          </Form.Item>
-        </Form>
+                </Input.Group>
+              </Form.Item>
+            </Form>
+          </TabPane>
+        </Tabs>
       </Modal>
       <BlockForm
         visible={blockVisible}

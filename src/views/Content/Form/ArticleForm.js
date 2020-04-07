@@ -4,7 +4,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/no-children-prop */
 /* eslint-disable react/jsx-filename-extension */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   Button, Form, Input, Select, Drawer, Row, Col, Tabs,
 } from 'antd';
@@ -28,14 +28,15 @@ const ArticleForm = ({
 
   const callback = (key) => {
     console.log(key);
-    form.validateFields()
-      .then((values) => {
-        form.resetFields();
-        console.log(values);
-      })
-      .catch((info) => {
-        console.log('Validate Failed:', info);
-      });
+    if (key === '2' || key === '3') {
+      form.validateFields()
+        .then((values) => {
+          console.log(values);
+        })
+        .catch((info) => {
+          console.log('Validate Failed:', info);
+        });
+    }
   };
 
   const onFinish = (values) => {
@@ -88,19 +89,20 @@ const ArticleForm = ({
       form.resetFields();
     };
   });
+  // eslint-disable-next-line no-return-assign
   return (
     <Drawer
       forceRender
+      zIndex={9000}
       title="Article Config"
       visible={visible}
-      width={720}
+      width={1600}
       onClose={onCancel}
     >
       <Tabs defaultActiveKey="1" onChange={callback}>
         <TabPane tab="Config" key="1" style={{ minHeight: '80vh' }} forceRender>
           <Form
             form={form}
-            name="article_form"
             initialValues={{
               sapoSelector: record.sapoSelector,
               sapoRedundancySelectors: record.sapoRedundancySelectors,
@@ -118,67 +120,67 @@ const ArticleForm = ({
           >
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item name="sapoSelector" label="Sapo">
+                <Form.Item name="sapoSelector" label="Sapo" id={Date.now()}>
                   <Input />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item name="sapoRedundancySelectors" label="Sapo Redundancy">
+                <Form.Item name="sapoRedundancySelectors" label="Sapo Redundancy" id={Date.now()}>
                   {renderSelectTag()}
                 </Form.Item>
               </Col>
             </Row>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item name="titleSelector" label="Title">
+                <Form.Item name="titleSelector" label="Title" id={Date.now()}>
                   <Input />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item name="titleRedundancySelectors" label="Title Redundancy">
+                <Form.Item name="titleRedundancySelectors" label="Title Redundancy" id={Date.now()}>
                   {renderSelectTag()}
                 </Form.Item>
               </Col>
             </Row>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item name="thumbnailSelector" label="Thumbnail">
+                <Form.Item name="thumbnailSelector" label="Thumbnail" id={Date.now()}>
                   <Input />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item name="thumbnailRedundancySelectors" label="Thumbnail Redundancy">
+                <Form.Item name="thumbnailRedundancySelectors" label="Thumbnail Redundancy" id={Date.now()}>
                   {renderSelectTag()}
                 </Form.Item>
               </Col>
             </Row>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item name="tagsSelector" label="Tags">
+                <Form.Item name="tagsSelector" label="Tags" id={Date.now()}>
                   <Input />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item name="tagsRedundancySelectors" label="Tags Redundancy">
+                <Form.Item name="tagsRedundancySelectors" label="Tags Redundancy" id={Date.now()}>
                   {renderSelectTag()}
                 </Form.Item>
               </Col>
             </Row>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item name="contentSelector" label="Content">
+                <Form.Item name="contentSelector" label="Content" id={Date.now()}>
                   <Input />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item name="contentRedundancySelectors" label="Content Redundancy">
+                <Form.Item name="contentRedundancySelectors" label="Content Redundancy" id={Date.now()}>
                   {renderSelectTag()}
                 </Form.Item>
               </Col>
             </Row>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item name="textRedundancySelectors" label="Text Redundancy">
+                <Form.Item name="textRedundancySelectors" label="Text Redundancy" id={Date.now()}>
                   {renderSelectTag()}
                 </Form.Item>
               </Col>
