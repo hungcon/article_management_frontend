@@ -11,10 +11,12 @@ import {
   DeleteOutlined, ExclamationCircleOutlined, PlusOutlined, EditOutlined,
 } from '@ant-design/icons';
 import Axios from 'axios';
+import { useDispatch } from 'react-redux';
 import RssForm from './Form/RssForm';
 import HtmlForm from './Form/HtmlForm';
 import ArticleForm from './Form/ArticleForm';
 import openNotification from '../Notifications';
+import allActions from '../../store/actions/allActions';
 
 const { confirm } = Modal;
 
@@ -32,7 +34,17 @@ const initRss = {
 const initHtml = {
   contentRedundancySelectors: [],
   url: '',
-  blocksConfiguration: [],
+  blocksConfiguration: [
+    // {
+    //   configuration: {
+    //     redundancySelectors: [],
+    //     itemSelector: '',
+    //     titleSelector: '',
+    //     linkSelector: '',
+    //   },
+    //   blockSelector: '',
+    // },
+  ],
 };
 
 const initArticle = {
@@ -69,11 +81,8 @@ const MoreInfo = ({ record }) => {
   const [html, setHtml] = useState(initHtml);
   const [articleVisible, setArticleVisible] = useState(false);
   const [article, setArticle] = useState(initArticle);
-  const [reload, setReload] = useState(false);
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-
-  }, [reload]);
 
   const onCreate = (values) => {
     console.log('Received values of form: ', values);
@@ -84,8 +93,17 @@ const MoreInfo = ({ record }) => {
     console.log('Rss values of form: ', values);
     setRssVisible(false);
   };
-  const onHtmlCreate = (values) => {
-    console.log('Html values of form: ', values);
+
+  const onHtmlCreate = (values, blockConfig) => {
+    const htmlConfig = {
+      contentRedundancySelectors: values.contentRedundancySelectors,
+      url: values.url,
+      blocksConfiguration: [
+        blockConfig,
+      ],
+    };
+    console.log(htmlConfig);
+    dispatch(allActions.configAction.reload());
     setHtmlVisible(false);
   };
 
@@ -121,7 +139,7 @@ const MoreInfo = ({ record }) => {
           console.log('html: ', deleteId, ' ', index);
           const result = await Axios.post('http://localhost:8000/delete-html-config', { htmlConfigId: deleteId, index });
           if (result.data.status === 1) {
-            setReload(!reload);
+            dispatch(allActions.configAction.reload());
             openNotification('success');
           } else {
             openNotification('error');

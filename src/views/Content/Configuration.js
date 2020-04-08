@@ -59,11 +59,12 @@ const initSource = {
 export default function Configuration() {
   const classes = useStyles();
   const data = useSelector((state) => state.config.data);
+  const reload = useSelector((state) => state.config.reload);
   const dispatch = useDispatch();
 
   const [sourceVisible, setSourceVisible] = useState(false);
   const [source, setSource] = useState(initSource);
-  const [reloadTable, setReloadTable] = useState(false);
+  // const [reloadTable, setReloadTable] = useState(false);
 
   const showSourceModal = (sourceVal) => {
     setSource(sourceVal);
@@ -92,7 +93,7 @@ export default function Configuration() {
       async onOk() {
         const result = await Axios.post('http://localhost:8000/delete-config', { configId: toDelete._id });
         if (result.data.status === 1) {
-          setReloadTable(!reloadTable);
+          dispatch(allActions.configAction.reload());
           openNotification('success');
         } else {
           openNotification('error');
@@ -214,7 +215,7 @@ export default function Configuration() {
     }
     fetchData();
     return () => { ignore = true; };
-  }, [reloadTable, dispatch]);
+  }, [reload, dispatch]);
 
   return (
     <div className={classes.root}>

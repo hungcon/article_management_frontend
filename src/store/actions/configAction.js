@@ -4,6 +4,11 @@ const fetchData = (data) => ({
 });
 
 
+const reload = () => ({
+  type: 'RELOAD',
+});
+
 export default {
   fetchData,
+  reload,
 };
