@@ -10,7 +10,11 @@ import {
 import {
   EditOutlined, DeleteOutlined, ExclamationCircleOutlined, PlusOutlined,
 } from '@ant-design/icons';
+import Axios from 'axios';
+import { useDispatch } from 'react-redux';
 import BlockForm from './BlockForm';
+import openNotification from '../../Notifications';
+import allActions from '../../../store/actions/allActions';
 
 const { confirm } = Modal;
 
@@ -27,14 +31,17 @@ const HtmlForm = ({
   visible, onCreate, onCancel, record,
 }) => {
   const [block, setBlock] = useState(initBlock);
+  const [listBlockServer, setListBlockServer] = useState(record.blocksConfiguration);
   const [newBlock, setNewBlock] = useState([]);
   const [blockVisible, setBlockVisible] = useState(false);
+  const [type, setType] = useState({});
+  const dispatch = useDispatch();
 
   const renderSelectTag = () => (
     <Select mode="tags" style={{ width: '100%' }} tokenSeparators={[',']} />
   );
 
-  const showDeleteConfirm = (toDelete) => {
+  const showDeleteConfirm = (blockConfigId, htmlConfigId) => {
     confirm({
       title: 'Are you sure delete this block config?',
       // eslint-disable-next-line react/jsx-filename-extension
@@ -42,8 +49,16 @@ const HtmlForm = ({
       okText: 'Yes',
       okType: 'danger',
       cancelText: 'No',
-      onOk() {
-        console.log('config: ', toDelete);
+      centered: true,
+      async onOk() {
+        console.log('block: ', blockConfigId, htmlConfigId);
+        const result = await Axios.post('http://localhost:8000/delete-block-config', { htmlConfigId, blockConfigId });
+        if (result.data.status === 1) {
+          dispatch(allActions.configAction.reload());
+          openNotification('success');
+        } else {
+          openNotification('error');
+        }
       },
       onCancel() {
         console.log('Cancel');
@@ -51,13 +66,19 @@ const HtmlForm = ({
     });
   };
 
-  const showBlockModal = (blockVal) => {
+  const handleCancel = () => {
+    setBlock(initBlock);
+    setNewBlock([]);
+    onCancel();
+  };
+
+  const showBlockModal = (blockVal, typeVal, index) => {
+    setType({ type: typeVal, index });
     setBlock(blockVal);
     setBlockVisible(true);
   };
 
   const onBlockCreate = (values) => {
-    console.log(values);
     const blockConfig = {
       configuration: {
         redundancySelectors: values.redundancySelectors,
@@ -68,11 +89,30 @@ const HtmlForm = ({
       blockSelector: values.blockSelector,
     };
     setBlock(blockConfig);
-    const newBlockState = newBlock;
-    newBlockState.push(blockConfig);
-
-    setNewBlock(newBlockState);
+    switch (type.type) {
+      case 'serverUpdate':
+        // eslint-disable-next-line no-case-declarations
+        const newListBlockServer = listBlockServer;
+        newListBlockServer[type.index] = blockConfig;
+        setListBlockServer(newListBlockServer);
+        break;
+      case 'localAdd':
+        setNewBlock([...newBlock, blockConfig]);
+        break;
+      case 'localUpdate':
+        // eslint-disable-next-line no-case-declarations
+        const newBlockState = newBlock;
+        newBlockState[type.index] = blockConfig;
+        setNewBlock(newBlockState);
+      // eslint-disable-next-line no-fallthrough
+      default:
+        break;
+    }
     setBlockVisible(false);
+  };
+
+  const removeNewBlock = (values) => {
+    setNewBlock(newBlock.filter((e) => (e.blockSelector !== values.blockSelector)));
   };
 
   const [form] = Form.useForm();
@@ -90,13 +130,13 @@ const HtmlForm = ({
         title="Html Config"
         okText={!record.url ? 'Add' : 'Update'}
         cancelText="Cancel"
-        onCancel={onCancel}
+        onCancel={handleCancel}
         onOk={() => {
           form
             .validateFields()
             .then((values) => {
               form.resetFields();
-              onCreate(values, newBlock);
+              onCreate(values, newBlock, listBlockServer);
             })
             .catch((info) => {
               console.log('Validate Failed:', info);
@@ -125,7 +165,7 @@ const HtmlForm = ({
               // eslint-disable-next-line react/no-array-index-key
                 <div key={index}>
                   <Button
-                    onClick={() => showBlockModal(config)}
+                    onClick={() => showBlockModal(config, 'serverUpdate', index)}
                     style={{ marginBottom: 10 }}
                     icon={<EditOutlined />}
                   >
@@ -135,7 +175,8 @@ const HtmlForm = ({
                   </Button>
                   <Button
                     danger
-                    onClick={() => showDeleteConfirm(config)}
+                    // eslint-disable-next-line no-underscore-dangle
+                    onClick={() => showDeleteConfirm(config._id, record._id)}
                     icon={<DeleteOutlined />}
                   />
                 </div>
@@ -144,7 +185,7 @@ const HtmlForm = ({
                 // eslint-disable-next-line react/no-array-index-key
                 <div key={index}>
                   <Button
-                    onClick={() => showBlockModal(config)}
+                    onClick={() => showBlockModal(config, 'localUpdate', index)}
                     style={{ marginBottom: 10 }}
                     icon={<EditOutlined />}
                   >
@@ -154,30 +195,14 @@ const HtmlForm = ({
                   </Button>
                   <Button
                     danger
-                    onClick={() => showDeleteConfirm(config)}
+                    onClick={() => removeNewBlock(config)}
                     icon={<DeleteOutlined />}
                   />
                 </div>
               ))}
-              {/* {block.blockSelector !== '' && (
-                <div>
-                  <Button
-                    onClick={() => showBlockModal(block)}
-                    style={{ marginBottom: 10 }}
-                    icon={<EditOutlined />}
-                  >
-                    New Block config
-                  </Button>
-                  <Button
-                    danger
-                    onClick={() => setBlock(initBlock)}
-                    icon={<DeleteOutlined />}
-                  />
-                </div>
-              )} */}
               <Button
                 type="primary"
-                onClick={() => showBlockModal(initBlock)}
+                onClick={() => showBlockModal(initBlock, 'localAdd')}
                 icon={<PlusOutlined />}
               >
                 Add Block
@@ -191,6 +216,7 @@ const HtmlForm = ({
         onCreate={onBlockCreate}
         onCancel={() => setBlockVisible(false)}
         record={block}
+        type={type}
       />
     </div>
   );

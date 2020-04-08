@@ -7,7 +7,7 @@ import {
 } from 'antd';
 
 const BlockForm = ({
-  visible, onCreate, onCancel, record,
+  visible, onCreate, onCancel, record, type,
 }) => {
   const renderSelectTag = () => (
     <Select mode="tags" style={{ width: '100%' }} tokenSeparators={[',']} />
@@ -24,7 +24,7 @@ const BlockForm = ({
       forceRender
       visible={visible}
       title="Block Config"
-      okText={!record.blockSelector ? 'Add' : 'Update'}
+      okText={type === 'add' ? 'Add' : 'Update'}
       cancelText="Cancel"
       onCancel={onCancel}
       onOk={() => {

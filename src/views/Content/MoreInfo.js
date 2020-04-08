@@ -5,7 +5,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-filename-extension */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Descriptions, Button, Modal } from 'antd';
 import {
   DeleteOutlined, ExclamationCircleOutlined, PlusOutlined, EditOutlined,
@@ -94,15 +94,21 @@ const MoreInfo = ({ record }) => {
     setRssVisible(false);
   };
 
-  const onHtmlCreate = (values, blockConfig) => {
-    const htmlConfig = {
-      contentRedundancySelectors: values.contentRedundancySelectors,
-      url: values.url,
-      blocksConfiguration: [
-        blockConfig,
-      ],
-    };
-    console.log(htmlConfig);
+  const onHtmlCreate = (values, addBlock, updateBlock) => {
+    console.log('general: ', values);
+    console.log('add: ', addBlock);
+    // console.log('update: ', updateBlock);
+    const listUpdate = [];
+    for (let i = 0; i < updateBlock.length; i += 1) {
+      const block = updateBlock[i];
+      if (block !== undefined) {
+        listUpdate.push({
+          index: i,
+          blocksConfiguration: block,
+        });
+      }
+    }
+    console.log(listUpdate);
     dispatch(allActions.configAction.reload());
     setHtmlVisible(false);
   };
@@ -122,7 +128,7 @@ const MoreInfo = ({ record }) => {
     setArticleVisible(true);
   };
 
-  const showDeleteConfirm = (type, deleteId, index) => {
+  const showDeleteConfirm = (type, deleteId, configId) => {
     confirm({
       title: `Are you sure delete this ${type}?`,
       // eslint-disable-next-line react/jsx-filename-extension
@@ -133,11 +139,11 @@ const MoreInfo = ({ record }) => {
       centered: true,
       async onOk() {
         if (type === 'rss') {
-          console.log('rss:', deleteId, ' ', index);
+          console.log('rss:', deleteId, ' ', configId);
           // call api xoá rss
         } else {
-          console.log('html: ', deleteId, ' ', index);
-          const result = await Axios.post('http://localhost:8000/delete-html-config', { htmlConfigId: deleteId, index });
+          console.log('html: ', deleteId, ' ', configId);
+          const result = await Axios.post('http://localhost:8000/delete-html-config', { htmlConfigId: deleteId, configId });
           if (result.data.status === 1) {
             dispatch(allActions.configAction.reload());
             openNotification('success');
@@ -152,7 +158,7 @@ const MoreInfo = ({ record }) => {
     });
   };
 
-  const showHTMLConfig = (htmlConfig, deleteId) => (
+  const showHTMLConfig = (htmlConfig, configId) => (
     <Descriptions>
       <Descriptions.Item>
         {htmlConfig.map((eachHtml, index) => (
@@ -168,7 +174,7 @@ const MoreInfo = ({ record }) => {
             </Button>
             <Button
               danger
-              onClick={() => showDeleteConfirm('html', deleteId, index)}
+              onClick={() => showDeleteConfirm('html', eachHtml._id, configId)}
               icon={<DeleteOutlined />}
             />
           </div>
@@ -186,7 +192,7 @@ const MoreInfo = ({ record }) => {
     </Descriptions>
   );
 
-  const showRSSConfig = (rssConfig, deleteId) => (
+  const showRSSConfig = (rssConfig, configId) => (
     <Descriptions>
       <Descriptions.Item>
         {
@@ -203,7 +209,7 @@ const MoreInfo = ({ record }) => {
           </Button>
           <Button
             danger
-            onClick={() => showDeleteConfirm('rss', deleteId, index)}
+            onClick={() => showDeleteConfirm('rss', eachRss._id, configId)}
             icon={<DeleteOutlined />}
           />
         </div>

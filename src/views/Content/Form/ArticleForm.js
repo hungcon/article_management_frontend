@@ -44,9 +44,7 @@ const ArticleForm = ({
     onCreate(values);
   };
 
-  const renderPreview = () => {
-    console.log('preview');
-    return renderHTML(`
+  const renderPreview = () => renderHTML(`
     <div className="list_link" data-component-type="list_link" data-component-value="3911814,3582550" />
     <p className="Normal">
       Ng&#xE0;y 17/3, C&#xF4;ng an H&#xE0; N&#x1ED9;i cho bi&#x1EBF;t t&#x1EEB; n&#x103;m 2018 Mai Anh thu&#xEA;
@@ -81,7 +79,6 @@ const ArticleForm = ({
       data-component-value="3911814,3582550"
       style="cursor: pointer;"
     />`);
-  };
 
   // eslint-disable-next-line arrow-body-style
   useEffect(() => {
