@@ -34,17 +34,7 @@ const initRss = {
 const initHtml = {
   contentRedundancySelectors: [],
   url: '',
-  blocksConfiguration: [
-    // {
-    //   configuration: {
-    //     redundancySelectors: [],
-    //     itemSelector: '',
-    //     titleSelector: '',
-    //     linkSelector: '',
-    //   },
-    //   blockSelector: '',
-    // },
-  ],
+  blocksConfiguration: [],
 };
 
 const initArticle = {
@@ -94,22 +84,16 @@ const MoreInfo = ({ record }) => {
     setRssVisible(false);
   };
 
-  const onHtmlCreate = (values, addBlock, updateBlock) => {
-    console.log('general: ', values);
-    console.log('add: ', addBlock);
-    // console.log('update: ', updateBlock);
-    const listUpdate = [];
-    for (let i = 0; i < updateBlock.length; i += 1) {
-      const block = updateBlock[i];
-      if (block !== undefined) {
-        listUpdate.push({
-          index: i,
-          blocksConfiguration: block,
-        });
+  const onHtmlCreate = async (values, addBlock, htmlId) => {
+    addBlock.map(async (block) => {
+      const result = await Axios.post('http://localhost:8000/add-block-config', { html: values, htmlId, block });
+      if (result.data.status === 1) {
+        dispatch(allActions.configAction.reload());
+        openNotification('success');
+      } else {
+        openNotification('error');
       }
-    }
-    console.log(listUpdate);
-    dispatch(allActions.configAction.reload());
+    });
     setHtmlVisible(false);
   };
 
@@ -160,26 +144,31 @@ const MoreInfo = ({ record }) => {
 
   const showHTMLConfig = (htmlConfig, configId) => (
     <Descriptions>
-      <Descriptions.Item>
-        {htmlConfig.map((eachHtml, index) => (
-          <div key={index}>
-            <Button
-              onClick={() => showHTMLModal(eachHtml)}
-              style={{ marginBottom: 10 }}
-              icon={<EditOutlined />}
-            >
-              HTML Config
-              {' '}
-              {index + 1}
-            </Button>
-            <Button
-              danger
-              onClick={() => showDeleteConfirm('html', eachHtml._id, configId)}
-              icon={<DeleteOutlined />}
-            />
-          </div>
-        ))}
-      </Descriptions.Item>
+      {htmlConfig.length === 0 ? (
+        <Descriptions.Item>Have no HTML config</Descriptions.Item>
+      )
+        : (
+          <Descriptions.Item>
+            {htmlConfig.map((eachHtml, index) => (
+              <div key={index}>
+                <Button
+                  onClick={() => showHTMLModal(eachHtml)}
+                  style={{ marginBottom: 10 }}
+                  icon={<EditOutlined />}
+                >
+                  HTML Config
+                  {' '}
+                  {index + 1}
+                </Button>
+                <Button
+                  danger
+                  onClick={() => showDeleteConfirm('html', eachHtml._id, configId)}
+                  icon={<DeleteOutlined />}
+                />
+              </div>
+            ))}
+          </Descriptions.Item>
+        )}
       <Descriptions.Item>
         <Button
           type="primary"

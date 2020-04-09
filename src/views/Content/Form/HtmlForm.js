@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-case-declarations */
 /* eslint-disable no-undef */
 /* eslint-disable no-return-assign */
 /* eslint-disable no-console */
@@ -27,15 +29,21 @@ const initBlock = {
   },
   blockSelector: '',
 };
+
 const HtmlForm = ({
+
   visible, onCreate, onCancel, record,
 }) => {
   const [block, setBlock] = useState(initBlock);
-  const [listBlockServer, setListBlockServer] = useState(record.blocksConfiguration);
   const [newBlock, setNewBlock] = useState([]);
   const [blockVisible, setBlockVisible] = useState(false);
   const [type, setType] = useState({});
   const dispatch = useDispatch();
+
+  const onHtmlCreate = (values, addBlock, htmlId) => {
+    onCreate(values, addBlock, htmlId);
+    setNewBlock([]);
+  };
 
   const renderSelectTag = () => (
     <Select mode="tags" style={{ width: '100%' }} tokenSeparators={[',']} />
@@ -55,6 +63,7 @@ const HtmlForm = ({
         const result = await Axios.post('http://localhost:8000/delete-block-config', { htmlConfigId, blockConfigId });
         if (result.data.status === 1) {
           dispatch(allActions.configAction.reload());
+          onCancel();
           openNotification('success');
         } else {
           openNotification('error');
@@ -72,13 +81,13 @@ const HtmlForm = ({
     onCancel();
   };
 
-  const showBlockModal = (blockVal, typeVal, index) => {
-    setType({ type: typeVal, index });
+  const showBlockModal = (blockVal, typeVal, blockId) => {
+    setType({ type: typeVal, blockId });
     setBlock(blockVal);
     setBlockVisible(true);
   };
 
-  const onBlockCreate = (values) => {
+  const onBlockCreate = async (values) => {
     const blockConfig = {
       configuration: {
         redundancySelectors: values.redundancySelectors,
@@ -92,9 +101,14 @@ const HtmlForm = ({
     switch (type.type) {
       case 'serverUpdate':
         // eslint-disable-next-line no-case-declarations
-        const newListBlockServer = listBlockServer;
-        newListBlockServer[type.index] = blockConfig;
-        setListBlockServer(newListBlockServer);
+        const result = await Axios.post('http://localhost:8000/update-block-config', { blockConfigId: type.blockId, block: blockConfig });
+        if (result.data.status === 1) {
+          dispatch(allActions.configAction.reload());
+          handleCancel();
+          openNotification('success');
+        } else {
+          openNotification('error');
+        }
         break;
       case 'localAdd':
         setNewBlock([...newBlock, blockConfig]);
@@ -136,7 +150,7 @@ const HtmlForm = ({
             .validateFields()
             .then((values) => {
               form.resetFields();
-              onCreate(values, newBlock, listBlockServer);
+              onHtmlCreate(values, newBlock, record._id);
             })
             .catch((info) => {
               console.log('Validate Failed:', info);
@@ -150,7 +164,6 @@ const HtmlForm = ({
           initialValues={{
             url: record.url,
             contentRedundancySelectors: record.contentRedundancySelectors,
-            blocksConfiguration: record.blocksConfiguration,
           }}
         >
           <Form.Item name="url" label="URL">
@@ -165,7 +178,8 @@ const HtmlForm = ({
               // eslint-disable-next-line react/no-array-index-key
                 <div key={index}>
                   <Button
-                    onClick={() => showBlockModal(config, 'serverUpdate', index)}
+                    // eslint-disable-next-line no-underscore-dangle
+                    onClick={() => showBlockModal(config, 'serverUpdate', config._id)}
                     style={{ marginBottom: 10 }}
                     icon={<EditOutlined />}
                   >

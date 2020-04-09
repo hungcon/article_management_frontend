@@ -90,10 +90,9 @@ const ArticleForm = ({
   return (
     <Drawer
       forceRender
-      zIndex={9000}
       title="Article Config"
       visible={visible}
-      width={1600}
+      width={1000}
       onClose={onCancel}
     >
       <Tabs defaultActiveKey="1" onChange={callback}>

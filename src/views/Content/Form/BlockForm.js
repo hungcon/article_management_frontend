@@ -24,7 +24,7 @@ const BlockForm = ({
       forceRender
       visible={visible}
       title="Block Config"
-      okText={type === 'add' ? 'Add' : 'Update'}
+      okText={type.type === 'localAdd' ? 'Add' : 'Update'}
       cancelText="Cancel"
       onCancel={onCancel}
       onOk={() => {
