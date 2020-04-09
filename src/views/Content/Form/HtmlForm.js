@@ -166,7 +166,16 @@ const HtmlForm = ({
             contentRedundancySelectors: record.contentRedundancySelectors,
           }}
         >
-          <Form.Item name="url" label="URL">
+          <Form.Item
+            name="url"
+            label="URL"
+            rules={[
+              {
+                required: true,
+                message: 'Please input url',
+              },
+            ]}
+          >
             <Input />
           </Form.Item>
           <Form.Item name="contentRedundancySelectors" label="Content Redundancy">

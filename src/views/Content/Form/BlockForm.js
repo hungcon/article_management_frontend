@@ -50,16 +50,52 @@ const BlockForm = ({
           redundancySelectors: record.configuration.redundancySelectors,
         }}
       >
-        <Form.Item name="blockSelector" label="Block">
+        <Form.Item
+          name="blockSelector"
+          label="Block"
+          rules={[
+            {
+              required: true,
+              message: 'Please input block selector',
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
-        <Form.Item name="itemSelector" label="Item">
+        <Form.Item
+          name="itemSelector"
+          label="Item"
+          rules={[
+            {
+              required: true,
+              message: 'Please input item selector',
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
-        <Form.Item name="titleSelector" label="Title">
+        <Form.Item
+          name="titleSelector"
+          label="Title"
+          rules={[
+            {
+              required: true,
+              message: 'Please input title selector',
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
-        <Form.Item name="linkSelector" label="Link">
+        <Form.Item
+          name="linkSelector"
+          label="Link"
+          rules={[
+            {
+              required: true,
+              message: 'Please input link selector',
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
         <Form.Item name="redundancySelectors" label="Redundancy">

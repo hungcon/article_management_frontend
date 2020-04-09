@@ -71,6 +71,7 @@ const MoreInfo = ({ record }) => {
   const [html, setHtml] = useState(initHtml);
   const [articleVisible, setArticleVisible] = useState(false);
   const [article, setArticle] = useState(initArticle);
+  const [htmlAction, setHtmlAction] = useState();
   const dispatch = useDispatch();
 
 
@@ -85,15 +86,32 @@ const MoreInfo = ({ record }) => {
   };
 
   const onHtmlCreate = async (values, addBlock, htmlId) => {
-    addBlock.map(async (block) => {
-      const result = await Axios.post('http://localhost:8000/add-block-config', { html: values, htmlId, block });
-      if (result.data.status === 1) {
-        dispatch(allActions.configAction.reload());
-        openNotification('success');
-      } else {
-        openNotification('error');
-      }
-    });
+    switch (htmlAction) {
+      case 'update':
+        addBlock.map(async (block) => {
+          const updateResult = await Axios.post('http://localhost:8000/add-block-config', { html: values, htmlId, block });
+          if (updateResult.data.status === 1) {
+            dispatch(allActions.configAction.reload());
+            openNotification('success');
+          } else {
+            openNotification('error');
+          }
+        });
+        break;
+      case 'add':
+        // eslint-disable-next-line no-case-declarations
+        const addResult = await Axios.post('http://localhost:8000/add-html-config', { html: values, addBlock, configId: record._id });
+        if (addResult.data.status === 1) {
+          dispatch(allActions.configAction.reload());
+          openNotification('success');
+        } else {
+          openNotification('error');
+        }
+        break;
+      default:
+        break;
+    }
+
     setHtmlVisible(false);
   };
 
@@ -102,7 +120,8 @@ const MoreInfo = ({ record }) => {
     setRssVisible(true);
   };
 
-  const showHTMLModal = (htmlVal) => {
+  const showHTMLModal = (htmlVal, action) => {
+    setHtmlAction(action);
     setHtml(htmlVal);
     setHtmlVisible(true);
   };
@@ -152,7 +171,7 @@ const MoreInfo = ({ record }) => {
             {htmlConfig.map((eachHtml, index) => (
               <div key={index}>
                 <Button
-                  onClick={() => showHTMLModal(eachHtml)}
+                  onClick={() => showHTMLModal(eachHtml, 'update')}
                   style={{ marginBottom: 10 }}
                   icon={<EditOutlined />}
                 >
@@ -172,7 +191,7 @@ const MoreInfo = ({ record }) => {
       <Descriptions.Item>
         <Button
           type="primary"
-          onClick={() => showHTMLModal(initHtml)}
+          onClick={() => showHTMLModal(initHtml, 'add', configId)}
           icon={<PlusOutlined />}
         >
           Add HTML
