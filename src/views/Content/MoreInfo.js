@@ -72,6 +72,7 @@ const MoreInfo = ({ record }) => {
   const [articleVisible, setArticleVisible] = useState(false);
   const [article, setArticle] = useState(initArticle);
   const [htmlAction, setHtmlAction] = useState();
+  const [rssAction, setRssAction] = useState();
   const dispatch = useDispatch();
 
 
@@ -80,8 +81,32 @@ const MoreInfo = ({ record }) => {
     setArticleVisible(false);
   };
 
-  const onRssCreate = (values) => {
-    console.log('Rss values of form: ', values);
+  const onRssCreate = async (values, rssConfigId) => {
+    console.log(values);
+    switch (rssAction) {
+      case 'update':
+        // eslint-disable-next-line no-case-declarations
+        const updateRssResult = await Axios.post('http://localhost:8000/update-rss-config', { rssConfig: values, rssConfigId });
+        if (updateRssResult.data.status === 1) {
+          dispatch(allActions.configAction.reload());
+          openNotification('success');
+        } else {
+          openNotification('error');
+        }
+        break;
+      case 'add':
+        // eslint-disable-next-line no-case-declarations
+        const addRssResult = await Axios.post('http://localhost:8000/add-rss-config', { rssConfig: values, configId: record._id });
+        if (addRssResult.data.status === 1) {
+          dispatch(allActions.configAction.reload());
+          openNotification('success');
+        } else {
+          openNotification('error');
+        }
+        break;
+      default:
+        break;
+    }
     setRssVisible(false);
   };
 
@@ -111,17 +136,17 @@ const MoreInfo = ({ record }) => {
       default:
         break;
     }
-
     setHtmlVisible(false);
   };
 
-  const showRSSModal = (rssVal) => {
+  const showRSSModal = (rssVal, rssActionVal) => {
+    setRssAction(rssActionVal);
     setRss(rssVal);
     setRssVisible(true);
   };
 
-  const showHTMLModal = (htmlVal, action) => {
-    setHtmlAction(action);
+  const showHTMLModal = (htmlVal, htmlActioVal) => {
+    setHtmlAction(htmlActioVal);
     setHtml(htmlVal);
     setHtmlVisible(true);
   };
@@ -142,12 +167,18 @@ const MoreInfo = ({ record }) => {
       centered: true,
       async onOk() {
         if (type === 'rss') {
-          console.log('rss:', deleteId, ' ', configId);
-          // call api xoá rss
+          console.log('rssId :', deleteId, 'configId: ', configId);
+          const deleteRssResult = await Axios.post('http://localhost:8000/delete-rss-config', { rssConfigId: deleteId, configId });
+          if (deleteRssResult.data.status === 1) {
+            dispatch(allActions.configAction.reload());
+            openNotification('success');
+          } else {
+            openNotification('error');
+          }
         } else {
-          console.log('html: ', deleteId, ' ', configId);
-          const result = await Axios.post('http://localhost:8000/delete-html-config', { htmlConfigId: deleteId, configId });
-          if (result.data.status === 1) {
+          console.log('html: ', deleteId, 'htmlId: ', configId);
+          const deleteHtmlResult = await Axios.post('http://localhost:8000/delete-html-config', { htmlConfigId: deleteId, configId });
+          if (deleteHtmlResult.data.status === 1) {
             dispatch(allActions.configAction.reload());
             openNotification('success');
           } else {
@@ -191,7 +222,7 @@ const MoreInfo = ({ record }) => {
       <Descriptions.Item>
         <Button
           type="primary"
-          onClick={() => showHTMLModal(initHtml, 'add', configId)}
+          onClick={() => showHTMLModal(initHtml, 'add')}
           icon={<PlusOutlined />}
         >
           Add HTML
@@ -207,7 +238,7 @@ const MoreInfo = ({ record }) => {
       rssConfig.map((eachRss, index) => (
         <div key={index}>
           <Button
-            onClick={() => showRSSModal(eachRss)}
+            onClick={() => showRSSModal(eachRss, 'update')}
             style={{ marginBottom: 10 }}
             icon={<EditOutlined />}
           >
@@ -227,7 +258,7 @@ const MoreInfo = ({ record }) => {
       <Descriptions.Item>
         <Button
           type="primary"
-          onClick={() => showRSSModal(initRss)}
+          onClick={() => showRSSModal(initRss, 'add')}
           icon={<PlusOutlined />}
         >
           Add RSS

@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-console */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-filename-extension */
@@ -29,7 +30,7 @@ const RssForm = ({
           .validateFields()
           .then((values) => {
             form.resetFields();
-            onCreate(values);
+            onCreate(values, record._id);
           })
           .catch((info) => {
             console.log('Validate Failed:', info);
@@ -46,25 +47,79 @@ const RssForm = ({
           titleSelector: record.configuration.titleSelector,
           linkSelector: record.configuration.linkSelector,
           sapoSelector: record.configuration.sapoSelector,
-          publicDateSelector: record.configuration.publicDateSelector,
+          publishDateSelector: record.configuration.publishDateSelector,
         }}
       >
-        <Form.Item name="url" label="URL">
+        <Form.Item
+          name="url"
+          label="URL"
+          rules={[
+            {
+              required: true,
+              message: 'Please input url',
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
-        <Form.Item name="itemSelector" label="Item">
+        <Form.Item
+          name="itemSelector"
+          label="Item"
+          rules={[
+            {
+              required: true,
+              message: 'Please input item selector',
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
-        <Form.Item name="titleSelector" label="Title">
+        <Form.Item
+          name="titleSelector"
+          label="Title"
+          rules={[
+            {
+              required: true,
+              message: 'Please input title selector',
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
-        <Form.Item name="linkSelector" label="Link">
+        <Form.Item
+          name="linkSelector"
+          label="Link"
+          rules={[
+            {
+              required: true,
+              message: 'Please input link selector',
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
-        <Form.Item name="sapoSelector" label="Sapo">
+        <Form.Item
+          name="sapoSelector"
+          label="Sapo"
+          rules={[
+            {
+              required: true,
+              message: 'Please input sapo selector',
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
-        <Form.Item name="publicDateSelector" label="Publish Date">
+        <Form.Item
+          name="publishDateSelector"
+          label="Publish Date"
+          rules={[
+            {
+              required: true,
+              message: 'Please input publish date selector',
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
       </Form>
