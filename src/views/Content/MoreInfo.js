@@ -260,12 +260,12 @@ const MoreInfo = ({ record }) => {
         <Descriptions.Item label="Created At">
           {new Intl.DateTimeFormat('en-GB', {
             year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit',
-          }).format(record.createdAt)}
+          }).format(new Date(record.createdAt).getTime())}
         </Descriptions.Item>
         <Descriptions.Item label="Updated At">
           {new Intl.DateTimeFormat('en-GB', {
             year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit',
-          }).format(record.updatedAt)}
+          }).format(new Date(record.updatedAt).getTime())}
         </Descriptions.Item>
         <br />
         <Descriptions.Item label="Queue">

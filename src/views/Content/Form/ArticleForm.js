@@ -117,7 +117,16 @@ const ArticleForm = ({
           >
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item name="sapoSelector" label="Sapo">
+                <Form.Item
+                  name="sapoSelector"
+                  label="Sapo"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please input sapo selector',
+                    },
+                  ]}
+                >
                   <Input />
                 </Form.Item>
               </Col>
@@ -129,7 +138,16 @@ const ArticleForm = ({
             </Row>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item name="titleSelector" label="Title">
+                <Form.Item
+                  name="titleSelector"
+                  label="Title"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please input title selector',
+                    },
+                  ]}
+                >
                   <Input />
                 </Form.Item>
               </Col>
@@ -141,7 +159,16 @@ const ArticleForm = ({
             </Row>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item name="thumbnailSelector" label="Thumbnail">
+                <Form.Item
+                  name="thumbnailSelector"
+                  label="Thumbnail"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please input thumbnail selector',
+                    },
+                  ]}
+                >
                   <Input />
                 </Form.Item>
               </Col>
@@ -153,7 +180,16 @@ const ArticleForm = ({
             </Row>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item name="tagsSelector" label="Tags">
+                <Form.Item
+                  name="tagsSelector"
+                  label="Tags"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please input tags selector',
+                    },
+                  ]}
+                >
                   <Input />
                 </Form.Item>
               </Col>
@@ -165,7 +201,16 @@ const ArticleForm = ({
             </Row>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item name="contentSelector" label="Content">
+                <Form.Item
+                  name="contentSelector"
+                  label="Content"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please input content selector',
+                    },
+                  ]}
+                >
                   <Input />
                 </Form.Item>
               </Col>

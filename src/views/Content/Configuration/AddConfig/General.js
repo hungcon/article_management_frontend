@@ -29,34 +29,101 @@ const General = ({ onCreate, general }) => {
       layout="vertical"
       form={form}
       initialValues={{
-        website: general.website,
-        category: general.category,
+        website: general.website.name,
+        category: general.category.name,
         status: general.status,
         queue: general.queue,
         crawlType: general.crawlType,
         schedules: general.schedules,
+        articleDemoLink: general.articleDemoLink,
       }}
       onFinish={onSubmit}
     >
-      <Form.Item name="website" label="Website">
+      <Form.Item
+        name="website"
+        label="Website"
+        rules={[
+          {
+            required: true,
+            message: 'Please input website name',
+          },
+        ]}
+      >
         <Input />
       </Form.Item>
-      <Form.Item name="category" label="Category">
+      <Form.Item
+        name="category"
+        label="Category"
+        rules={[
+          {
+            required: true,
+            message: 'Please input category name',
+          },
+        ]}
+      >
         <Input />
       </Form.Item>
-      <Form.Item name="crawlType" label="Crawl Type">
+      <Form.Item
+        name="crawlType"
+        label="Crawl Type"
+        rules={[
+          {
+            required: true,
+            message: 'Please select crawl type',
+          },
+        ]}
+      >
         <Select>
           <Option value="RSS">RSS</Option>
           <Option value="HTML">HTML</Option>
         </Select>
       </Form.Item>
-      <Form.Item name="queue" label="Queue">
+      <Form.Item
+        name="queue"
+        label="Queue"
+        rules={[
+          {
+            required: true,
+            message: 'Please input queue',
+          },
+        ]}
+      >
         <Input />
       </Form.Item>
-      <Form.Item name="schedules" label="Schedule">
+      <Form.Item
+        name="schedules"
+        label="Schedule"
+        rules={[
+          {
+            required: true,
+            message: 'Please input schedules',
+          },
+        ]}
+      >
         {renderSelectTag(general.schedules)}
       </Form.Item>
-      <Form.Item name="status" label="Status">
+      <Form.Item
+        name="status"
+        label="Status"
+        rules={[
+          {
+            required: true,
+            message: 'Please input status',
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        name="articleDemoLink"
+        label="Article Demo Link"
+        rules={[
+          {
+            required: true,
+            message: 'Please input article demo link',
+          },
+        ]}
+      >
         <Input />
       </Form.Item>
       <div

@@ -21,7 +21,6 @@ const ArticleConfig = ({
   };
 
   const onSubmit = (values) => {
-    console.log(values);
     onCreate(values);
   };
 
@@ -37,34 +36,85 @@ const ArticleConfig = ({
       form={form}
       id="rss_form"
       initialValues={{
+        sapoRedundancySelectors: [],
+        titleRedundancySelectors: [],
+        thumbnailRedundancySelectors: [],
+        tagsRedundancySelectors: [],
+        contentRedundancySelectors: [],
+        textRedundancySelectors: [],
       }}
       onFinish={onSubmit}
     >
-      <Form.Item name="sapoSelector" label="Sapo">
+      <Form.Item
+        name="sapoSelector"
+        label="Sapo"
+        rules={[
+          {
+            required: true,
+            message: 'Please input sapo selector',
+          },
+        ]}
+      >
         <Input />
       </Form.Item>
       <Form.Item name="sapoRedundancySelectors" label="Sapo Redundancy">
         {renderSelectTag()}
       </Form.Item>
-      <Form.Item name="titleSelector" label="Title">
+      <Form.Item
+        name="titleSelector"
+        label="Title"
+        rules={[
+          {
+            required: true,
+            message: 'Please input title selector',
+          },
+        ]}
+      >
         <Input />
       </Form.Item>
       <Form.Item name="titleRedundancySelectors" label="Title Redundancy">
         {renderSelectTag()}
       </Form.Item>
-      <Form.Item name="thumbnailSelector" label="Thumbnail">
+      <Form.Item
+        name="thumbnailSelector"
+        label="Thumbnail"
+        rules={[
+          {
+            required: true,
+            message: 'Please input thumbnail selector',
+          },
+        ]}
+      >
         <Input />
       </Form.Item>
       <Form.Item name="thumbnailRedundancySelectors" label="Thumbnail Redundancy">
         {renderSelectTag()}
       </Form.Item>
-      <Form.Item name="tagsSelector" label="Tags">
+      <Form.Item
+        name="tagsSelector"
+        label="Tags"
+        rules={[
+          {
+            required: true,
+            message: 'Please input tags selector',
+          },
+        ]}
+      >
         <Input />
       </Form.Item>
       <Form.Item name="tagsRedundancySelectors" label="Tags Redundancy">
         {renderSelectTag()}
       </Form.Item>
-      <Form.Item name="contentSelector" label="Content">
+      <Form.Item
+        name="contentSelector"
+        label="Content"
+        rules={[
+          {
+            required: true,
+            message: 'Please input content selector',
+          },
+        ]}
+      >
         <Input />
       </Form.Item>
       <Form.Item name="contentRedundancySelectors" label="Content Redundancy">

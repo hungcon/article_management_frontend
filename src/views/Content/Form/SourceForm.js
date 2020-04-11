@@ -5,6 +5,8 @@ import {
   Modal, Form, Input, Switch, Select,
 } from 'antd';
 
+const { Option } = Select;
+
 const SourceForm = ({
   visible, onCreate, onCancel, record,
 }) => {
@@ -52,19 +54,68 @@ const SourceForm = ({
           status: record.status === '01',
         }}
       >
-        <Form.Item name="website" label="Website">
+        <Form.Item
+          name="website"
+          label="Website"
+          rules={[
+            {
+              required: true,
+              message: 'Please input website name',
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
-        <Form.Item name="category" label="Category">
+        <Form.Item
+          name="category"
+          label="Category"
+          rules={[
+            {
+              required: true,
+              message: 'Please input category name',
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
-        <Form.Item name="crawlType" label="Crawl Type">
+        <Form.Item
+          name="crawlType"
+          label="Crawl Type"
+          rules={[
+            {
+              required: true,
+              message: 'Please input crawl type',
+            },
+          ]}
+        >
+
+          <Select>
+            <Option value="RSS">RSS</Option>
+            <Option value="HTML">HTML</Option>
+          </Select>
+        </Form.Item>
+        <Form.Item
+          name="queue"
+          label="Queue"
+          rules={[
+            {
+              required: true,
+              message: 'Please input queue',
+            },
+          ]}
+        >
           <Input />
         </Form.Item>
-        <Form.Item name="queue" label="Queue">
-          <Input />
-        </Form.Item>
-        <Form.Item name="schedules" label="Schedule">
+        <Form.Item
+          name="schedules"
+          label="Schedule"
+          rules={[
+            {
+              required: true,
+              message: 'Please input schedules',
+            },
+          ]}
+        >
           {renderSelectTag(record.schedules)}
         </Form.Item>
         <Form.Item name="status" label="Status" valuePropName="checked">

@@ -19,10 +19,10 @@ const initBlock = {
   blockSelector: '',
 };
 
-const HtmlConfig = ({ onCreate, prev }) => {
+const HtmlConfig = ({ onCreate, prev, htmlVal }) => {
   const [form] = Form.useForm();
   const [block, setBlock] = useState(initBlock);
-  const [newBlock, setNewBlock] = useState([]);
+  const [newBlock, setNewBlock] = useState(htmlVal.blocksConfiguration);
   const [blockVisible, setBlockVisible] = useState(false);
   const [type, setType] = useState({});
   const renderSelectTag = (children) => (
@@ -35,8 +35,8 @@ const HtmlConfig = ({ onCreate, prev }) => {
     onCreate(values, newBlock);
   };
 
-  const showBlockModal = (blockVal, typeVal) => {
-    setType({ type: typeVal });
+  const showBlockModal = (blockVal, typeVal, index) => {
+    setType({ type: typeVal, index });
     setBlock(blockVal);
     setBlockVisible(true);
   };
@@ -45,7 +45,6 @@ const HtmlConfig = ({ onCreate, prev }) => {
   };
 
   const onBlockCreate = (values) => {
-    console.log(values);
     const blockConfig = {
       configuration: {
         redundancySelectors: values.redundancySelectors,
@@ -55,7 +54,21 @@ const HtmlConfig = ({ onCreate, prev }) => {
       },
       blockSelector: values.blockSelector,
     };
-    setNewBlock([...newBlock, blockConfig]);
+    switch (type.type) {
+      case 'localUpdate':
+        // eslint-disable-next-line no-case-declarations
+        const newBlockState = newBlock;
+        newBlockState[type.index] = blockConfig;
+        setNewBlock(newBlockState);
+        break;
+      case 'localAdd':
+        // eslint-disable-next-line no-case-declarations
+        setNewBlock([...newBlock, blockConfig]);
+        break;
+      default:
+        break;
+    }
+
     setBlockVisible(false);
   };
 
@@ -70,6 +83,8 @@ const HtmlConfig = ({ onCreate, prev }) => {
       layout="vertical"
       form={form}
       initialValues={{
+        url: htmlVal.url,
+        contentRedundancySelectors: htmlVal.contentRedundancySelectors,
       }}
       onFinish={onSubmit}
     >
@@ -93,7 +108,7 @@ const HtmlConfig = ({ onCreate, prev }) => {
           // eslint-disable-next-line react/no-array-index-key
           <div key={index}>
             <Button
-              // onClick={() => showBlockModal(config, 'localUpdate', index)}
+              onClick={() => showBlockModal(config, 'localUpdate', index)}
               style={{ marginBottom: 10 }}
               icon={<EditOutlined />}
             >
