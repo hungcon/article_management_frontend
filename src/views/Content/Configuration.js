@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-underscore-dangle */
 import React, { useState, useEffect } from 'react';
 import 'antd/dist/antd.css';
@@ -6,7 +7,7 @@ import {
   Table, Button, Switch, Modal,
 } from 'antd';
 import {
-  ExclamationCircleOutlined, DeleteOutlined, EditOutlined,
+  ExclamationCircleOutlined, DeleteOutlined, EditOutlined, PlusCircleOutlined,
 } from '@ant-design/icons';
 import { css } from 'emotion';
 import Axios from 'axios';
@@ -49,14 +50,13 @@ const initSource = {
   createdAt: 0,
   updatedAt: 0,
   articleDemoLink: '',
-  status: 0,
+  status: '00',
   schedules: [
-    '',
   ],
   queue: 1,
 };
 
-export default function Configuration() {
+export default function Configuration(props) {
   const classes = useStyles();
   const data = useSelector((state) => state.config.data);
   const reload = useSelector((state) => state.config.reload);
@@ -219,6 +219,13 @@ export default function Configuration() {
 
   return (
     <div className={classes.root}>
+      <Button
+        onClick={() => props.history.push('/dashboard/configuration/add-config')}
+        style={{ marginRight: 10 }}
+        icon={<PlusCircleOutlined />}
+      >
+        Add config
+      </Button>
       <Table
         className={tableCSS}
         columns={columns}

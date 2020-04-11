@@ -36,33 +36,21 @@ const initHtml = {
   url: '',
   blocksConfiguration: [],
 };
-
 const initArticle = {
   sapoSelector: '',
-  sapoRedundancySelectors: [
-
-  ],
+  sapoRedundancySelectors: [],
   titleSelector: '',
-  titleRedundancySelectors: [
-
-  ],
+  titleRedundancySelectors: [],
   thumbnailSelector: '',
-  thumbnailRedundancySelectors: [
-
-  ],
+  thumbnailRedundancySelectors: [],
   tagsSelector: '',
   tagsRedundancySelectors: [
-
   ],
   contentSelector: '',
-  contentRedundancySelectors: [
-
-  ],
-  textRedundancySelectors: [
-    '',
-  ],
+  contentRedundancySelectors: [],
+  textRedundancySelectors: [],
+  articleDemoLink: '',
 };
-
 
 const MoreInfo = ({ record }) => {
   const [rssVisible, setRssVisible] = useState(false);
@@ -75,14 +63,12 @@ const MoreInfo = ({ record }) => {
   const [rssAction, setRssAction] = useState();
   const dispatch = useDispatch();
 
-
   const onCreate = (values) => {
     console.log('Received values of form: ', values);
     setArticleVisible(false);
   };
 
   const onRssCreate = async (values, rssConfigId) => {
-    console.log(values);
     switch (rssAction) {
       case 'update':
         // eslint-disable-next-line no-case-declarations
@@ -152,7 +138,9 @@ const MoreInfo = ({ record }) => {
   };
 
   const showArticleModal = (articleVal) => {
-    setArticle(articleVal);
+    const articleInfo = articleVal;
+    articleInfo.articleDemoLink = record.articleDemoLink;
+    setArticle(articleInfo);
     setArticleVisible(true);
   };
 

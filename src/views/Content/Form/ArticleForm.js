@@ -111,73 +111,81 @@ const ArticleForm = ({
               contentSelector: record.contentSelector,
               contentRedundancySelectors: record.contentRedundancySelectors,
               textRedundancySelectors: record.textRedundancySelectors,
+              articleDemoLink: record.articleDemoLink,
             }}
             onFinish={onFinish}
           >
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item name="sapoSelector" label="Sapo" id={Date.now()}>
+                <Form.Item name="sapoSelector" label="Sapo">
                   <Input />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item name="sapoRedundancySelectors" label="Sapo Redundancy" id={Date.now()}>
+                <Form.Item name="sapoRedundancySelectors" label="Sapo Redundancy">
                   {renderSelectTag()}
                 </Form.Item>
               </Col>
             </Row>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item name="titleSelector" label="Title" id={Date.now()}>
+                <Form.Item name="titleSelector" label="Title">
                   <Input />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item name="titleRedundancySelectors" label="Title Redundancy" id={Date.now()}>
+                <Form.Item name="titleRedundancySelectors" label="Title Redundancy">
                   {renderSelectTag()}
                 </Form.Item>
               </Col>
             </Row>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item name="thumbnailSelector" label="Thumbnail" id={Date.now()}>
+                <Form.Item name="thumbnailSelector" label="Thumbnail">
                   <Input />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item name="thumbnailRedundancySelectors" label="Thumbnail Redundancy" id={Date.now()}>
+                <Form.Item name="thumbnailRedundancySelectors" label="Thumbnail Redundancy">
                   {renderSelectTag()}
                 </Form.Item>
               </Col>
             </Row>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item name="tagsSelector" label="Tags" id={Date.now()}>
+                <Form.Item name="tagsSelector" label="Tags">
                   <Input />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item name="tagsRedundancySelectors" label="Tags Redundancy" id={Date.now()}>
+                <Form.Item name="tagsRedundancySelectors" label="Tags Redundancy">
                   {renderSelectTag()}
                 </Form.Item>
               </Col>
             </Row>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item name="contentSelector" label="Content" id={Date.now()}>
+                <Form.Item name="contentSelector" label="Content">
                   <Input />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item name="contentRedundancySelectors" label="Content Redundancy" id={Date.now()}>
+                <Form.Item name="contentRedundancySelectors" label="Content Redundancy">
                   {renderSelectTag()}
                 </Form.Item>
               </Col>
             </Row>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item name="textRedundancySelectors" label="Text Redundancy" id={Date.now()}>
+                <Form.Item name="textRedundancySelectors" label="Text Redundancy">
                   {renderSelectTag()}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item name="articleDemoLink" label="Demo Link">
+                  <Input />
                 </Form.Item>
               </Col>
             </Row>
