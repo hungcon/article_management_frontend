@@ -1,6 +1,3 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-filename-extension */
 import React, { useState } from 'react';
 import 'antd/dist/antd.css';
 import './index.css';
@@ -17,6 +14,7 @@ import RssConfig from './RssConfig';
 import ArticleConfig from './ArticleConfig';
 import openNotification from '../../../Notifications';
 import allActions from '../../../../store/actions/allActions';
+import { message } from '../../../../common';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -151,10 +149,10 @@ export default function AddConfig(props) {
     const addResult = await Axios.post('http://localhost:8000/add-config', data);
     if (addResult.data.status === 1) {
       dispatch(allActions.configAction.reload());
-      openNotification('success');
+      openNotification('success', message.ADD_SUCCESS);
       props.history.push('/dashboard/configuration');
     } else {
-      openNotification('error');
+      openNotification('error', message.ERROR);
     }
   };
 

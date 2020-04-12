@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-filename-extension */
 import React, { useEffect } from 'react';
 import {
   Modal, Form, Input, Switch, Select,
@@ -14,11 +12,8 @@ const SourceForm = ({
       {children}
     </Select>
   );
-  // eslint-disable-next-line arrow-body-style
-  useEffect(() => {
-    return () => {
-      form.resetFields();
-    };
+  useEffect(() => () => {
+    form.resetFields();
   });
   return (
     <Modal

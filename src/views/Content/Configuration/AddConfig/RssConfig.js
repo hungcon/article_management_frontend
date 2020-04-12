@@ -1,7 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-console */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-filename-extension */
 import React, { useEffect } from 'react';
 import {
   Button, Form, Input,
@@ -15,11 +11,9 @@ const RssConfig = ({
     console.log(values);
     onCreate(values);
   };
-  // eslint-disable-next-line arrow-body-style
-  useEffect(() => {
-    return () => {
-      form.resetFields();
-    };
+
+  useEffect(() => () => {
+    form.resetFields();
   });
   return (
     <Form

@@ -1,5 +1,3 @@
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import MUIDataTable from 'mui-datatables';
 import { makeStyles, createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';

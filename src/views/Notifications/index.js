@@ -1,8 +1,8 @@
 import { notification } from 'antd';
 
-const openNotification = (type) => {
+const openNotification = (type, message) => {
   notification[type]({
-    message: 'Delete successfully',
+    message,
     placement: 'bottomRight',
   });
 };

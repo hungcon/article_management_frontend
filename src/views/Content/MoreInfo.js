@@ -1,8 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-/* eslint-disable no-alert */
-/* eslint-disable no-restricted-globals */
 /* eslint-disable react/no-array-index-key */
-/* eslint-disable no-unused-expressions */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-filename-extension */
 import React, { useState } from 'react';
@@ -17,6 +14,7 @@ import HtmlForm from './Form/HtmlForm';
 import ArticleForm from './Form/ArticleForm';
 import openNotification from '../Notifications';
 import allActions from '../../store/actions/allActions';
+import { message } from '../../common';
 
 const { confirm } = Modal;
 
@@ -72,12 +70,12 @@ const MoreInfo = ({ record }) => {
     switch (rssAction) {
       case 'update':
         // eslint-disable-next-line no-case-declarations
-        const updateRssResult = await Axios.post('http://localhost:8000/update-rss-config', { rssConfig: values, rssConfigId });
+        const updateRssResult = await Axios.post('http://localhost:8000/update-rss-config', { rssConfig: values, rssConfigId, configId: record._id });
         if (updateRssResult.data.status === 1) {
           dispatch(allActions.configAction.reload());
-          openNotification('success');
+          openNotification('success', message.UPDATE_SUCCESS);
         } else {
-          openNotification('error');
+          openNotification('error', message.ERROR);
         }
         break;
       case 'add':
@@ -85,9 +83,9 @@ const MoreInfo = ({ record }) => {
         const addRssResult = await Axios.post('http://localhost:8000/add-rss-config', { rssConfig: values, configId: record._id });
         if (addRssResult.data.status === 1) {
           dispatch(allActions.configAction.reload());
-          openNotification('success');
+          openNotification('success', message.ADD_SUCCESS);
         } else {
-          openNotification('error');
+          openNotification('error', message.ERROR);
         }
         break;
       default:
@@ -103,18 +101,20 @@ const MoreInfo = ({ record }) => {
           const updateResult = await Axios.post('http://localhost:8000/update-html-config', { html: values, htmlId, configId: record._id });
           if (updateResult.data.status === 1) {
             dispatch(allActions.configAction.reload());
-            openNotification('success');
+            openNotification('success', message.UPDATE_SUCCESS);
           } else {
-            openNotification('error');
+            openNotification('error', message.ERROR);
           }
         } else {
           addBlock.map(async (block) => {
-            const updateResult = await Axios.post('http://localhost:8000/add-block-config', { html: values, htmlId, block });
+            const updateResult = await Axios.post('http://localhost:8000/add-block-config', {
+              html: values, htmlId, block, configId: record._id,
+            });
             if (updateResult.data.status === 1) {
               dispatch(allActions.configAction.reload());
-              openNotification('success');
+              openNotification('success', message.ADD_SUCCESS);
             } else {
-              openNotification('error');
+              openNotification('error', message.ERROR);
             }
           });
         }
@@ -124,9 +124,9 @@ const MoreInfo = ({ record }) => {
         const addResult = await Axios.post('http://localhost:8000/add-html-config', { html: values, addBlock, configId: record._id });
         if (addResult.data.status === 1) {
           dispatch(allActions.configAction.reload());
-          openNotification('success');
+          openNotification('success', message.ADD_SUCCESS);
         } else {
-          openNotification('error');
+          openNotification('error', message.ERROR);
         }
         break;
       default:
@@ -303,12 +303,14 @@ const MoreInfo = ({ record }) => {
         onCreate={onRssCreate}
         onCancel={() => setRssVisible(false)}
         record={rss}
+        configId={record._id}
       />
       <HtmlForm
         visible={htmlVisible}
         onCreate={onHtmlCreate}
         onCancel={() => setHtmlVisible(false)}
         record={html}
+        configId={record._id}
       />
       <ArticleForm
         visible={articleVisible}

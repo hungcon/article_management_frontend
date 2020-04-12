@@ -22,6 +22,12 @@ module.exports = {
     'react',
   ],
   rules: {
-    'no-console': 0
+    'no-console': 0,
+    'react/prop-types': 0,
+    'react/jsx-filename-extension': 0,
+    'no-case-declarations': 0,
+    'react/no-array-index-key': 0,
+    
+
   },
 };

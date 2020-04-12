@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-filename-extension */
 import React, { useState, useEffect } from 'react';
 import {
   Form, Input, Select, Button,
@@ -56,13 +54,11 @@ const HtmlConfig = ({ onCreate, prev, htmlVal }) => {
     };
     switch (type.type) {
       case 'localUpdate':
-        // eslint-disable-next-line no-case-declarations
         const newBlockState = newBlock;
         newBlockState[type.index] = blockConfig;
         setNewBlock(newBlockState);
         break;
       case 'localAdd':
-        // eslint-disable-next-line no-case-declarations
         setNewBlock([...newBlock, blockConfig]);
         break;
       default:

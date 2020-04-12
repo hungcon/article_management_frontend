@@ -1,9 +1,3 @@
-/* eslint-disable max-len */
-/* eslint-disable react/style-prop-object */
-/* eslint-disable no-const-assign */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/no-children-prop */
-/* eslint-disable react/jsx-filename-extension */
 import React, { useEffect } from 'react';
 import {
   Button, Form, Input, Select, Drawer, Row, Col, Tabs,

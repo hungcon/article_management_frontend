@@ -1,7 +1,4 @@
 /* eslint-disable no-underscore-dangle */
-/* eslint-disable no-console */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-filename-extension */
 import React, { useEffect } from 'react';
 import {
   Modal, Form, Input,
@@ -11,11 +8,8 @@ const RssForm = ({
   visible, onCreate, onCancel, record,
 }) => {
   const [form] = Form.useForm();
-  // eslint-disable-next-line arrow-body-style
-  useEffect(() => {
-    return () => {
-      form.resetFields();
-    };
+  useEffect(() => () => {
+    form.resetFields();
   });
   return (
     <Modal

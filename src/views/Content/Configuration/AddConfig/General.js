@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-filename-extension */
 import React, { useEffect } from 'react';
 import {
   Form, Input, Select, Button,

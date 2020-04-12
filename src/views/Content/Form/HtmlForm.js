@@ -17,6 +17,7 @@ import { useDispatch } from 'react-redux';
 import BlockForm from './BlockForm';
 import openNotification from '../../Notifications';
 import allActions from '../../../store/actions/allActions';
+import { message } from '../../../common';
 
 const { confirm } = Modal;
 
@@ -31,8 +32,7 @@ const initBlock = {
 };
 
 const HtmlForm = ({
-
-  visible, onCreate, onCancel, record,
+  visible, onCreate, onCancel, record, configId,
 }) => {
   const [block, setBlock] = useState(initBlock);
   const [newBlock, setNewBlock] = useState([]);
@@ -60,13 +60,13 @@ const HtmlForm = ({
       centered: true,
       async onOk() {
         console.log('block: ', blockConfigId, htmlConfigId);
-        const result = await Axios.post('http://localhost:8000/delete-block-config', { htmlConfigId, blockConfigId });
+        const result = await Axios.post('http://localhost:8000/delete-block-config', { htmlConfigId, blockConfigId, configId });
         if (result.data.status === 1) {
           dispatch(allActions.configAction.reload());
           onCancel();
-          openNotification('success');
+          openNotification('success', message.DELETE_SUCCESS);
         } else {
-          openNotification('error');
+          openNotification('error', message.ERROR);
         }
       },
       onCancel() {
@@ -100,14 +100,13 @@ const HtmlForm = ({
     setBlock(blockConfig);
     switch (type.type) {
       case 'serverUpdate':
-        // eslint-disable-next-line no-case-declarations
-        const result = await Axios.post('http://localhost:8000/update-block-config', { blockConfigId: type.blockId, block: blockConfig });
+        const result = await Axios.post('http://localhost:8000/update-block-config', { blockConfigId: type.blockId, block: blockConfig, configId });
         if (result.data.status === 1) {
           dispatch(allActions.configAction.reload());
           handleCancel();
-          openNotification('success');
+          openNotification('success', message.UPDATE_SUCCESS);
         } else {
-          openNotification('error');
+          openNotification('error', message.ERROR);
         }
         break;
       case 'localAdd':
@@ -130,11 +129,9 @@ const HtmlForm = ({
   };
 
   const [form] = Form.useForm();
-  // eslint-disable-next-line arrow-body-style
-  useEffect(() => {
-    return () => {
-      form.resetFields();
-    };
+
+  useEffect(() => () => {
+    form.resetFields();
   });
   return (
     <div>

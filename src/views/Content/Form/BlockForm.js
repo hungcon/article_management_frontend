@@ -1,6 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-filename-extension */
 import React, { useEffect } from 'react';
 import {
   Modal, Form, Input, Select,

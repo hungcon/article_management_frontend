@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable no-underscore-dangle */
 import React, { useState, useEffect } from 'react';
 import 'antd/dist/antd.css';
@@ -16,6 +15,7 @@ import SourceForm from './Form/SourceForm';
 import allActions from '../../store/actions/allActions';
 import MoreInfo from './MoreInfo';
 import openNotification from '../Notifications';
+import { message } from '../../common';
 
 const { confirm } = Modal;
 
@@ -82,9 +82,9 @@ export default function Configuration(props) {
     const updateResult = await Axios.post('http://localhost:8000/update-config', { configId, config: values });
     if (updateResult.data.status === 1) {
       dispatch(allActions.configAction.reload());
-      openNotification('success');
+      openNotification('success', message.UPDATE_SUCCESS);
     } else {
-      openNotification('error');
+      openNotification('error', message.ERROR);
     }
     handleCancel();
   };
@@ -102,9 +102,9 @@ export default function Configuration(props) {
         const result = await Axios.post('http://localhost:8000/delete-config', { configId: toDelete._id });
         if (result.data.status === 1) {
           dispatch(allActions.configAction.reload());
-          openNotification('success');
+          openNotification('success', message.DELETE_SUCCESS);
         } else {
-          openNotification('error');
+          openNotification('error', message.ERROR);
         }
       },
       onCancel() {
