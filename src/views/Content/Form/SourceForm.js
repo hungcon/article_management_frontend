@@ -5,8 +5,6 @@ import {
   Modal, Form, Input, Switch, Select,
 } from 'antd';
 
-const { Option } = Select;
-
 const SourceForm = ({
   visible, onCreate, onCancel, record,
 }) => {
@@ -49,7 +47,6 @@ const SourceForm = ({
           website: record.website.name,
           category: record.category.name,
           schedules: record.schedules,
-          crawlType: record.crawlType,
           queue: record.queue,
           status: record.status === '01',
         }}
@@ -77,22 +74,6 @@ const SourceForm = ({
           ]}
         >
           <Input />
-        </Form.Item>
-        <Form.Item
-          name="crawlType"
-          label="Crawl Type"
-          rules={[
-            {
-              required: true,
-              message: 'Please input crawl type',
-            },
-          ]}
-        >
-
-          <Select>
-            <Option value="RSS">RSS</Option>
-            <Option value="HTML">HTML</Option>
-          </Select>
         </Form.Item>
         <Form.Item
           name="queue"

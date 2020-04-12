@@ -99,15 +99,25 @@ const MoreInfo = ({ record }) => {
   const onHtmlCreate = async (values, addBlock, htmlId) => {
     switch (htmlAction) {
       case 'update':
-        addBlock.map(async (block) => {
-          const updateResult = await Axios.post('http://localhost:8000/add-block-config', { html: values, htmlId, block });
+        if (addBlock.length === 0) {
+          const updateResult = await Axios.post('http://localhost:8000/update-html-config', { html: values, htmlId, configId: record._id });
           if (updateResult.data.status === 1) {
             dispatch(allActions.configAction.reload());
             openNotification('success');
           } else {
             openNotification('error');
           }
-        });
+        } else {
+          addBlock.map(async (block) => {
+            const updateResult = await Axios.post('http://localhost:8000/add-block-config', { html: values, htmlId, block });
+            if (updateResult.data.status === 1) {
+              dispatch(allActions.configAction.reload());
+              openNotification('success');
+            } else {
+              openNotification('error');
+            }
+          });
+        }
         break;
       case 'add':
         // eslint-disable-next-line no-case-declarations
@@ -131,8 +141,8 @@ const MoreInfo = ({ record }) => {
     setRssVisible(true);
   };
 
-  const showHTMLModal = (htmlVal, htmlActioVal) => {
-    setHtmlAction(htmlActioVal);
+  const showHTMLModal = (htmlVal, htmlActionVal) => {
+    setHtmlAction(htmlActionVal);
     setHtml(htmlVal);
     setHtmlVisible(true);
   };

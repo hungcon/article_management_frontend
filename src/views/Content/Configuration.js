@@ -64,9 +64,10 @@ export default function Configuration(props) {
 
   const [sourceVisible, setSourceVisible] = useState(false);
   const [source, setSource] = useState(initSource);
-  // const [reloadTable, setReloadTable] = useState(false);
+  const [configId, setConfigId] = useState();
 
-  const showSourceModal = (sourceVal) => {
+  const showSourceModal = (sourceVal, configIdVal) => {
+    setConfigId(configIdVal);
     setSource(sourceVal);
     setSourceVisible(true);
   };
@@ -76,8 +77,15 @@ export default function Configuration(props) {
     setSourceVisible(false);
   };
 
-  const onCreate = (values) => {
+  const onCreate = async (values) => {
     console.log('Received values of form: ', values);
+    const updateResult = await Axios.post('http://localhost:8000/update-config', { configId, config: values });
+    if (updateResult.data.status === 1) {
+      dispatch(allActions.configAction.reload());
+      openNotification('success');
+    } else {
+      openNotification('error');
+    }
     handleCancel();
   };
 
@@ -182,7 +190,7 @@ export default function Configuration(props) {
       render: (value, record) => (
         <div>
           <Button
-            onClick={() => showSourceModal(record)}
+            onClick={() => showSourceModal(record, record._id)}
             style={{ marginRight: 10 }}
             icon={<EditOutlined />}
           >
