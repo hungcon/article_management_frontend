@@ -61,8 +61,28 @@ const MoreInfo = ({ record }) => {
   const [rssAction, setRssAction] = useState();
   const dispatch = useDispatch();
 
-  const onCreate = (values) => {
-    console.log('Received values of form: ', values);
+  const onCreate = async (values) => {
+    const articleVal = {
+      sapoSelector: values.sapoSelector,
+      sapoRedundancySelectors: values.sapoRedundancySelectors,
+      titleSelector: values.titleSelector,
+      titleRedundancySelectors: values.titleRedundancySelectors,
+      thumbnailSelector: values.thumbnailSelector,
+      thumbnailRedundancySelectors: values.thumbnailRedundancySelectors,
+      tagsSelector: values.tagsSelector,
+      tagsRedundancySelectors: values.tagsRedundancySelectors,
+      contentSelector: values.contentSelector,
+      contentRedundancySelectors: values.contentRedundancySelectors,
+      textRedundancySelectors: values.textRedundancySelectors,
+    };
+    const { articleDemoLink } = values;
+    const updateArticleResult = await Axios.post('http://localhost:8000/update-article-config', { articleVal, articleDemoLink, configId: record._id });
+    if (updateArticleResult.data.status === 1) {
+      dispatch(allActions.configAction.reload());
+      openNotification('success', message.UPDATE_SUCCESS);
+    } else {
+      openNotification('error', message.ERROR);
+    }
     setArticleVisible(false);
   };
 
@@ -169,18 +189,18 @@ const MoreInfo = ({ record }) => {
           const deleteRssResult = await Axios.post('http://localhost:8000/delete-rss-config', { rssConfigId: deleteId, configId });
           if (deleteRssResult.data.status === 1) {
             dispatch(allActions.configAction.reload());
-            openNotification('success');
+            openNotification('success', message.DELETE_SUCCESS);
           } else {
-            openNotification('error');
+            openNotification('error', message.ERROR);
           }
         } else {
           console.log('html: ', deleteId, 'htmlId: ', configId);
           const deleteHtmlResult = await Axios.post('http://localhost:8000/delete-html-config', { htmlConfigId: deleteId, configId });
           if (deleteHtmlResult.data.status === 1) {
             dispatch(allActions.configAction.reload());
-            openNotification('success');
+            openNotification('success', message.DELETE_SUCCESS);
           } else {
-            openNotification('error');
+            openNotification('error', message.ERROR);
           }
         }
       },
@@ -231,28 +251,30 @@ const MoreInfo = ({ record }) => {
 
   const showRSSConfig = (rssConfig, configId) => (
     <Descriptions>
-      <Descriptions.Item>
-        {
-      rssConfig.map((eachRss, index) => (
-        <div key={index}>
-          <Button
-            onClick={() => showRSSModal(eachRss, 'update')}
-            style={{ marginBottom: 10 }}
-            icon={<EditOutlined />}
-          >
-            RSS Config
-            {' '}
-            {index + 1}
-          </Button>
-          <Button
-            danger
-            onClick={() => showDeleteConfirm('rss', eachRss._id, configId)}
-            icon={<DeleteOutlined />}
-          />
-        </div>
-      ))
-    }
-      </Descriptions.Item>
+      {rssConfig.length === 0 ? (
+        <Descriptions.Item>Have no RSS config</Descriptions.Item>
+      ) : (
+        <Descriptions.Item>
+          { rssConfig.map((eachRss, index) => (
+            <div key={index}>
+              <Button
+                onClick={() => showRSSModal(eachRss, 'update')}
+                style={{ marginBottom: 10 }}
+                icon={<EditOutlined />}
+              >
+                RSS Config
+                {' '}
+                {index + 1}
+              </Button>
+              <Button
+                danger
+                onClick={() => showDeleteConfirm('rss', eachRss._id, configId)}
+                icon={<DeleteOutlined />}
+              />
+            </div>
+          ))}
+        </Descriptions.Item>
+      )}
       <Descriptions.Item>
         <Button
           type="primary"
