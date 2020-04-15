@@ -3,7 +3,11 @@ import {
   Form, Input, Select, Button,
 } from 'antd';
 
+import { isValidCron } from 'cron-validator';
+import { websites, categories } from '../../../../common';
+
 const { Option } = Select;
+
 
 const General = ({ onCreate, general }) => {
   const [form] = Form.useForm();
@@ -12,6 +16,17 @@ const General = ({ onCreate, general }) => {
       {children}
     </Select>
   );
+
+  const scheduleValidator = (rule, values, callback) => {
+    const invalidInputs = values.filter((value) => !isValidCron(value, { seconds: true }));
+    if (invalidInputs.length === 0) {
+      callback();
+    } else if (invalidInputs.length === 1) {
+      callback(`${invalidInputs.join('')} is not a valid schedule`);
+    } else {
+      callback(`${invalidInputs.slice(0, -1).join(', ')} and ${invalidInputs.slice(-1)} are not valid schedule`);
+    }
+  };
   const onSubmit = (values) => {
     console.log(values);
     onCreate(values);
@@ -43,11 +58,21 @@ const General = ({ onCreate, general }) => {
         rules={[
           {
             required: true,
-            message: 'Please input website name',
+            message: 'Please select website name',
           },
         ]}
       >
-        <Input />
+        <Select
+          showSearch
+          optionFilterProp="children"
+          filterOption={
+            (input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+        >
+          {websites.map((website) => (
+            <Option key={website.id} value={website.name}>{website.name}</Option>
+          ))}
+        </Select>
       </Form.Item>
       <Form.Item
         name="category"
@@ -59,7 +84,16 @@ const General = ({ onCreate, general }) => {
           },
         ]}
       >
-        <Input />
+        <Select
+          showSearch
+          filterOption={
+            (input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+        >
+          {categories.map((category) => (
+            <Option key={category}>{category}</Option>
+          ))}
+        </Select>
       </Form.Item>
       <Form.Item
         name="crawlType"
@@ -77,24 +111,15 @@ const General = ({ onCreate, general }) => {
         </Select>
       </Form.Item>
       <Form.Item
-        name="queue"
-        label="Queue"
-        rules={[
-          {
-            required: true,
-            message: 'Please input queue',
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item
         name="schedules"
         label="Schedule"
         rules={[
           {
             required: true,
             message: 'Please input schedules',
+          },
+          {
+            validator: scheduleValidator,
           },
         ]}
       >

@@ -45,11 +45,11 @@ const initRss = {
   version: 0,
   url: '',
   configuration: {
-    itemSelector: '',
-    titleSelector: '',
-    linkSelector: '',
-    sapoSelector: '',
-    publicDateSelector: '',
+    itemSelector: 'item',
+    titleSelector: 'title',
+    linkSelector: 'link',
+    sapoSelector: 'description',
+    publishDateSelector: 'pubDate',
   },
 };
 const initHtml = {

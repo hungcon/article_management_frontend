@@ -299,14 +299,9 @@ const MoreInfo = ({ record }) => {
             year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit',
           }).format(new Date(record.updatedAt).getTime())}
         </Descriptions.Item>
-        <br />
-        <Descriptions.Item label="Queue">
-          {record.queue}
-        </Descriptions.Item>
         <Descriptions.Item label="Schedule">
-          {record.schedules}
+          {record.schedules.map((schedule) => (<p>{schedule}</p>))}
         </Descriptions.Item>
-        <br />
         <Descriptions.Item label={record.crawlType === 'HTML' ? 'HTML Config' : 'RSS Config'} span={3}>
           {record.crawlType === 'HTML' ? showHTMLConfig(record.html, record._id) : showRSSConfig(record.rss, record._id)}
         </Descriptions.Item>

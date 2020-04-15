@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import {
   Modal, Form, Input, Switch, Select,
 } from 'antd';
+import { isValidCron } from 'cron-validator';
 
 const SourceForm = ({
   visible, onCreate, onCancel, record,
@@ -12,6 +13,16 @@ const SourceForm = ({
       {children}
     </Select>
   );
+  const scheduleValidator = (rule, values, callback) => {
+    const invalidInputs = values.filter((value) => !isValidCron(value, { seconds: true }));
+    if (invalidInputs.length === 0) {
+      callback();
+    } else if (invalidInputs.length === 1) {
+      callback(`${invalidInputs.join('')} is not a valid schedule`);
+    } else {
+      callback(`${invalidInputs.slice(0, -1).join(', ')} and ${invalidInputs.slice(-1)} are not valid schedule`);
+    }
+  };
   useEffect(() => () => {
     form.resetFields();
   });
@@ -42,7 +53,6 @@ const SourceForm = ({
           website: record.website.name,
           category: record.category.name,
           schedules: record.schedules,
-          queue: record.queue,
           status: record.status === '01',
         }}
       >
@@ -71,24 +81,15 @@ const SourceForm = ({
           <Input />
         </Form.Item>
         <Form.Item
-          name="queue"
-          label="Queue"
-          rules={[
-            {
-              required: true,
-              message: 'Please input queue',
-            },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
           name="schedules"
           label="Schedule"
           rules={[
             {
               required: true,
               message: 'Please input schedules',
+            },
+            {
+              validator: scheduleValidator,
             },
           ]}
         >

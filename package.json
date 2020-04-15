@@ -13,6 +13,7 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "chartist": "^0.11.4",
+    "cron-validator": "^1.1.1",
     "elasticsearch": "^16.6.0",
     "emotion": "^10.0.27",
     "mui-datatables": "^2.13.3",
