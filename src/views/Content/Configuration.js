@@ -239,7 +239,7 @@ export default function Configuration(props) {
         columns={columns}
         dataSource={data}
         expandable={{
-          expandedRowRender: (record) => <MoreInfo record={record} />,
+          expandedRowRender: (record) => <MoreInfo record={record} props={props} />,
         }}
         bordered
         scroll={{ y: 490 }}

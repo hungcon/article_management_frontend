@@ -1,0 +1,29 @@
+.root {
+  width: 100%;
+}
+
+.article-config {
+  position: relative;
+  float: left;
+  margin-top: 1em;
+  width: 50%;
+  height: 1200px;
+}
+
+.right-content {
+  position: relative;
+  float: left;
+  margin-left: 1em;
+  width: 45%;
+}
+
+.button-group {
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: right;
+}
+
+.button {
+  margin-right: 8px;
+}

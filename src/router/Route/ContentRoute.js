@@ -6,6 +6,7 @@ import LogChart from '../../views/Content/LogChart';
 import Accounts from '../../views/Content/Accounts';
 import Reports from '../../views/Content/Reports';
 import AddConfig from '../../views/Content/Configuration/AddConfig/AddConfig';
+import ArticleConfig from '../../views/Content/Configuration/ArticleConfig/ArticleConfig';
 import Statistics from '../../views/Content/Statistics';
 import PrivateRoute from '../../PrivateRoute';
 
@@ -14,6 +15,7 @@ export default function ContentRoute() {
     <Switch>
       <PrivateRoute path="/dashboard/configuration" exact component={Configuration} />
       <PrivateRoute path="/dashboard/configuration/add-config" exact component={AddConfig} />
+      <PrivateRoute path="/dashboard/configuration/article-config/:configId" exact component={ArticleConfig} />
       <PrivateRoute path="/dashboard/log-chart" exact component={LogChart} />
       <PrivateRoute path="/dashboard/accounts" exact component={Accounts} />
       <PrivateRoute path="/dashboard/reports" exact component={Reports} />

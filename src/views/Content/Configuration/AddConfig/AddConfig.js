@@ -37,7 +37,6 @@ const initGeneral = {
   crawlType: '',
   schedules: [
   ],
-  queue: '',
   articleDemoLink: '',
 };
 

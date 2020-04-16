@@ -18,23 +18,14 @@ import BlockForm from './BlockForm';
 import openNotification from '../../Notifications';
 import allActions from '../../../store/actions/allActions';
 import { message } from '../../../common';
+import { init } from '../../../common/init';
 
 const { confirm } = Modal;
-
-const initBlock = {
-  configuration: {
-    redundancySelectors: [],
-    itemSelector: '',
-    titleSelector: '',
-    linkSelector: '',
-  },
-  blockSelector: '',
-};
 
 const HtmlForm = ({
   visible, onCreate, onCancel, record, configId,
 }) => {
-  const [block, setBlock] = useState(initBlock);
+  const [block, setBlock] = useState(init.INIT_BLOCK);
   const [newBlock, setNewBlock] = useState([]);
   const [blockVisible, setBlockVisible] = useState(false);
   const [type, setType] = useState({});

@@ -1,7 +1,4 @@
 /* eslint-disable no-underscore-dangle */
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-filename-extension */
 import React, { useState } from 'react';
 import { Descriptions, Button, Modal } from 'antd';
 import {
@@ -11,80 +8,21 @@ import Axios from 'axios';
 import { useDispatch } from 'react-redux';
 import RssForm from './Form/RssForm';
 import HtmlForm from './Form/HtmlForm';
-import ArticleForm from './Form/ArticleForm';
 import openNotification from '../Notifications';
 import allActions from '../../store/actions/allActions';
 import { message } from '../../common';
+import { init } from '../../common/init';
 
 const { confirm } = Modal;
 
-const initRss = {
-  version: 0,
-  url: '',
-  configuration: {
-    itemSelector: '',
-    titleSelector: '',
-    linkSelector: '',
-    sapoSelector: '',
-    publicDateSelector: '',
-  },
-};
-const initHtml = {
-  contentRedundancySelectors: [],
-  url: '',
-  blocksConfiguration: [],
-};
-const initArticle = {
-  sapoSelector: '',
-  sapoRedundancySelectors: [],
-  titleSelector: '',
-  titleRedundancySelectors: [],
-  thumbnailSelector: '',
-  thumbnailRedundancySelectors: [],
-  tagsSelector: '',
-  tagsRedundancySelectors: [
-  ],
-  contentSelector: '',
-  contentRedundancySelectors: [],
-  textRedundancySelectors: [],
-  articleDemoLink: '',
-};
-
-const MoreInfo = ({ record }) => {
+const MoreInfo = ({ record, props }) => {
   const [rssVisible, setRssVisible] = useState(false);
-  const [rss, setRss] = useState(initRss);
+  const [rss, setRss] = useState(init.INIT_RSS);
   const [htmlVisible, setHtmlVisible] = useState(false);
-  const [html, setHtml] = useState(initHtml);
-  const [articleVisible, setArticleVisible] = useState(false);
-  const [article, setArticle] = useState(initArticle);
+  const [html, setHtml] = useState(init.INIT_HTML);
   const [htmlAction, setHtmlAction] = useState();
   const [rssAction, setRssAction] = useState();
   const dispatch = useDispatch();
-
-  const onCreate = async (values) => {
-    const articleVal = {
-      sapoSelector: values.sapoSelector,
-      sapoRedundancySelectors: values.sapoRedundancySelectors,
-      titleSelector: values.titleSelector,
-      titleRedundancySelectors: values.titleRedundancySelectors,
-      thumbnailSelector: values.thumbnailSelector,
-      thumbnailRedundancySelectors: values.thumbnailRedundancySelectors,
-      tagsSelector: values.tagsSelector,
-      tagsRedundancySelectors: values.tagsRedundancySelectors,
-      contentSelector: values.contentSelector,
-      contentRedundancySelectors: values.contentRedundancySelectors,
-      textRedundancySelectors: values.textRedundancySelectors,
-    };
-    const { articleDemoLink } = values;
-    const updateArticleResult = await Axios.post('http://localhost:8000/update-article-config', { articleVal, articleDemoLink, configId: record._id });
-    if (updateArticleResult.data.status === 1) {
-      dispatch(allActions.configAction.reload());
-      openNotification('success', message.UPDATE_SUCCESS);
-    } else {
-      openNotification('error', message.ERROR);
-    }
-    setArticleVisible(false);
-  };
 
   const onRssCreate = async (values, rssConfigId) => {
     switch (rssAction) {
@@ -167,13 +105,6 @@ const MoreInfo = ({ record }) => {
     setHtmlVisible(true);
   };
 
-  const showArticleModal = (articleVal) => {
-    const articleInfo = articleVal;
-    articleInfo.articleDemoLink = record.articleDemoLink;
-    setArticle(articleInfo);
-    setArticleVisible(true);
-  };
-
   const showDeleteConfirm = (type, deleteId, configId) => {
     confirm({
       title: `Are you sure delete this ${type}?`,
@@ -240,7 +171,7 @@ const MoreInfo = ({ record }) => {
       <Descriptions.Item>
         <Button
           type="primary"
-          onClick={() => showHTMLModal(initHtml, 'add')}
+          onClick={() => showHTMLModal(init.INIT_HTML, 'add')}
           icon={<PlusOutlined />}
         >
           Add HTML
@@ -278,7 +209,7 @@ const MoreInfo = ({ record }) => {
       <Descriptions.Item>
         <Button
           type="primary"
-          onClick={() => showRSSModal(initRss, 'add')}
+          onClick={() => showRSSModal(init.INIT_RSS, 'add')}
           icon={<PlusOutlined />}
         >
           Add RSS
@@ -300,14 +231,14 @@ const MoreInfo = ({ record }) => {
           }).format(new Date(record.updatedAt).getTime())}
         </Descriptions.Item>
         <Descriptions.Item label="Schedule">
-          {record.schedules.map((schedule) => (<p>{schedule}</p>))}
+          {record.schedules.map((schedule) => (<p key={schedule}>{schedule}</p>))}
         </Descriptions.Item>
         <Descriptions.Item label={record.crawlType === 'HTML' ? 'HTML Config' : 'RSS Config'} span={3}>
           {record.crawlType === 'HTML' ? showHTMLConfig(record.html, record._id) : showRSSConfig(record.rss, record._id)}
         </Descriptions.Item>
         <Descriptions.Item label="Article Config" span={3}>
           <Button
-            onClick={() => showArticleModal(record.article)}
+            onClick={() => props.history.push(`/dashboard/configuration/article-config/${record._id}`)}
             style={{ marginRight: 10, marginBottom: 10 }}
             icon={<EditOutlined />}
           >
@@ -328,12 +259,6 @@ const MoreInfo = ({ record }) => {
         onCancel={() => setHtmlVisible(false)}
         record={html}
         configId={record._id}
-      />
-      <ArticleForm
-        visible={articleVisible}
-        onCreate={onCreate}
-        onCancel={() => setArticleVisible(false)}
-        record={article}
       />
     </div>
   );
