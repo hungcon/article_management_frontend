@@ -14,9 +14,9 @@ import './index.css';
 import { init } from '../../../../common/init';
 import { message } from '../../../../common';
 
-
 const ArticleConfig = (props) => {
   const [article, setArticle] = useState(init.INIT_ARTICLE);
+  const [content, setContent] = useState();
   const dispatch = useDispatch();
 
   const [form] = Form.useForm();
@@ -35,8 +35,25 @@ const ArticleConfig = (props) => {
     form
       .validateFields()
       .then((values) => {
-        console.log(values);
-        form.resetFields();
+        const link = values.articleDemoLink;
+        const configuration = {
+          sapoSelector: values.sapoSelector,
+          sapoRedundancySelectors: values.sapoRedundancySelectors,
+          titleSelector: values.titleSelector,
+          titleRedundancySelectors: values.titleRedundancySelectors,
+          thumbnailSelector: values.thumbnailSelector,
+          thumbnailRedundancySelectors: values.thumbnailRedundancySelectors,
+          tagsSelector: values.tagsSelector,
+          tagsRedundancySelectors: values.tagsRedundancySelectors,
+          contentSelector: values.contentSelector,
+          contentRedundancySelectors: values.contentRedundancySelectors,
+          textRedundancySelectors: values.textRedundancySelectors,
+        };
+        const contentVal = {
+          link,
+          configuration,
+        };
+        setContent(contentVal);
       })
       .catch((info) => {
         console.log('Validate Failed:', info);
@@ -77,6 +94,22 @@ const ArticleConfig = (props) => {
         const data = articleConfig.data.article;
         data.articleDemoLink = articleConfig.data.articleDemoLink;
         setArticle(data);
+        setContent({
+          link: articleConfig.data.articleDemoLink,
+          configuration: {
+            sapoSelector: data.sapoSelector,
+            sapoRedundancySelectors: data.sapoRedundancySelectors,
+            titleSelector: data.titleSelector,
+            titleRedundancySelectors: data.titleRedundancySelectors,
+            thumbnailSelector: data.thumbnailSelector,
+            thumbnailRedundancySelectors: data.thumbnailRedundancySelectors,
+            tagsSelector: data.tagsSelector,
+            tagsRedundancySelectors: data.tagsRedundancySelectors,
+            contentSelector: data.contentSelector,
+            contentRedundancySelectors: data.contentRedundancySelectors,
+            textRedundancySelectors: data.textRedundancySelectors,
+          },
+        });
       }
     }
     fetchData();
@@ -221,7 +254,7 @@ const ArticleConfig = (props) => {
         </Form>
       </div>
       <div className="right-content">
-        <Preview />
+        <Preview content={content} />
       </div>
 
     </div>

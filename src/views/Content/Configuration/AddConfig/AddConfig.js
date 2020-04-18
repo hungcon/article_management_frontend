@@ -135,16 +135,11 @@ export default function AddConfig(props) {
       contentRedundancySelectors: values.contentRedundancySelectors,
       textRedundancySelectors: values.textRedundancySelectors,
     };
-    const data = general.crawlType === 'HTML' ? {
+    const data = {
       general,
-      config: html,
-      article,
-    } : {
-      general,
-      config: rss,
+      config: general.crawlType === 'HTML' ? html : rss,
       article,
     };
-    console.log(data);
     const addResult = await Axios.post('http://localhost:8000/add-config', data);
     if (addResult.data.status === 1) {
       dispatch(allActions.configAction.reload());
