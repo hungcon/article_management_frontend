@@ -62,7 +62,7 @@ export default function Preview({ content }) {
         }
       </TabPane>
       <TabPane tab="Text" key="2">
-        {html && html.text}
+        {html && `${html.sapo}\n\n${html.text}`}
       </TabPane>
     </Tabs>
   );

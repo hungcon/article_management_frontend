@@ -1,9 +1,12 @@
 /* eslint-disable prefer-promise-reject-errors */
 import React, { useEffect } from 'react';
 import {
-  Modal, Form, Input, Switch, Select,
+  Modal, Form, Switch, Select,
 } from 'antd';
 import { isValidCron } from 'cron-validator';
+import { websites, categories } from '../../../common';
+
+const { Option } = Select;
 
 const SourceForm = ({
   visible, onCreate, onCancel, record,
@@ -65,11 +68,21 @@ const SourceForm = ({
           rules={[
             {
               required: true,
-              message: 'Please input website name',
+              message: 'Please select website name',
             },
           ]}
         >
-          <Input />
+          <Select
+            showSearch
+            optionFilterProp="children"
+            filterOption={
+            (input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+          >
+            {websites.map((website) => (
+              <Option key={website.id} value={website.name}>{website.name}</Option>
+            ))}
+          </Select>
         </Form.Item>
         <Form.Item
           name="category"
@@ -81,7 +94,16 @@ const SourceForm = ({
             },
           ]}
         >
-          <Input />
+          <Select
+            showSearch
+            filterOption={
+            (input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+          }
+          >
+            {categories.map((category) => (
+              <Option key={category}>{category}</Option>
+            ))}
+          </Select>
         </Form.Item>
         <Form.Item
           name="schedules"

@@ -32,9 +32,13 @@ const ArticleConfig = ({
       form={form}
       id="rss_form"
       initialValues={{
+        sapoSelector: 'meta[name="description"]',
         sapoRedundancySelectors: [],
+        titleSelector: 'title',
         titleRedundancySelectors: [],
+        thumbnailSelector: 'meta[property="og:image"]',
         thumbnailRedundancySelectors: [],
+        tagsSelector: 'meta[name="keywords"]',
         tagsRedundancySelectors: [],
         contentRedundancySelectors: [],
         textRedundancySelectors: [],
