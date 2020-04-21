@@ -67,7 +67,7 @@ const HtmlForm = ({
   };
 
   const handleCancel = () => {
-    setBlock(initBlock);
+    setBlock(init.INIT_BLOCK);
     setNewBlock([]);
     onCancel();
   };
@@ -213,7 +213,7 @@ const HtmlForm = ({
               ))}
               <Button
                 type="primary"
-                onClick={() => showBlockModal(initBlock, 'localAdd')}
+                onClick={() => showBlockModal(init.INIT_BLOCK, 'localAdd')}
                 icon={<PlusOutlined />}
               >
                 Add Block
