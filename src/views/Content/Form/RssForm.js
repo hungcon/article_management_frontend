@@ -15,7 +15,7 @@ const RssForm = ({
     <Modal
       forceRender
       visible={visible}
-      title="Rss Config"
+      title="RSS Config"
       okText={!record.url ? 'Add' : 'Update'}
       cancelText="Cancel"
       onCancel={onCancel}
@@ -34,7 +34,7 @@ const RssForm = ({
       <Form
         layout="vertical"
         form={form}
-        id="rss_form"
+        name={Date.now()}
         initialValues={{
           url: record.url,
           itemSelector: record.configuration.itemSelector,

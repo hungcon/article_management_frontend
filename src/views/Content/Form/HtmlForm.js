@@ -129,7 +129,7 @@ const HtmlForm = ({
       <Modal
         forceRender
         visible={visible}
-        title="Html Config"
+        title="HTML Config"
         okText={!record.url ? 'Add' : 'Update'}
         cancelText="Cancel"
         onCancel={handleCancel}

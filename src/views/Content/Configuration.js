@@ -229,7 +229,7 @@ export default function Configuration(props) {
     <div className={classes.root}>
       <Button
         onClick={() => props.history.push('/dashboard/configuration/add-config')}
-        style={{ marginRight: 10 }}
+        style={{ marginBottom: 15 }}
         icon={<PlusCircleOutlined />}
       >
         Add config

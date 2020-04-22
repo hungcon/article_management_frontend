@@ -39,13 +39,13 @@ export default function Preview({ content }) {
           html && (
             <div>
               <b>Title:</b>
-                {html.title}
+                {html.title && html.title}
               <br />
               <b>Description:</b>
-                {html.sapo}
+                {html.sapo && html.sapo}
               <br />
               <b>Tags:</b>
-                {html.tags.join(', ')}
+                {html.tags && html.tags.join(', ')}
               <br />
               <b>Thumbnail:</b>
               <br />

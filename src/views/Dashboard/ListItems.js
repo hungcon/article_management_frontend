@@ -7,9 +7,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import BuildIcon from '@material-ui/icons/Build';
-import PeopleIcon from '@material-ui/icons/People';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
-import BarChartIcon from '@material-ui/icons/BarChart';
+import SpeakerNotesOffIcon from '@material-ui/icons/SpeakerNotesOff';
+import DescriptionIcon from '@material-ui/icons/Description';
 import LayersIcon from '@material-ui/icons/Layers';
 import { NavLink } from 'react-router-dom';
 import styles from '../../assets/styles/dashboardStyles';
@@ -28,20 +28,20 @@ export default function ListItems(props) {
           <ListItemText primary="Configuration" className={classes.text} />
         </ListItem>
       </NavLink>
-      <NavLink to="/dashboard/log-chart" className={classes.link} activeClassName={classes.active}>
+      <NavLink to="/dashboard/list-valid-articles" className={classes.link} activeClassName={classes.active}>
         <ListItem button className={clsx(props.open && classes.button)}>
           <ListItemIcon>
-            <BarChartIcon className={classes.icon} />
+            <DescriptionIcon className={classes.icon} />
           </ListItemIcon>
-          <ListItemText primary="Log Chart" className={classes.text} />
+          <ListItemText primary="List Valid Articles" className={classes.text} />
         </ListItem>
       </NavLink>
-      <NavLink to="/dashboard/accounts" className={classes.link} activeClassName={classes.active}>
+      <NavLink to="/dashboard/list-invalid-articles" className={classes.link} activeClassName={classes.active}>
         <ListItem button className={clsx(props.open && classes.button)}>
           <ListItemIcon>
-            <PeopleIcon className={classes.icon} />
+            <SpeakerNotesOffIcon className={classes.icon} />
           </ListItemIcon>
-          <ListItemText primary="Accounts" className={classes.text} />
+          <ListItemText primary="List Invalid Articles" className={classes.text} />
         </ListItem>
       </NavLink>
       <NavLink to="/dashboard/reports" className={classes.link} activeClassName={classes.active}>
