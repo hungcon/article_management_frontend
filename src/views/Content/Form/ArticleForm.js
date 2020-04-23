@@ -84,6 +84,7 @@ const ArticleForm = ({
   return (
     <Drawer
       forceRender
+      style={{ fontFamily: 'Montserrat' }}
       title="Article Config"
       visible={visible}
       width={1000}

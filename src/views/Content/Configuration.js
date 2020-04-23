@@ -23,6 +23,7 @@ const useStyles = makeStyles(() => ({
   root: {
     width: '100%',
     maxHeight: 440,
+    fontFamily: 'Montserrat',
   },
 }));
 
@@ -53,7 +54,6 @@ const initSource = {
   status: '00',
   schedules: [
   ],
-  queue: 1,
 };
 
 export default function Configuration(props) {

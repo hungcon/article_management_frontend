@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import BuildIcon from '@material-ui/icons/Build';
-import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
+import PieChartIcon from '@material-ui/icons/PieChart';
 import SpeakerNotesOffIcon from '@material-ui/icons/SpeakerNotesOff';
 import DescriptionIcon from '@material-ui/icons/Description';
 import LayersIcon from '@material-ui/icons/Layers';
@@ -44,20 +44,20 @@ export default function ListItems(props) {
           <ListItemText primary="List Invalid Articles" className={classes.text} />
         </ListItem>
       </NavLink>
-      <NavLink to="/dashboard/reports" className={classes.link} activeClassName={classes.active}>
+      <NavLink to="/dashboard/statistics" className={classes.link} activeClassName={classes.active}>
         <ListItem button className={clsx(props.open && classes.button)}>
           <ListItemIcon>
-            <LibraryBooksIcon className={classes.icon} />
+            <PieChartIcon className={classes.icon} />
           </ListItemIcon>
-          <ListItemText primary="Reports" className={classes.text} />
+          <ListItemText primary="Statistics" className={classes.text} />
         </ListItem>
       </NavLink>
-      <NavLink to="/dashboard/statistics" className={classes.link} activeClassName={classes.active}>
+      <NavLink to="/dashboard/reports" className={classes.link} activeClassName={classes.active}>
         <ListItem button className={clsx(props.open && classes.button)}>
           <ListItemIcon>
             <LayersIcon className={classes.icon} />
           </ListItemIcon>
-          <ListItemText primary="Statistics" className={classes.text} />
+          <ListItemText primary="Reports" className={classes.text} />
         </ListItem>
       </NavLink>
     </div>

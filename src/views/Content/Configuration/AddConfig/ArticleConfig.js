@@ -28,6 +28,7 @@ const ArticleConfig = ({
   });
   return (
     <Form
+      style={{ fontFamily: 'Montserrat' }}
       layout="vertical"
       form={form}
       id="rss_form"

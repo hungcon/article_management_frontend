@@ -6,15 +6,17 @@ import {
 
 import { isValidCron } from 'cron-validator';
 import { websites, categories } from '../../../../common';
+import { init } from '../../../../common/init';
 
 const { Option } = Select;
-
 
 const General = ({ onCreate, general }) => {
   const [form] = Form.useForm();
   const renderSelectTag = (children) => (
-    <Select mode="tags" style={{ width: '100%' }} tokenSeparators={[',']}>
+    <Select mode="multiple" style={{ width: '100%' }} tokenSeparators={[',']}>
       {children}
+      {init.INIT_SCHEDULES.scheduleDefault
+        .map((tag) => <Option key={tag.key} value={tag.value}>{tag.key}</Option>) }
     </Select>
   );
 
@@ -29,7 +31,6 @@ const General = ({ onCreate, general }) => {
   };
 
   const onSubmit = (values) => {
-    console.log(values);
     onCreate(values);
   };
   // eslint-disable-next-line arrow-body-style
@@ -40,6 +41,7 @@ const General = ({ onCreate, general }) => {
   });
   return (
     <Form
+      style={{ fontFamily: 'Montserrat' }}
       layout="vertical"
       form={form}
       initialValues={{

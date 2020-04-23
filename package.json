@@ -16,6 +16,8 @@
     "cron-validator": "^1.1.1",
     "elasticsearch": "^16.6.0",
     "emotion": "^10.0.27",
+    "highcharts": "^8.0.4",
+    "highcharts-react-official": "^3.0.0",
     "mui-datatables": "^2.13.3",
     "prettier": "^2.0.2",
     "react": "^16.12.0",

@@ -128,6 +128,7 @@ const HtmlForm = ({
     <div>
       <Modal
         forceRender
+        style={{ fontFamily: 'Montserrat' }}
         visible={visible}
         title="HTML Config"
         okText={!record.url ? 'Add' : 'Update'}

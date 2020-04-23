@@ -1,11 +1,11 @@
 .root {
   width: 100%;
+  font-family: 'Montserrat';
 }
 
 .article-config {
   position: relative;
   float: left;
-  margin-top: 1em;
   width: 50%;
   height: 1200px;
 }

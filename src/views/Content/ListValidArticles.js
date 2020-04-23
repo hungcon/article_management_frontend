@@ -17,6 +17,7 @@ const useStyles = makeStyles(() => ({
   root: {
     width: '100%',
     maxHeight: 400,
+    fontFamily: 'Montserrat',
   },
 }));
 
@@ -154,22 +155,23 @@ export default function ListValidArticles() {
           </Button>
         </Form.Item>
       </Form>
-      <Table
-        className={tableCSS}
-        columns={columns}
-        dataSource={data}
-        bordered
-        // scroll={{ y: 490 }}
-        summary={() => (
+      {!data ? 'Loading data...' : (
+        <Table
+          className={tableCSS}
+          columns={columns}
+          dataSource={data}
+          bordered
+          summary={() => (
+            <tr>
+              <th>Total documents</th>
+              <td colSpan={2}>
+                <Text type="danger">{counts}</Text>
+              </td>
+            </tr>
+          )}
+        />
+      )}
 
-          <tr>
-            <th>Total documents</th>
-            <td colSpan={2}>
-              <Text type="danger">{counts}</Text>
-            </td>
-          </tr>
-        )}
-      />
     </div>
   );
 }

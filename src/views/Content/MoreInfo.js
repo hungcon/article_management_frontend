@@ -1,6 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 import React, { useState } from 'react';
-import { Descriptions, Button, Modal } from 'antd';
+import {
+  Descriptions, Button, Modal, Typography,
+} from 'antd';
 import {
   DeleteOutlined, ExclamationCircleOutlined, PlusOutlined, EditOutlined,
 } from '@ant-design/icons';
@@ -14,6 +16,7 @@ import { message } from '../../common';
 import { init } from '../../common/init';
 
 const { confirm } = Modal;
+const { Text } = Typography;
 
 const MoreInfo = ({ record, props }) => {
   const [rssVisible, setRssVisible] = useState(false);
@@ -231,7 +234,54 @@ const MoreInfo = ({ record, props }) => {
           }).format(new Date(record.updatedAt).getTime())}
         </Descriptions.Item>
         <Descriptions.Item label="Schedule">
-          {record.schedules.map((schedule) => (<p key={schedule}>{schedule}</p>))}
+          {record.schedules.map((schedule) => {
+            if (schedule === '0 */1 * * * *') {
+              return (
+                <Text mark key={schedule} value={schedule}>
+                  Every 1 minute
+                  <br />
+                </Text>
+              );
+            }
+            if (schedule === '0 */5 * * * *') {
+              return (
+                <Text mark key={schedule} value={schedule}>
+                  Every 5 minute
+                  <br />
+                </Text>
+              );
+            }
+            if (schedule === '0 */10 * * * *') {
+              return (
+                <Text mark key={schedule} value={schedule}>
+                  Every 10 minute
+                  <br />
+                </Text>
+              );
+            }
+            if (schedule === '0 */15 * * * *') {
+              return (
+                <Text mark key={schedule} value={schedule}>
+                  Every 15 minute
+                  <br />
+                </Text>
+              );
+            }
+            if (schedule === '0 */30 * * * *') {
+              return (
+                <Text mark key={schedule} value={schedule}>
+                  Every 30 minute
+                  <br />
+                </Text>
+              );
+            }
+            return (
+              <Text mark key={schedule} value={schedule}>
+                Every 1 hour
+                <br />
+              </Text>
+            );
+          })}
         </Descriptions.Item>
         <Descriptions.Item label={record.crawlType === 'HTML' ? 'HTML Config' : 'RSS Config'} span={3}>
           {record.crawlType === 'HTML' ? showHTMLConfig(record.html, record._id) : showRSSConfig(record.rss, record._id)}

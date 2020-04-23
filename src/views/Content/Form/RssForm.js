@@ -14,6 +14,7 @@ const RssForm = ({
   return (
     <Modal
       forceRender
+      style={{ fontFamily: 'Montserrat' }}
       visible={visible}
       title="RSS Config"
       okText={!record.url ? 'Add' : 'Update'}

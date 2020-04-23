@@ -17,6 +17,7 @@ const useStyles = makeStyles(() => ({
   root: {
     width: '100%',
     maxHeight: 400,
+    fontFamily: 'Montserrat',
   },
 }));
 

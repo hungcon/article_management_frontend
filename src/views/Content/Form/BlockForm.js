@@ -19,6 +19,7 @@ const BlockForm = ({
   return (
     <Modal
       forceRender
+      style={{ fontFamily: 'Montserrat' }}
       visible={visible}
       title="Block Config"
       okText={type.type === 'localAdd' ? 'Add' : 'Update'}

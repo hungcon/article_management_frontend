@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   Button, Form, Input, Select,
 } from 'antd';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import {
   useParams,
 } from 'react-router-dom';
@@ -127,6 +128,12 @@ const ArticleConfig = (props) => {
   return (
     <div className="root">
       <div className="article-config">
+        <Button
+          type="primary"
+          onClick={() => props.history.push('/dashboard/configuration')}
+          shape="circle"
+          icon={<ArrowLeftOutlined />}
+        />
         <Form
           layout="vertical"
           size="middle"

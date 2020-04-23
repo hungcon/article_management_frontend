@@ -6,20 +6,12 @@ import {
   EditOutlined, DeleteOutlined, PlusOutlined,
 } from '@ant-design/icons';
 import BlockForm from '../../Form/BlockForm';
+import { init } from '../../../../common/init';
 
-const initBlock = {
-  configuration: {
-    redundancySelectors: [],
-    itemSelector: '',
-    titleSelector: '',
-    linkSelector: '',
-  },
-  blockSelector: '',
-};
 
 const HtmlConfig = ({ onCreate, prev, htmlVal }) => {
   const [form] = Form.useForm();
-  const [block, setBlock] = useState(initBlock);
+  const [block, setBlock] = useState(init.INIT_BLOCK);
   const [newBlock, setNewBlock] = useState(htmlVal.blocksConfiguration);
   const [blockVisible, setBlockVisible] = useState(false);
   const [type, setType] = useState({});
@@ -121,7 +113,7 @@ const HtmlConfig = ({ onCreate, prev, htmlVal }) => {
         ))}
         <Button
           type="primary"
-          onClick={() => showBlockModal(initBlock, 'localAdd')}
+          onClick={() => showBlockModal(init.INIT_BLOCK, 'localAdd')}
           icon={<PlusOutlined />}
         >
           Add Block

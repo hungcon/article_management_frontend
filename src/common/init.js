@@ -40,4 +40,29 @@ export const init = {
     textRedundancySelectors: [],
     articleDemoLink: '',
   },
+  INIT_SCHEDULES: {
+    scheduleDefault: [
+      {
+        key: 'Every 5 minutes',
+        value: '0 */5 * * * *',
+      },
+      {
+        key: 'Every 10 minutes',
+        value: '0 */10 * * * *',
+      },
+      {
+        key: 'Every 15 minutes',
+        value: '0 */15 * * * *',
+      },
+      {
+        key: 'Every 30 minutes',
+        value: '0 */30 * * * *',
+      },
+      {
+        key: 'Every 1 hour',
+        value: '0 * * * * *',
+      },
+    ],
+  },
+
 };

@@ -15,11 +15,13 @@ import ArticleConfig from './ArticleConfig';
 import openNotification from '../../../Notifications';
 import allActions from '../../../../store/actions/allActions';
 import { message } from '../../../../common';
+import { init } from '../../../../common/init';
 
 const useStyles = makeStyles(() => ({
   root: {
     width: '100%',
     maxHeight: 440,
+    fontFamily: 'Montserrat',
   },
 }));
 
@@ -40,30 +42,13 @@ const initGeneral = {
   articleDemoLink: '',
 };
 
-const initRss = {
-  version: 0,
-  url: '',
-  configuration: {
-    itemSelector: 'item',
-    titleSelector: 'title',
-    linkSelector: 'link',
-    sapoSelector: 'description',
-    publishDateSelector: 'pubDate',
-  },
-};
-const initHtml = {
-  contentRedundancySelectors: [],
-  url: '',
-  blocksConfiguration: [],
-};
-
 
 export default function AddConfig(props) {
   const classes = useStyles();
   const [current, setCurrent] = useState(0);
   const [general, setGeneral] = useState(initGeneral);
-  const [rss, setRss] = useState(initRss);
-  const [html, setHtml] = useState(initHtml);
+  const [rss, setRss] = useState(init.INIT_RSS);
+  const [html, setHtml] = useState(init.INIT_HTML);
   const dispatch = useDispatch();
 
   const next = () => {
@@ -95,8 +80,6 @@ export default function AddConfig(props) {
   };
 
   const onHtmlCreate = (values, newBlock) => {
-    console.log(values);
-    console.log('newBlock: ', newBlock);
     const htmlVal = {
       url: values.url,
       contentRedundancySelectors: values.contentRedundancySelectors,
