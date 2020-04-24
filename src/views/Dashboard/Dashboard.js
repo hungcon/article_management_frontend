@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -16,18 +16,34 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { Avatar } from '@material-ui/core';
+import axios from 'axios';
 import styles from '../../assets/styles/dashboardStyles';
 import ContentRoute from '../../router/Route/ContentRoute';
 import ListItems from './ListItems';
-// import {useSelector } from 'react-redux';
 
 const useStyles = makeStyles(styles);
 
 export default function Dashboard(props) {
   const classes = useStyles();
   // const count = useSelector(state => state.test);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState({ firstName: '', lastName: '' });
 
+  useEffect(() => {
+    let ignore = false;
+    async function fetchData() {
+      const user = (await axios.post('http://localhost:8000/get-user-info', { userName: localStorage.getItem('userName') })).data;
+      const {
+        firstName,
+        lastName,
+      } = user;
+      if (!ignore) {
+        setCurrentUser({ firstName, lastName });
+      }
+    }
+    fetchData();
+    return () => { ignore = true; };
+  }, []);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -37,6 +53,7 @@ export default function Dashboard(props) {
   };
   const signOut = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('userName');
     props.history.push('/');
   };
 
@@ -72,7 +89,7 @@ export default function Dashboard(props) {
       >
         <div className={classes.toolbarIcon}>
           <Avatar alt="Avatar" src="src" style={{ marginRight: '15px' }} />
-          <Typography className={classes.text} style={{ marginRight: '15px', color: '#FFF', fontFamily: 'Source Sans Pro' }}>Hưng Phùng</Typography>
+          <Typography className={classes.text} style={{ marginRight: '15px', color: '#FFF', fontFamily: 'Source Sans Pro' }}>{`${currentUser.firstName} ${currentUser.lastName}`}</Typography>
           <IconButton onClick={handleDrawerClose} className={classes.menuIcon}>
             <ChevronLeftIcon />
           </IconButton>

@@ -84,6 +84,7 @@ const ArticleConfig = (props) => {
       if (updateArticleResult.data.status === 1) {
         dispatch(allActions.configAction.reload());
         openNotification('success', message.UPDATE_SUCCESS);
+        props.history.push('/dashboard');
       } else {
         openNotification('error', message.ERROR);
       }

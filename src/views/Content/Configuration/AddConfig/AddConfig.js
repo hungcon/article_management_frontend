@@ -131,6 +131,7 @@ export default function AddConfig(props) {
       if (addResult.data.status === 1) {
         dispatch(allActions.configAction.reload());
         openNotification('success', message.ADD_SUCCESS);
+        props.history.push('/dashboard');
       } else {
         openNotification('error', message.ERROR);
       }

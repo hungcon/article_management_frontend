@@ -80,6 +80,7 @@ export default function SignIn(props) {
           open: true,
         });
       } else {
+        localStorage.setItem('userName', userName);
         localStorage.setItem('token', accessToken.token);
         props.history.push('/dashboard');
       }
