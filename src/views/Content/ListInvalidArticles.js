@@ -28,6 +28,10 @@ export default function ListInValidArticles() {
   const [filters, setFilters] = useState();
   const [counts, setCounts] = useState();
 
+  const crawlArticle = (article) => {
+    console.log(article);
+  };
+
   useEffect(() => {
     let ignore = false;
 
@@ -59,7 +63,7 @@ export default function ListInValidArticles() {
       title: 'Website',
       dataIndex: 'website',
       key: 'website',
-      width: '20%',
+      width: '17%',
       render: (value) => value.name,
     },
     {
@@ -81,6 +85,36 @@ export default function ListInValidArticles() {
       title: 'Title',
       dataIndex: 'title',
       key: 'title',
+    },
+    {
+      title: 'Reason',
+      dataIndex: 'reason',
+      key: 'reason',
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      width: '20%',
+      align: 'center',
+      render: (value, record) => (
+        <div>
+          <Button
+            disabled={record.reason === 'Number of words less than 100.'}
+            onClick={() => crawlArticle(record)}
+            danger
+            type="primary"
+            style={{ marginRight: 10 }}
+          >
+            Recrawl
+          </Button>
+          <Button
+            type="primary"
+            onClick={() => window.open(record.link)}
+          >
+            Open link
+          </Button>
+        </div>
+      ),
     },
   ];
   const tableCSS = css({
