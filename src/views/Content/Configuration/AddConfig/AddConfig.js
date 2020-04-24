@@ -123,14 +123,21 @@ export default function AddConfig(props) {
       config: general.crawlType === 'HTML' ? html : rss,
       article,
     };
-    const addResult = await Axios.post('http://localhost:8000/add-config', data);
-    if (addResult.data.status === 1) {
-      dispatch(allActions.configAction.reload());
-      openNotification('success', message.ADD_SUCCESS);
-      props.history.push('/dashboard/configuration');
-    } else {
-      openNotification('error', message.ERROR);
-    }
+    Axios.post('http://localhost:8000/add-config', data, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    }).then((addResult) => {
+      if (addResult.data.status === 1) {
+        dispatch(allActions.configAction.reload());
+        openNotification('success', message.ADD_SUCCESS);
+      } else {
+        openNotification('error', message.ERROR);
+      }
+    }).catch((err) => {
+      console.log(err);
+      openNotification('error', message.UNAUTHORIZED);
+    });
   };
 
   const steps = [

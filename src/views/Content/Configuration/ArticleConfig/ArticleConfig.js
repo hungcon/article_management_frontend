@@ -76,14 +76,21 @@ const ArticleConfig = (props) => {
       textRedundancySelectors: values.textRedundancySelectors,
     };
     const { articleDemoLink } = values;
-    const updateArticleResult = await Axios.post('http://localhost:8000/update-article-config', { articleVal, articleDemoLink, configId });
-    if (updateArticleResult.data.status === 1) {
-      dispatch(allActions.configAction.reload());
-      openNotification('success', message.UPDATE_SUCCESS);
-      props.history.push('/dashboard/configuration');
-    } else {
-      openNotification('error', message.ERROR);
-    }
+    Axios.post('http://localhost:8000/update-article-config', { articleVal, articleDemoLink, configId }, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    }).then((updateArticleResult) => {
+      if (updateArticleResult.data.status === 1) {
+        dispatch(allActions.configAction.reload());
+        openNotification('success', message.UPDATE_SUCCESS);
+      } else {
+        openNotification('error', message.ERROR);
+      }
+    }).catch((err) => {
+      console.log(err);
+      openNotification('error', message.UNAUTHORIZED);
+    });
   };
 
   useEffect(() => {

@@ -8,7 +8,7 @@ function PrivateRoute({ component: Component, ...rest }) {
   return (
     <Route
       {...rest}
-      render={(props) => (localStorage.getItem('userName') ? (
+      render={(props) => (localStorage.getItem('token') ? (
         <Component {...props} />
       ) : (
         <Redirect

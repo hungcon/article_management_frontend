@@ -30,24 +30,38 @@ const MoreInfo = ({ record, props }) => {
   const onRssCreate = async (values, rssConfigId) => {
     switch (rssAction) {
       case 'update':
-        // eslint-disable-next-line no-case-declarations
-        const updateRssResult = await Axios.post('http://localhost:8000/update-rss-config', { rssConfig: values, rssConfigId, configId: record._id });
-        if (updateRssResult.data.status === 1) {
-          dispatch(allActions.configAction.reload());
-          openNotification('success', message.UPDATE_SUCCESS);
-        } else {
-          openNotification('error', message.ERROR);
-        }
+        Axios.post('http://localhost:8000/update-rss-config', { rssConfig: values, rssConfigId, configId: record._id }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }).then((updateRssResult) => {
+          if (updateRssResult.data.status === 1) {
+            dispatch(allActions.configAction.reload());
+            openNotification('success', message.UPDATE_SUCCESS);
+          } else {
+            openNotification('error', message.ERROR);
+          }
+        }).catch((err) => {
+          console.log(err);
+          openNotification('error', message.UNAUTHORIZED);
+        });
         break;
       case 'add':
-        // eslint-disable-next-line no-case-declarations
-        const addRssResult = await Axios.post('http://localhost:8000/add-rss-config', { rssConfig: values, configId: record._id });
-        if (addRssResult.data.status === 1) {
-          dispatch(allActions.configAction.reload());
-          openNotification('success', message.ADD_SUCCESS);
-        } else {
-          openNotification('error', message.ERROR);
-        }
+        Axios.post('http://localhost:8000/add-rss-config', { rssConfig: values, configId: record._id }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }).then((addRssResult) => {
+          if (addRssResult.data.status === 1) {
+            dispatch(allActions.configAction.reload());
+            openNotification('success', message.ADD_SUCCESS);
+          } else {
+            openNotification('error', message.ERROR);
+          }
+        }).catch((err) => {
+          console.log(err);
+          openNotification('error', message.UNAUTHORIZED);
+        });
         break;
       default:
         break;
@@ -59,36 +73,59 @@ const MoreInfo = ({ record, props }) => {
     switch (htmlAction) {
       case 'update':
         if (addBlock.length === 0) {
-          const updateResult = await Axios.post('http://localhost:8000/update-html-config', { html: values, htmlId, configId: record._id });
-          if (updateResult.data.status === 1) {
-            dispatch(allActions.configAction.reload());
-            openNotification('success', message.UPDATE_SUCCESS);
-          } else {
-            openNotification('error', message.ERROR);
-          }
-        } else {
-          addBlock.map(async (block) => {
-            const updateResult = await Axios.post('http://localhost:8000/add-block-config', {
-              html: values, htmlId, block, configId: record._id,
-            });
+          Axios.post('http://localhost:8000/update-html-config', { html: values, htmlId, configId: record._id }, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }).then((updateResult) => {
             if (updateResult.data.status === 1) {
               dispatch(allActions.configAction.reload());
-              openNotification('success', message.ADD_SUCCESS);
+              openNotification('success', message.UPDATE_SUCCESS);
             } else {
               openNotification('error', message.ERROR);
             }
+          }).catch((err) => {
+            console.log(err);
+            openNotification('error', message.UNAUTHORIZED);
+          });
+        } else {
+          addBlock.map(async (block) => {
+            Axios.post('http://localhost:8000/add-block-config', {
+              html: values, htmlId, block, configId: record._id,
+            }, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
+            }).then((updateResult) => {
+              if (updateResult.data.status === 1) {
+                dispatch(allActions.configAction.reload());
+                openNotification('success', message.ADD_SUCCESS);
+              } else {
+                openNotification('error', message.ERROR);
+              }
+            }).catch((err) => {
+              console.log(err);
+              openNotification('error', message.UNAUTHORIZED);
+            });
           });
         }
         break;
       case 'add':
-        // eslint-disable-next-line no-case-declarations
-        const addResult = await Axios.post('http://localhost:8000/add-html-config', { html: values, addBlock, configId: record._id });
-        if (addResult.data.status === 1) {
-          dispatch(allActions.configAction.reload());
-          openNotification('success', message.ADD_SUCCESS);
-        } else {
-          openNotification('error', message.ERROR);
-        }
+        Axios.post('http://localhost:8000/add-html-config', { html: values, addBlock, configId: record._id }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }).then((addResult) => {
+          if (addResult.data.status === 1) {
+            dispatch(allActions.configAction.reload());
+            openNotification('success', message.ADD_SUCCESS);
+          } else {
+            openNotification('error', message.ERROR);
+          }
+        }).catch((err) => {
+          console.log(err);
+          openNotification('error', message.UNAUTHORIZED);
+        });
         break;
       default:
         break;
@@ -120,22 +157,38 @@ const MoreInfo = ({ record, props }) => {
       async onOk() {
         if (type === 'rss') {
           console.log('rssId :', deleteId, 'configId: ', configId);
-          const deleteRssResult = await Axios.post('http://localhost:8000/delete-rss-config', { rssConfigId: deleteId, configId });
-          if (deleteRssResult.data.status === 1) {
-            dispatch(allActions.configAction.reload());
-            openNotification('success', message.DELETE_SUCCESS);
-          } else {
-            openNotification('error', message.ERROR);
-          }
+          Axios.post('http://localhost:8000/delete-rss-config', { rssConfigId: deleteId, configId }, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }).then((deleteRssResult) => {
+            if (deleteRssResult.data.status === 1) {
+              dispatch(allActions.configAction.reload());
+              openNotification('success', message.DELETE_SUCCESS);
+            } else {
+              openNotification('error', message.ERROR);
+            }
+          }).catch((err) => {
+            console.log(err);
+            openNotification('error', message.UNAUTHORIZED);
+          });
         } else {
           console.log('html: ', deleteId, 'htmlId: ', configId);
-          const deleteHtmlResult = await Axios.post('http://localhost:8000/delete-html-config', { htmlConfigId: deleteId, configId });
-          if (deleteHtmlResult.data.status === 1) {
-            dispatch(allActions.configAction.reload());
-            openNotification('success', message.DELETE_SUCCESS);
-          } else {
-            openNotification('error', message.ERROR);
-          }
+          Axios.post('http://localhost:8000/delete-html-config', { htmlConfigId: deleteId, configId }, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }).then((deleteHtmlResult) => {
+            if (deleteHtmlResult.data.status === 1) {
+              dispatch(allActions.configAction.reload());
+              openNotification('success', message.DELETE_SUCCESS);
+            } else {
+              openNotification('error', message.ERROR);
+            }
+          }).catch((err) => {
+            console.log(err);
+            openNotification('error', message.UNAUTHORIZED);
+          });
         }
       },
       onCancel() {

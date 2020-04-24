@@ -73,6 +73,8 @@ export default function Statistics() {
             },
             series: [
               {
+                name: 'Number of articles',
+                colorByPoint: true,
                 data: dateSeries,
               },
             ],
@@ -91,7 +93,7 @@ export default function Statistics() {
       <Title level={4}>Statistic number article crawled by website and category</Title>
       {
       !listDataArticle ? 'Loading chart...' : (
-        <Row gutter={16}>
+        <Row gutter={15}>
           {
           listDataArticle.map((dataChart) => (
             <Col span={8} key={dataChart.title.text} className={classes.chart}>

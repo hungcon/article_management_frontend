@@ -36,6 +36,7 @@ export default function Dashboard(props) {
     setOpen(false);
   };
   const signOut = () => {
+    localStorage.removeItem('token');
     props.history.push('/');
   };
 

@@ -78,14 +78,21 @@ export default function Configuration(props) {
   };
 
   const onCreate = async (values) => {
-    console.log('Received values of form: ', values);
-    const updateResult = await Axios.post('http://localhost:8000/update-config', { configId, config: values });
-    if (updateResult.data.status === 1) {
-      dispatch(allActions.configAction.reload());
-      openNotification('success', message.UPDATE_SUCCESS);
-    } else {
-      openNotification('error', message.ERROR);
-    }
+    Axios.post('http://localhost:8000/update-config', { configId, config: values }, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    }).then((updateResult) => {
+      if (updateResult.data.status === 1) {
+        dispatch(allActions.configAction.reload());
+        openNotification('success', message.UPDATE_SUCCESS);
+      } else {
+        openNotification('error', message.ERROR);
+      }
+    }).catch((err) => {
+      console.log(err);
+      openNotification('error', message.UNAUTHORIZED);
+    });
     handleCancel();
   };
 
@@ -99,13 +106,21 @@ export default function Configuration(props) {
       cancelText: 'No',
       centered: true,
       async onOk() {
-        const result = await Axios.post('http://localhost:8000/delete-config', { configId: toDelete._id });
-        if (result.data.status === 1) {
-          dispatch(allActions.configAction.reload());
-          openNotification('success', message.DELETE_SUCCESS);
-        } else {
-          openNotification('error', message.ERROR);
-        }
+        Axios.post('http://localhost:8000/delete-config', { configId: toDelete._id }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }).then((result) => {
+          if (result.data.status === 1) {
+            dispatch(allActions.configAction.reload());
+            openNotification('success', message.DELETE_SUCCESS);
+          } else {
+            openNotification('error', message.ERROR);
+          }
+        }).catch((err) => {
+          console.log(err);
+          openNotification('error', message.UNAUTHORIZED);
+        });
       },
       onCancel() {
       },
@@ -210,7 +225,6 @@ export default function Configuration(props) {
 
   useEffect(() => {
     let ignore = false;
-
     async function fetchData() {
       const result = await Axios.post('http://localhost:8000/get-configuration');
       const configData = result.data;

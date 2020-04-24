@@ -20,6 +20,7 @@ import { useForm } from 'react-hook-form';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
 import image from '../../assets/images/login.jpg';
 import allActions from '../../store/actions/allActions';
 
@@ -69,9 +70,25 @@ export default function SignIn(props) {
   const { handleSubmit, register, errors } = useForm();
   const [snackbar, setSnackbar] = useState({});
 
-  const onSubmit = (values) => {
-    // dispatch(allActions.configAction.decrement());
-    props.history.push('/dashboard');
+  const onSubmit = async (values) => {
+    const { userName, password } = values;
+    const { accessToken } = (await axios.post('http://localhost:8000/sign-in', { userName, password })).data;
+    if (accessToken) {
+      if (!accessToken.success) {
+        setSnackbar({
+          message: accessToken.err,
+          open: true,
+        });
+      } else {
+        localStorage.setItem('token', accessToken.token);
+        props.history.push('/dashboard');
+      }
+    } else {
+      setSnackbar({
+        message: 'Internal server error',
+        open: true,
+      });
+    }
   };
 
   const closeSnackbar = () => {

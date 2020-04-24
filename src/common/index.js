@@ -4,6 +4,7 @@ export const message = {
   UPDATE_SUCCESS: 'Update successfully',
   ADD_SUCCESS: 'Add successfully',
   ERROR: 'Have an error',
+  UNAUTHORIZED: 'Unauthorized',
 };
 
 export const websites = [
