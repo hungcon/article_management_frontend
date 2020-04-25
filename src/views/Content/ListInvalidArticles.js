@@ -3,7 +3,7 @@
 /* eslint-disable no-shadow */
 import React, { useState, useEffect } from 'react';
 import {
-  Table, Tag, Form, Select, Button, Typography,
+  Table, Tag, Form, Select, Button, Typography, Breadcrumb,
 } from 'antd';
 import { makeStyles } from '@material-ui/core/styles';
 import { css } from 'emotion';
@@ -140,6 +140,14 @@ export default function ListInValidArticles() {
   };
   return (
     <div className={classes.root}>
+      <Breadcrumb style={{ marginBottom: 10 }}>
+        <Breadcrumb.Item>
+          <a href="/dashboard/configuration">Dashboard</a>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <a href="/dashboard/list-invalid-articles">Invalid Articles</a>
+        </Breadcrumb.Item>
+      </Breadcrumb>
       <Form
         style={{ marginBottom: '15px' }}
         form={form}

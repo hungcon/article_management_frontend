@@ -3,9 +3,8 @@ import 'antd/dist/antd.css';
 import './index.css';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  Steps, Button,
+  Steps, Breadcrumb,
 } from 'antd';
-import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import Axios from 'axios';
 import General from './General';
@@ -159,15 +158,17 @@ export default function AddConfig(props) {
 
   return (
     <div className={classes.root}>
-      <Button
-        type="primary"
-        onClick={() => props.history.push('/dashboard/configuration')}
-        style={{
-          marginBottom: 20, top: 0, left: 0,
-        }}
-        shape="circle"
-        icon={<ArrowLeftOutlined />}
-      />
+      <Breadcrumb style={{ marginBottom: 10 }}>
+        <Breadcrumb.Item>
+          Dashboard
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <a href="/dashboard/configuration">Configuration</a>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <a href="/dashboard/configuration/add-config">Add Config</a>
+        </Breadcrumb.Item>
+      </Breadcrumb>
       <Steps current={current}>
         {steps.map((item) => (
           <Step key={item.title} title={item.title} />

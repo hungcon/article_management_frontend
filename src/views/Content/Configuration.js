@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import 'antd/dist/antd.css';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  Table, Button, Switch, Modal,
+  Table, Button, Switch, Modal, Breadcrumb,
 } from 'antd';
 import {
   ExclamationCircleOutlined, DeleteOutlined, EditOutlined, PlusCircleOutlined,
@@ -241,6 +241,14 @@ export default function Configuration(props) {
 
   return (
     <div className={classes.root}>
+      <Breadcrumb style={{ marginBottom: 10 }}>
+        <Breadcrumb.Item>
+          Dashboard
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <a href="/dashboard/configuration">Configuration</a>
+        </Breadcrumb.Item>
+      </Breadcrumb>
       <Button
         onClick={() => props.history.push('/dashboard/configuration/add-config')}
         style={{ marginBottom: 15 }}

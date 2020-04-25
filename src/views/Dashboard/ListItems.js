@@ -8,7 +8,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import BuildIcon from '@material-ui/icons/Build';
 import PieChartIcon from '@material-ui/icons/PieChart';
-import SpeakerNotesOffIcon from '@material-ui/icons/SpeakerNotesOff';
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import DescriptionIcon from '@material-ui/icons/Description';
 import LayersIcon from '@material-ui/icons/Layers';
 import { NavLink } from 'react-router-dom';
@@ -39,7 +39,7 @@ export default function ListItems(props) {
       <NavLink to="/dashboard/list-invalid-articles" className={classes.link} activeClassName={classes.active}>
         <ListItem button className={clsx(props.open && classes.button)}>
           <ListItemIcon>
-            <SpeakerNotesOffIcon className={classes.icon} />
+            <ErrorOutlineIcon className={classes.icon} />
           </ListItemIcon>
           <ListItemText primary="List Invalid Articles" className={classes.text} />
         </ListItem>
