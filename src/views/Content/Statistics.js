@@ -130,57 +130,52 @@ export default function Statistics() {
           <a href="/dashboard/statistics">Statistic</a>
         </Breadcrumb.Item>
       </Breadcrumb>
-      <div>
-        {
-          !listNumberArticle ? 'Loading info...' : (
-            <Row gutter={15}>
-              {listNumberArticle.map((website) => (
-                <Col
-                  span={4}
-                  key={website.name}
-                  className={classes.card}
-                >
-                  <Card
-                    hoverable
-                    style={{ backgroundColor: '#a3dace2e', color: '#000' }}
-                  >
-                    <div>
-                      <b style={{ fontSize: 14 }}>{website.name}</b>
+      { !listNumberArticle ? 'Loading info...' : (
+        <Row gutter={15}>
+          {listNumberArticle.map((website) => (
+            <Col
+              span={4}
+              key={website.name}
+              className={classes.card}
+            >
+              <Card
+                hoverable
+                style={{ backgroundColor: '#a3dace2e', color: '#000' }}
+              >
+                <div>
+                  <b style={{ fontSize: 14 }}>{website.name}</b>
 
-                      {
+                  {
+                    Number.parseInt((website.valid / (website.invalid + website.valid)) * 100)
+                    >= 90
+                      ? <CheckCircleOutlined style={{ float: 'right', color: '#52c41a', fontSize: 14 }} />
+                      : <WarningOutlined style={{ float: 'right', color: '#faad14', fontSize: 14 }} />
+                    }
+                </div>
+                <br />
+                Valid:
+                {' '}
+                {website.valid}
+                <br />
+                Invalid:
+                {' '}
+                {website.invalid}
+                <br />
+                <Progress
+                  strokeColor={{
+                    from: '#108ee9',
+                    to: '#87d068',
+                  }}
+                  percent={
                       Number.parseInt((website.valid / (website.invalid + website.valid)) * 100)
-                      >= 90
-                        ? <CheckCircleOutlined style={{ float: 'right', color: '#52c41a', fontSize: 14 }} />
-                        : <WarningOutlined style={{ float: 'right', color: '#faad14', fontSize: 14 }} />
-                      }
-                    </div>
-                    <br />
-                    Valid:
-                    {' '}
-                    {website.valid}
-                    <br />
-                    Invalid:
-                    {' '}
-                    {website.invalid}
-                    <br />
-                    <Progress
-                      strokeColor={{
-                        from: '#108ee9',
-                        to: '#87d068',
-                      }}
-                      percent={
-                        Number.parseInt((website.valid / (website.invalid + website.valid)) * 100)
-                      }
-                      status="active"
-                    />
-                  </Card>
-                </Col>
-              ))}
-            </Row>
-          )
-        }
-
-      </div>
+                    }
+                  status="active"
+                />
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      )}
       {
       !listDataArticle ? 'Loading chart...' : (
         <Row gutter={15}>

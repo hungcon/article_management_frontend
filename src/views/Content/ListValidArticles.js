@@ -3,7 +3,7 @@
 /* eslint-disable no-shadow */
 import React, { useState, useEffect } from 'react';
 import {
-  Table, Tag, Form, Select, Button, Typography, Breadcrumb,
+  Table, Tag, Form, Select, Button, Typography, Breadcrumb, DatePicker,
 } from 'antd';
 import { makeStyles } from '@material-ui/core/styles';
 import { css } from 'emotion';
@@ -12,6 +12,7 @@ import { websites, categories } from '../../common';
 
 const { Option } = Select;
 const { Text } = Typography;
+const { RangePicker } = DatePicker;
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -27,6 +28,8 @@ export default function ListValidArticles() {
   const [data, setData] = useState();
   const [filters, setFilters] = useState();
   const [counts, setCounts] = useState();
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
 
   useEffect(() => {
     let ignore = false;
@@ -40,7 +43,11 @@ export default function ListValidArticles() {
         id: 0,
         name: filters ? filters.category : '',
       };
-      const result = await axios.post('http://localhost:8000/get-valid-articles', { website, category });
+      const date = {
+        startDate: startDate || '',
+        endDate: endDate || '',
+      };
+      const result = await axios.post('http://localhost:8000/get-valid-articles', { website, category, date });
       const articleData = result.data;
       setCounts(articleData.length);
       for (let i = 0; i < articleData.length; i += 1) {
@@ -104,6 +111,16 @@ export default function ListValidArticles() {
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
+
+  const onChange = (value, dateString) => {
+    console.log('Formatted Selected Time: ', dateString);
+    setStartDate(dateString[0]);
+    setEndDate(dateString[1]);
+  };
+
+  const onOk = (value) => {
+    console.log('onOk: ', value);
+  };
   return (
     <div className={classes.root}>
       <Breadcrumb style={{ marginBottom: 10 }}>
@@ -125,7 +142,7 @@ export default function ListValidArticles() {
         <Form.Item
           name="website"
           label="Website"
-          style={{ width: '45%' }}
+          style={{ width: '29%' }}
         >
           <Select
             showSearch
@@ -141,7 +158,7 @@ export default function ListValidArticles() {
           </Select>
         </Form.Item>
         <Form.Item
-          style={{ width: '45%' }}
+          style={{ width: '29%' }}
           name="category"
           label="Category"
         >
@@ -156,6 +173,17 @@ export default function ListValidArticles() {
               <Option key={category}>{category}</Option>
             ))}
           </Select>
+        </Form.Item>
+        <Form.Item
+          style={{ width: '29%' }}
+          label="Time"
+        >
+          <RangePicker
+            showTime={{ format: 'HH:mm' }}
+            format="YYYY-MM-DD HH:MM"
+            onChange={onChange}
+            onOk={onOk}
+          />
         </Form.Item>
         <Form.Item style={{ width: '5%' }}>
           <Button type="primary" htmlType="submit">

@@ -4,11 +4,17 @@
 import React, { useState, useEffect } from 'react';
 import {
   Table, Tag, Form, Select, Button, Typography, Breadcrumb,
+  DatePicker,
 } from 'antd';
 import { makeStyles } from '@material-ui/core/styles';
 import { css } from 'emotion';
 import axios from 'axios';
-import { websites, categories } from '../../common';
+import { websites, categories, message } from '../../common';
+import openNotification from '../Notifications';
+
+
+const { RangePicker } = DatePicker;
+
 
 const { Option } = Select;
 const { Text } = Typography;
@@ -27,9 +33,40 @@ export default function ListInValidArticles() {
   const [data, setData] = useState();
   const [filters, setFilters] = useState();
   const [counts, setCounts] = useState();
+  const [reload, setReload] = useState(false);
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
 
-  const crawlArticle = (article) => {
-    console.log(article);
+  const crawlArticle = async (article) => {
+    const { website, category } = article;
+    const articleConfig = (await axios.post('http://localhost:8000/get-config-by-website', { website, category: category[0] })).data;
+    const reCrawlArticle = (await axios.post('http://localhost:8000/crawl/article', {
+      link: article.link,
+      configuration: articleConfig.article,
+    })).data;
+    const newValidArticle = {
+      link: article.link,
+      title: article.title,
+      sapo: article.sapo,
+      publicDate: new Date(article.createdAt),
+      thumbnail: article.thumbnail,
+      category,
+      website,
+      sourceCode: article.sourceCode,
+      text: `${article.title}\n\n${article.text}`,
+      tags: article.tags || [],
+      numberOfWords: !article.text ? 0 : article.text.split(' ').length,
+      images: article.images,
+    };
+    if (reCrawlArticle) {
+      const addResult = await axios.post('http://localhost:8000/add-valid-articles', { article: newValidArticle });
+      if (addResult.data.status === 1) {
+        setReload(!reload);
+        openNotification('success', message.RECRAWL_SUCCESS);
+      } else {
+        openNotification('error', message.ERROR);
+      }
+    }
   };
 
   useEffect(() => {
@@ -44,7 +81,11 @@ export default function ListInValidArticles() {
         id: 0,
         name: filters ? filters.category : '',
       };
-      const result = await axios.post('http://localhost:8000/get-invalid-articles', { website, category });
+      const date = {
+        startDate: startDate || '',
+        endDate: endDate || '',
+      };
+      const result = await axios.post('http://localhost:8000/get-invalid-articles', { website, category, date });
       const articleData = result.data;
       setCounts(articleData.length);
       for (let i = 0; i < articleData.length; i += 1) {
@@ -56,7 +97,7 @@ export default function ListInValidArticles() {
     }
     fetchData();
     return () => { ignore = true; };
-  }, [filters]);
+  }, [filters, reload]);
 
   const columns = [
     {
@@ -138,6 +179,16 @@ export default function ListInValidArticles() {
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
+
+  const onChange = (value, dateString) => {
+    console.log('Formatted Selected Time: ', dateString);
+    setStartDate(dateString[0]);
+    setEndDate(dateString[1]);
+  };
+
+  const onOk = (value) => {
+    console.log('onOk: ', value);
+  };
   return (
     <div className={classes.root}>
       <Breadcrumb style={{ marginBottom: 10 }}>
@@ -159,7 +210,7 @@ export default function ListInValidArticles() {
         <Form.Item
           name="website"
           label="Website"
-          style={{ width: '45%' }}
+          style={{ width: '29%' }}
         >
           <Select
             showSearch
@@ -175,7 +226,7 @@ export default function ListInValidArticles() {
           </Select>
         </Form.Item>
         <Form.Item
-          style={{ width: '45%' }}
+          style={{ width: '29%' }}
           name="category"
           label="Category"
         >
@@ -191,12 +242,24 @@ export default function ListInValidArticles() {
             ))}
           </Select>
         </Form.Item>
+        <Form.Item
+          style={{ width: '29%' }}
+          label="Time"
+        >
+          <RangePicker
+            showTime={{ format: 'HH:mm' }}
+            format="YYYY-MM-DD HH:MM"
+            onChange={onChange}
+            onOk={onOk}
+          />
+        </Form.Item>
         <Form.Item style={{ width: '5%' }}>
           <Button type="primary" htmlType="submit">
             Filter
           </Button>
         </Form.Item>
       </Form>
+
       {!data ? 'Loading data...' : (
         <Table
           className={tableCSS}

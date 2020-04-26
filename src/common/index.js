@@ -5,6 +5,7 @@ export const message = {
   ADD_SUCCESS: 'Add successfully',
   ERROR: 'Have an error',
   UNAUTHORIZED: 'Unauthorized',
+  RECRAWL_SUCCESS: 'Recrawl successfully',
 };
 
 export const websites = [
