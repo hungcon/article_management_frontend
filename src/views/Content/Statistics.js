@@ -5,12 +5,14 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  Row, Col, Card, Breadcrumb, Progress,
+  Row, Col, Card, Breadcrumb, Progress, Statistic, Button,
 } from 'antd';
-import { CheckCircleOutlined, WarningOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, WarningOutlined, PlayCircleOutlined } from '@ant-design/icons';
 import Highcharts from 'highcharts/highstock';
 import PieChart from 'highcharts-react-official';
 import axios from 'axios';
+import openNotification from '../Notifications';
+import { message } from '../../common/index';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -31,6 +33,26 @@ export default function Statistics() {
   const classes = useStyles();
   const [listDataArticle, setListDataArticle] = useState();
   const [listNumberArticle, setListNumberArticle] = useState();
+  const [queueLength, setQueueLength] = useState(0);
+  const [error, setError] = useState(false);
+
+  const reRunSchedule = () => {
+    axios.post('http://localhost:8000/crawl/re-run', null, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    }).then((result) => {
+      console.log(result);
+      if (result.data.status === 1) {
+        openNotification('success', message.RERUN_SUCCESS);
+      } else {
+        openNotification('error', message.ERROR);
+      }
+    }).catch((err) => {
+      console.log(err);
+      openNotification('error', message.UNAUTHORIZED);
+    });
+  };
 
   useEffect(() => {
     let ignore = false;
@@ -120,6 +142,31 @@ export default function Statistics() {
     return () => { ignore = true; };
   }, []);
 
+  useEffect(() => {
+    let ignore = false;
+
+    async function fetchData() {
+      let queueLengthReturn;
+      if (!ignore) {
+        const { data } = (await axios.post('http://localhost:8000/get-queue-length'));
+        const queueLengthNum = data.queueLength;
+        setQueueLength(queueLengthNum);
+        queueLengthReturn = queueLengthNum;
+      }
+      return queueLengthReturn;
+    }
+    fetchData();
+    setInterval(async () => {
+      const newQueueLength = await fetchData();
+      if (queueLength && queueLength !== 0 && newQueueLength && newQueueLength === queueLength) {
+        setError(true);
+        setQueueLength(newQueueLength);
+      }
+    }, 10 * 1000);
+    return () => { ignore = true; };
+  }, [queueLength]);
+
+
   return (
     <div className={classes.root}>
       <Breadcrumb style={{ marginBottom: 10 }}>
@@ -130,6 +177,29 @@ export default function Statistics() {
           <a href="/dashboard/statistics">Statistic</a>
         </Breadcrumb.Item>
       </Breadcrumb>
+      <div style={{ marginBottom: 15 }}>
+        <Row gutter={16}>
+          <Col span={4}>
+            <Card>
+              <Statistic
+                title={!error ? 'Running' : 'Error'}
+                value={queueLength}
+                valueStyle={{ color: '#3f8600' }}
+              />
+            </Card>
+          </Col>
+          <Col span={4}>
+            <Button
+              onClick={() => reRunSchedule()}
+              style={{ marginRight: 10 }}
+              icon={<PlayCircleOutlined />}
+              type="primary"
+            >
+              Re-run schedule
+            </Button>
+          </Col>
+        </Row>
+      </div>
       { !listNumberArticle ? 'Loading info...' : (
         <Row gutter={15}>
           {listNumberArticle.map((website) => (

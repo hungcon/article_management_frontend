@@ -59,7 +59,7 @@ export default function ListValidArticles() {
     }
     fetchData();
     return () => { ignore = true; };
-  }, [filters]);
+  }, [filters, startDate, endDate]);
 
   const columns = [
     {

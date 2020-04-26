@@ -97,7 +97,7 @@ export default function ListInValidArticles() {
     }
     fetchData();
     return () => { ignore = true; };
-  }, [filters, reload]);
+  }, [filters, reload, startDate, endDate]);
 
   const columns = [
     {

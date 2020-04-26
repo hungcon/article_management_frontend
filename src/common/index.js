@@ -6,6 +6,7 @@ export const message = {
   ERROR: 'Have an error',
   UNAUTHORIZED: 'Unauthorized',
   RECRAWL_SUCCESS: 'Recrawl successfully',
+  RERUN_SUCCESS: 'Re-run schedule successfully',
 };
 
 export const websites = [
