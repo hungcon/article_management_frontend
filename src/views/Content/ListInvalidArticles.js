@@ -91,11 +91,12 @@ export default function ListInValidArticles() {
       for (let i = 0; i < articleData.length; i += 1) {
         articleData[i].key = i;
       }
-      if (!ignore) {
-        setData(articleData);
-      }
+      setData(articleData);
     }
-    fetchData();
+    if (!ignore) {
+      fetchData();
+    }
+
     return () => { ignore = true; };
   }, [filters, reload, startDate, endDate]);
 
@@ -248,7 +249,7 @@ export default function ListInValidArticles() {
         >
           <RangePicker
             showTime={{ format: 'HH:mm' }}
-            format="YYYY-MM-DD HH:MM"
+            format="YYYY-MM-DD HH:mm"
             onChange={onChange}
             onOk={onOk}
           />

@@ -162,7 +162,7 @@ export default function Statistics() {
         setError(true);
         setQueueLength(newQueueLength);
       }
-    }, 10 * 1000);
+    }, 5 * 60 * 1000);
     return () => { ignore = true; };
   }, [queueLength]);
 
