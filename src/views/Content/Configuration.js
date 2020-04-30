@@ -9,7 +9,7 @@ import {
   ExclamationCircleOutlined, DeleteOutlined, EditOutlined, PlusCircleOutlined,
 } from '@ant-design/icons';
 import { css } from 'emotion';
-import Axios from 'axios';
+import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import SourceForm from './Form/SourceForm';
 import allActions from '../../store/actions/allActions';
@@ -78,7 +78,7 @@ export default function Configuration(props) {
   };
 
   const onCreate = async (values) => {
-    Axios.post('http://localhost:8000/update-config', { configId, config: values }, {
+    axios.post('http://localhost:8000/update-config', { configId, config: values }, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
@@ -106,7 +106,7 @@ export default function Configuration(props) {
       cancelText: 'No',
       centered: true,
       async onOk() {
-        Axios.post('http://localhost:8000/delete-config', { configId: toDelete._id }, {
+        axios.post('http://localhost:8000/delete-config', { configId: toDelete._id }, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -226,7 +226,7 @@ export default function Configuration(props) {
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
-      const result = await Axios.post('http://localhost:8000/get-configuration');
+      const result = await axios.post('http://localhost:8000/get-configuration');
       const configData = result.data;
       for (let i = 0; i < configData.length; i += 1) {
         configData[i].key = i;

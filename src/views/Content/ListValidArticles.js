@@ -89,6 +89,11 @@ export default function ListValidArticles() {
       dataIndex: 'title',
       key: 'title',
     },
+    {
+      title: 'Cleaned',
+      dataIndex: 'isCleaned',
+      key: 'isCleaned',
+    },
   ];
   const tableCSS = css({
     backgroundColor: 'white',

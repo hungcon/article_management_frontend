@@ -52,12 +52,12 @@ export default function ListItems(props) {
           <ListItemText primary="Statistics" className={classes.text} />
         </ListItem>
       </NavLink>
-      <NavLink to="/dashboard/reports" className={classes.link} activeClassName={classes.active}>
+      <NavLink to="/dashboard/clean-text" className={classes.link} activeClassName={classes.active}>
         <ListItem button className={clsx(props.open && classes.button)}>
           <ListItemIcon>
             <LayersIcon className={classes.icon} />
           </ListItemIcon>
-          <ListItemText primary="Reports" className={classes.text} />
+          <ListItemText primary="Clean Text" className={classes.text} />
         </ListItem>
       </NavLink>
     </div>
