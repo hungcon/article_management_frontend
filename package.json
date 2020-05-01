@@ -24,8 +24,11 @@
     "react-chartist": "^0.14.3",
     "react-dom": "^16.12.0",
     "react-emotion": "^10.0.0",
+    "react-highlight-words": "^0.16.0",
     "react-hook-form": "^4.10.2",
     "react-material-ui-datatable": "2.0.0-alpha.30",
+    "react-native": "^0.62.2",
+    "react-native-web": "^0.12.2",
     "react-redux": "^7.2.0",
     "react-render-html": "^0.6.0",
     "react-route": "^1.0.3",
@@ -33,7 +36,8 @@
     "react-scripts": "3.4.1",
     "reactstrap": "^8.4.1",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "rn-highlight-words": "^1.0.2"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { css } from 'emotion';
-import { Breadcrumb, Table } from 'antd';
+import {
+  Breadcrumb, Table, Tag, Button, Drawer,
+} from 'antd';
+import axios from 'axios';
+
 import CleanOption from './CleanOption';
 
 const useStyles = makeStyles(() => ({
@@ -24,43 +28,81 @@ const tableCSS = css({
   },
 });
 
-const dataSource = [
-  {
-    key: '1',
-    name: 'Mike',
-    age: 32,
-    address: '10 Downing Street',
-  },
-  {
-    key: '2',
-    name: 'John',
-    age: 42,
-    address: '10 Downing Street 10 Downing Street 10 Downing Street10 Downing Street10 Downing Street10 Downing Street10 Downing Street10 Downing Street10 Downing Street10 Downing Street10 Downing Street10 Downing Street10 Downing Street10 Downing Street10 Downing Street10 Downing Street10 Downing Street10 Downing Street10 Downing Street10 Downing Street10 Downing Street10 Downing Street',
-  },
-];
-
-const columns = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
-  },
-];
-
-
 export default function CleanText() {
   const classes = useStyles();
+  const [data, setData] = useState();
+  const [visible, setVisible] = useState(false);
+  const [cleanOption, setCleanOption] = useState();
 
+  const showDrawer = (record) => {
+    setCleanOption(record);
+    setVisible(true);
+  };
+
+  const onClose = () => {
+    setVisible(false);
+  };
+
+  const columns = [
+    {
+      title: 'Website',
+      dataIndex: 'articleId',
+      key: 'articleId',
+      render: (value) => value.website.name,
+    },
+    {
+      title: 'Category',
+      dataIndex: 'articleId',
+      key: 'articleId',
+      render: (value) => (
+        <span>
+          {value.category.map((caegory) => (
+            <Tag color="green" key={caegory.name}>
+              {caegory.name.toUpperCase()}
+            </Tag>
+          ))}
+        </span>
+      ),
+    },
+    {
+      title: 'Title',
+      dataIndex: 'articleId',
+      key: 'articleId',
+      render: (value) => value.title,
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      width: '20%',
+      align: 'center',
+      render: (value, record) => (
+        <div>
+          <Button
+            type="primary"
+            onClick={() => showDrawer(record)}
+          >
+            Detail
+          </Button>
+        </div>
+      ),
+    },
+  ];
+  useEffect(() => {
+    let ignore = false;
+
+    async function fetchData() {
+      const result = await axios.post('http://localhost:8000/get-clean-articles');
+      const articleData = result.data;
+      for (let i = 0; i < articleData.length; i += 1) {
+        articleData[i].key = i;
+      }
+      setData(articleData);
+    }
+    if (!ignore) {
+      fetchData();
+    }
+    return () => { ignore = true; };
+  }, []);
 
   return (
     <div className={classes.root}>
@@ -75,13 +117,23 @@ export default function CleanText() {
       <Table
         className={tableCSS}
         columns={columns}
-        dataSource={dataSource}
-        expandable={{
-          expandedRowRender: (record) => <CleanOption record={record} />,
-        }}
+        dataSource={data}
+        // expandable={{
+        //   expandedRowRender: (record) => <CleanOption record={record} />,
+        // }}
         bordered
         scroll={{ y: 490 }}
       />
+      <Drawer
+        title="Basic Drawer"
+        placement="right"
+        width={1250}
+        closable={false}
+        onClose={onClose}
+        visible={visible}
+      >
+        <CleanOption record={cleanOption} />
+      </Drawer>
     </div>
   );
 }
