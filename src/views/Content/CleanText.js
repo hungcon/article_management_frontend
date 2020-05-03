@@ -118,9 +118,6 @@ export default function CleanText() {
         className={tableCSS}
         columns={columns}
         dataSource={data}
-        // expandable={{
-        //   expandedRowRender: (record) => <CleanOption record={record} />,
-        // }}
         bordered
         scroll={{ y: 490 }}
       />

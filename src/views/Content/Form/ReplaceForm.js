@@ -5,8 +5,9 @@ import {
 } from 'antd';
 
 const ReplaceForm = ({
-  visible, onCreate, onCancel,
+  visible, onCreate, onCancel, word,
 }) => {
+  console.log(word);
   const [form] = Form.useForm();
   useEffect(() => () => {
     form.resetFields();
@@ -36,18 +37,32 @@ const ReplaceForm = ({
         layout="vertical"
         form={form}
         initialValues={{
-
+          position: word.position,
+          machineClean: word.machineClean,
+          peopleClean: word.peopleClean,
         }}
       >
         <Form.Item
           name="position"
           label="Position"
         >
-          <Input />
+          <Input disabled />
+        </Form.Item>
+        <Form.Item
+          name="machineClean"
+          label="Machine normalize"
+        >
+          <Input disabled />
         </Form.Item>
         <Form.Item
           name="peopleClean"
           label="Replace with"
+          rules={[
+            {
+              required: true,
+              message: 'Please input normalize word',
+            },
+          ]}
         >
           <Input />
         </Form.Item>
