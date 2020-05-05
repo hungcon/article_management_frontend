@@ -64,5 +64,14 @@ export const init = {
       },
     ],
   },
+  INIT_WORD_INFO: {
+    position: 0,
+    machineNormalize: '',
+    peopleNormalize: '',
+  },
 
+  INIT_WORD_SELECT: {
+    loanwordsSelect: [],
+    abbreviationsSelect: [],
+  },
 };

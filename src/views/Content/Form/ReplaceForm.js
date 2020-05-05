@@ -7,7 +7,7 @@ import {
 const ReplaceForm = ({
   visible, onCreate, onCancel, word,
 }) => {
-  console.log(word);
+  // console.log(word);
   const [form] = Form.useForm();
   useEffect(() => () => {
     form.resetFields();
@@ -38,8 +38,8 @@ const ReplaceForm = ({
         form={form}
         initialValues={{
           position: word.position,
-          machineClean: word.machineClean,
-          peopleClean: word.peopleClean,
+          machineNormalize: word.machineNormalize,
+          peopleNormalize: word.peopleNormalize,
         }}
       >
         <Form.Item
@@ -49,13 +49,13 @@ const ReplaceForm = ({
           <Input disabled />
         </Form.Item>
         <Form.Item
-          name="machineClean"
+          name="machineNormalize"
           label="Machine normalize"
         >
           <Input disabled />
         </Form.Item>
         <Form.Item
-          name="peopleClean"
+          name="peopleNormalize"
           label="Replace with"
           rules={[
             {

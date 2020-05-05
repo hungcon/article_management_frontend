@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Table, Tag, Form, Select, Button, Typography, Breadcrumb, DatePicker,
 } from 'antd';
+import { PlusCircleOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { css } from 'emotion';
 import axios from 'axios';
@@ -22,7 +23,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function ListValidArticles() {
+export default function ListValidArticles(props) {
   const classes = useStyles();
   const [form] = Form.useForm();
   const [data, setData] = useState();
@@ -93,6 +94,31 @@ export default function ListValidArticles() {
       title: 'Cleaned',
       dataIndex: 'isCleaned',
       key: 'isCleaned',
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      width: '20%',
+      align: 'center',
+      render: (value, record) => (
+        <div>
+          <Button
+            // eslint-disable-next-line no-underscore-dangle
+            onClick={() => props.history.push(`/dashboard/list-valid-articles/${record._id}`)}
+            style={{ marginRight: 10 }}
+            icon={<EditOutlined />}
+          >
+            Update
+          </Button>
+          <Button
+            danger
+            // onClick={() => showDeleteConfirm(record)}
+            icon={<DeleteOutlined />}
+          >
+            Delete
+          </Button>
+        </div>
+      ),
     },
   ];
   const tableCSS = css({
@@ -196,6 +222,13 @@ export default function ListValidArticles() {
           </Button>
         </Form.Item>
       </Form>
+      <Button
+        onClick={() => props.history.push('/dashboard/list-valid-articles/add')}
+        style={{ marginBottom: 15 }}
+        icon={<PlusCircleOutlined />}
+      >
+        Add article
+      </Button>
       {!data ? 'Loading data...' : (
         <Table
           className={tableCSS}

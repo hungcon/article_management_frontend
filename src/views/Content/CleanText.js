@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { css } from 'emotion';
 import {
-  Breadcrumb, Table, Tag, Button, Drawer,
+  Breadcrumb, Table, Tag, Button,
 } from 'antd';
 import axios from 'axios';
 
-import CleanOption from './CleanOption';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -28,32 +27,21 @@ const tableCSS = css({
   },
 });
 
-export default function CleanText() {
+export default function CleanText(props) {
   const classes = useStyles();
   const [data, setData] = useState();
-  const [visible, setVisible] = useState(false);
-  const [cleanOption, setCleanOption] = useState();
-
-  const showDrawer = (record) => {
-    setCleanOption(record);
-    setVisible(true);
-  };
-
-  const onClose = () => {
-    setVisible(false);
-  };
 
   const columns = [
     {
       title: 'Website',
-      dataIndex: 'articleId',
-      key: 'articleId',
+      dataIndex: 'article',
+      key: 'article',
       render: (value) => value.website.name,
     },
     {
       title: 'Category',
-      dataIndex: 'articleId',
-      key: 'articleId',
+      dataIndex: 'article',
+      key: 'article',
       render: (value) => (
         <span>
           {value.category.map((caegory) => (
@@ -66,8 +54,8 @@ export default function CleanText() {
     },
     {
       title: 'Title',
-      dataIndex: 'articleId',
-      key: 'articleId',
+      dataIndex: 'article',
+      key: 'article',
       render: (value) => value.title,
     },
     {
@@ -79,7 +67,8 @@ export default function CleanText() {
         <div>
           <Button
             type="primary"
-            onClick={() => showDrawer(record)}
+            // eslint-disable-next-line no-underscore-dangle
+            onClick={() => props.history.push(`/dashboard/clean-text/${record._id}`)}
           >
             Detail
           </Button>
@@ -121,16 +110,6 @@ export default function CleanText() {
         bordered
         scroll={{ y: 490 }}
       />
-      <Drawer
-        title="Basic Drawer"
-        placement="right"
-        width={1250}
-        closable={false}
-        onClose={onClose}
-        visible={visible}
-      >
-        <CleanOption record={cleanOption} />
-      </Drawer>
     </div>
   );
 }
