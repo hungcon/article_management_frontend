@@ -6,7 +6,7 @@ import {
 import {
   DeleteOutlined, ExclamationCircleOutlined, PlusOutlined, EditOutlined,
 } from '@ant-design/icons';
-import Axios from 'axios';
+import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import RssForm from './Form/RssForm';
 import HtmlForm from './Form/HtmlForm';
@@ -30,7 +30,7 @@ const MoreInfo = ({ record, props }) => {
   const onRssCreate = async (values, rssConfigId) => {
     switch (rssAction) {
       case 'update':
-        Axios.post('http://localhost:8000/update-rss-config', { rssConfig: values, rssConfigId, configId: record._id }, {
+        axios.post('http://localhost:8000/update-rss-config', { rssConfig: values, rssConfigId, configId: record._id }, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -47,7 +47,7 @@ const MoreInfo = ({ record, props }) => {
         });
         break;
       case 'add':
-        Axios.post('http://localhost:8000/add-rss-config', { rssConfig: values, configId: record._id }, {
+        axios.post('http://localhost:8000/add-rss-config', { rssConfig: values, configId: record._id }, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -73,7 +73,7 @@ const MoreInfo = ({ record, props }) => {
     switch (htmlAction) {
       case 'update':
         if (addBlock.length === 0) {
-          Axios.post('http://localhost:8000/update-html-config', { html: values, htmlId, configId: record._id }, {
+          axios.post('http://localhost:8000/update-html-config', { html: values, htmlId, configId: record._id }, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
@@ -90,7 +90,7 @@ const MoreInfo = ({ record, props }) => {
           });
         } else {
           addBlock.map(async (block) => {
-            Axios.post('http://localhost:8000/add-block-config', {
+            axios.post('http://localhost:8000/add-block-config', {
               html: values, htmlId, block, configId: record._id,
             }, {
               headers: {
@@ -111,7 +111,7 @@ const MoreInfo = ({ record, props }) => {
         }
         break;
       case 'add':
-        Axios.post('http://localhost:8000/add-html-config', { html: values, addBlock, configId: record._id }, {
+        axios.post('http://localhost:8000/add-html-config', { html: values, addBlock, configId: record._id }, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -157,7 +157,7 @@ const MoreInfo = ({ record, props }) => {
       async onOk() {
         if (type === 'rss') {
           console.log('rssId :', deleteId, 'configId: ', configId);
-          Axios.post('http://localhost:8000/delete-rss-config', { rssConfigId: deleteId, configId }, {
+          axios.post('http://localhost:8000/delete-rss-config', { rssConfigId: deleteId, configId }, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
@@ -174,7 +174,7 @@ const MoreInfo = ({ record, props }) => {
           });
         } else {
           console.log('html: ', deleteId, 'htmlId: ', configId);
-          Axios.post('http://localhost:8000/delete-html-config', { htmlConfigId: deleteId, configId }, {
+          axios.post('http://localhost:8000/delete-html-config', { htmlConfigId: deleteId, configId }, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },

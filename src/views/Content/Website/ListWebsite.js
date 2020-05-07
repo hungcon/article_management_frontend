@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -7,6 +8,9 @@ import {
   EditOutlined, DeleteOutlined, PlusCircleOutlined, ExclamationCircleOutlined,
 } from '@ant-design/icons';
 import { css } from 'emotion';
+import axios from 'axios';
+import { message } from '../../../common';
+import openNotification from '../../Notifications';
 
 const { confirm } = Modal;
 
@@ -31,34 +35,92 @@ const tableCSS = css({
   },
 });
 
-const dataSource = [
-  {
-    key: '1',
-    _id: '1',
-    name: 'Dân trí',
-  },
-  {
-    key: '2',
-    _id: '3',
-    name: 'VnExpress',
-  },
-];
-
 
 export default function ListWebsite() {
   const classes = useStyles();
   const [visible, setVisible] = useState(false);
+  const [websites, setWebsites] = useState();
+  const [action, setAction] = useState();
+  const [website, setWebsite] = useState({ name: '' });
+  const [reload, setReload] = useState(false);
   const [form] = Form.useForm();
+
+  const checkWebsiteExisted = async (name) => {
+    const { data } = await axios.post('http://localhost:8000/is-website-existed', { name });
+    if (data) {
+      return true;
+    }
+    return false;
+  };
+
+  const onWebsiteCreate = (values) => {
+    switch (action) {
+      case 'add':
+        axios.post('http://localhost:8000/add-website', { name: values.name }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }).then((addResult) => {
+          if (addResult.data.status === 1) {
+            openNotification('success', message.ADD_SUCCESS);
+            setReload(!reload);
+          } else {
+            openNotification('error', message.ERROR);
+          }
+        }).catch((err) => {
+          console.log(err);
+          openNotification('error', message.UNAUTHORIZED);
+        });
+        break;
+      case 'update':
+        axios.post('http://localhost:8000/update-website', { name: values.name, websiteId: website._id }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }).then((updateResult) => {
+          if (updateResult.data.status === 1) {
+            openNotification('success', message.UPDATE_SUCCESS);
+            setReload(!reload);
+          } else {
+            openNotification('error', message.ERROR);
+          }
+        }).catch((err) => {
+          console.log(err);
+          openNotification('error', message.UNAUTHORIZED);
+        });
+        break;
+      default:
+        break;
+    }
+    setVisible(false);
+  };
 
   const onCancel = () => {
     setVisible(false);
   };
 
-  const showWebsiteModal = () => {
+  const showWebsiteModal = (actionVal, values) => {
+    setAction(actionVal);
+    setWebsite(values);
     setVisible(true);
   };
 
-  const showDeleteConfirm = () => {
+  useEffect(() => {
+    let ignore = false;
+    async function fetchData() {
+      const listWebsite = (await axios.post('http://localhost:8000/get-websites')).data;
+      for (let i = 0; i < listWebsite.length; i += 1) {
+        listWebsite[i].key = i + 1;
+      }
+      if (!ignore) {
+        setWebsites(listWebsite);
+      }
+    }
+    fetchData();
+    return () => { ignore = true; };
+  }, [reload]);
+
+  const showDeleteConfirm = (websiteId) => {
     confirm({
       title: 'Are you sure delete this website?',
       // eslint-disable-next-line react/jsx-filename-extension
@@ -68,7 +130,21 @@ export default function ListWebsite() {
       cancelText: 'No',
       centered: true,
       async onOk() {
-        console.log('ok');
+        axios.post('http://localhost:8000/delete-website', { websiteId }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }).then((deleteResult) => {
+          if (deleteResult.data.status === 1) {
+            openNotification('success', message.DELETE_SUCCESS);
+            setReload(!reload);
+          } else {
+            openNotification('error', message.ERROR);
+          }
+        }).catch((err) => {
+          console.log(err);
+          openNotification('error', message.UNAUTHORIZED);
+        });
       },
       onCancel() {
       },
@@ -81,10 +157,10 @@ export default function ListWebsite() {
 
   const columns = [
     {
-      title: 'ID',
+      title: 'Index',
       width: '10%',
-      dataIndex: '_id',
-      key: '_id',
+      dataIndex: 'key',
+      key: 'key',
     },
     {
       title: 'Name',
@@ -98,7 +174,7 @@ export default function ListWebsite() {
       render: (value, record) => (
         <div>
           <Button
-            onClick={() => showWebsiteModal('update', { website: 'abc' })}
+            onClick={() => showWebsiteModal('update', record)}
             style={{ marginRight: 10 }}
             icon={<EditOutlined />}
           >
@@ -106,7 +182,7 @@ export default function ListWebsite() {
           </Button>
           <Button
             danger
-            onClick={() => showDeleteConfirm()}
+            onClick={() => showDeleteConfirm(record._id)}
             icon={<DeleteOutlined />}
           >
             Delete
@@ -126,19 +202,19 @@ export default function ListWebsite() {
         </Breadcrumb.Item>
       </Breadcrumb>
       <Button
-        onClick={() => showWebsiteModal('add', {})}
+        onClick={() => showWebsiteModal('add', { name: '' })}
         style={{ marginBottom: 15 }}
         icon={<PlusCircleOutlined />}
       >
         Add website
       </Button>
-      <Table className={tableCSS} dataSource={dataSource} columns={columns} />
+      <Table className={tableCSS} dataSource={websites} columns={columns} />
       <Modal
         forceRender
         style={{ fontFamily: 'Montserrat' }}
         visible={visible}
         title="Website"
-        okText="Update"
+        okText={action === 'add' ? 'Add' : 'Update'}
         cancelText="Cancel"
         onCancel={onCancel}
         onOk={() => {
@@ -146,7 +222,7 @@ export default function ListWebsite() {
             .validateFields()
             .then((values) => {
               form.resetFields();
-              console.log(values);
+              onWebsiteCreate(values);
             })
             .catch((info) => {
               console.log('Validate Failed:', info);
@@ -157,6 +233,7 @@ export default function ListWebsite() {
           layout="vertical"
           form={form}
           initialValues={{
+            name: website.name,
           }}
         >
           <Form.Item
@@ -167,6 +244,15 @@ export default function ListWebsite() {
                 required: true,
                 message: 'Please input website name',
               },
+              () => ({
+                async validator(rule, value) {
+                  if (!(await checkWebsiteExisted(value))) {
+                    return Promise.resolve();
+                  }
+                  // eslint-disable-next-line prefer-promise-reject-errors
+                  return Promise.reject('Website is existed');
+                },
+              }),
             ]}
           >
             <Input />
