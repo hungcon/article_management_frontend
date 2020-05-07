@@ -178,13 +178,13 @@ export default function CleanOption() {
     for (const abbreviation of abbreviations) {
       highlights.push(abbreviation.words);
     }
+
     return (
       <Highlighter
-        style={{ fontFamily: 'Montserrat' }}
+        style={{ fontFamily: 'Montserrat', fontSize: 13 }}
         highlightStyle={{ backgroundColor: 'rgba(0, 128, 0, 0.42)' }}
         searchWords={highlights}
-        autoEscape
-        textToHighlight={record.article.text.trim().replace(/\./, '.\n\n')}
+        textToHighlight={record.article.text.trim().replace(/\.\s/g, '.\n\n')}
         onPressHighlightedText={(text, position) => console.log(`highlighted text that click: ${text}, ${position}`)}
       />
     );
@@ -200,19 +200,17 @@ export default function CleanOption() {
       highlights.push(abbreviation.normalize[0].peopleNormalize);
     }
     return (
-      <Highlighter
-        style={{ fontFamily: 'Montserrat' }}
-        highlightStyle={{ backgroundColor: 'rgba(255, 255, 0, 0.43)' }}
-        searchWords={highlights}
-        autoEscape
-        textToHighlight={record.cleanText.replace(/\s\s+/g, ' ')
-          .replace(/\t/g, ' ')
-          .replace(/\./g, '.\n\n')}
-        onPressHighlightedText={(text, position) => showReplaceOption(text, position)}
-      />
+      <div>
+        <Highlighter
+          style={{ fontFamily: 'Montserrat', fontSize: 13 }}
+          highlightStyle={{ backgroundColor: 'rgba(255, 255, 0, 0.43)' }}
+          searchWords={highlights}
+          textToHighlight={record.cleanText.trim().replace(/\.\s/g, '.\n\n')}
+          onPressHighlightedText={(text, position) => showReplaceOption(text, position)}
+        />
+      </div>
     );
   };
-
   return (
     <div className={classes.root}>
       <Breadcrumb style={{ marginBottom: 10 }}>

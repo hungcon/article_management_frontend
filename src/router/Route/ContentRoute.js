@@ -1,6 +1,7 @@
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-filename-extension */
 import React from 'react';
-import { Switch, Redirect } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import Configuration from '../../views/Content/Configuration';
 import ListValidArticles from '../../views/Content/ListValidArticles';
 import ListInvalidArticles from '../../views/Content/ListInvalidArticles';
@@ -11,11 +12,16 @@ import ArticleConfig from '../../views/Content/Configuration/ArticleConfig/Artic
 import Statistics from '../../views/Content/Statistics';
 import PrivateRoute from '../../PrivateRoute';
 import ArticleForm from '../../views/Article/ArticleForm';
+import AddArticle from '../../views/Article/AddArticle';
+import ListWebsite from '../../views/Content/Website/ListWebsite';
+import ListCategory from '../../views/Content/Category/ListCategory';
 
 export default function ContentRoute() {
   return (
     <Switch>
       <PrivateRoute path="/dashboard/configuration" exact component={Configuration} />
+      <PrivateRoute path="/dashboard/list-website" exact component={ListWebsite} />
+      <PrivateRoute path="/dashboard/list-category" exact component={ListCategory} />
       <PrivateRoute path="/dashboard/configuration/add-config" exact component={AddConfig} />
       <PrivateRoute path="/dashboard/configuration/article-config/:configId" exact component={ArticleConfig} />
       <PrivateRoute path="/dashboard/list-valid-articles" exact component={ListValidArticles} />
@@ -23,8 +29,8 @@ export default function ContentRoute() {
       <PrivateRoute path="/dashboard/list-invalid-articles" exact component={ListInvalidArticles} />
       <PrivateRoute path="/dashboard/clean-text" exact component={CleanText} />
       <PrivateRoute path="/dashboard/clean-text/:cleanArticleId" exact component={CleanOption} />
+      <PrivateRoute path="/dashboard/add-article" exact component={AddArticle} />
       <PrivateRoute path="/dashboard/statistics" exact component={Statistics} />
-      <Redirect from="/dashboard" to="/dashboard/configuration" />
     </Switch>
   );
 }

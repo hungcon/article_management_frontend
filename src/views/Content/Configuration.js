@@ -6,7 +6,7 @@ import {
   Table, Button, Switch, Modal, Breadcrumb,
 } from 'antd';
 import {
-  ExclamationCircleOutlined, DeleteOutlined, EditOutlined, PlusCircleOutlined,
+  ExclamationCircleOutlined, DeleteOutlined, EditOutlined, PlusCircleOutlined, PlayCircleOutlined,
 } from '@ant-design/icons';
 import { css } from 'emotion';
 import axios from 'axios';
@@ -239,6 +239,40 @@ export default function Configuration(props) {
     return () => { ignore = true; };
   }, [reload, dispatch]);
 
+  const runSchedule = async () => {
+    axios.post('http://localhost:8000/crawl/run', null, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    }).then((result) => {
+      if (result.data.status === 1) {
+        openNotification('success', message.RUN_SUCCESS);
+      } else {
+        openNotification('error', message.ERROR);
+      }
+    }).catch((err) => {
+      console.log(err);
+      openNotification('error', message.UNAUTHORIZED);
+    });
+  };
+
+  const stopSchedule = async () => {
+    axios.post('http://localhost:8000/crawl/stop', null, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    }).then((result) => {
+      if (result.data.status === 1) {
+        openNotification('success', message.RUN_SUCCESS);
+      } else {
+        openNotification('error', message.ERROR);
+      }
+    }).catch((err) => {
+      console.log(err);
+      openNotification('error', message.UNAUTHORIZED);
+    });
+  };
+
   return (
     <div className={classes.root}>
       <Breadcrumb style={{ marginBottom: 10 }}>
@@ -255,6 +289,22 @@ export default function Configuration(props) {
         icon={<PlusCircleOutlined />}
       >
         Add config
+      </Button>
+      <Button
+        type="primary"
+        onClick={() => runSchedule()}
+        style={{ marginLeft: 15 }}
+        icon={<PlayCircleOutlined />}
+      >
+        Start crawl
+      </Button>
+      <Button
+        type="danger"
+        onClick={() => stopSchedule()}
+        style={{ marginLeft: 15 }}
+        icon={<PlayCircleOutlined />}
+      >
+        Stop crawl
       </Button>
       <Table
         className={tableCSS}

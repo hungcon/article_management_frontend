@@ -7,6 +7,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import BuildIcon from '@material-ui/icons/Build';
+import CategoryIcon from '@material-ui/icons/Category';
+import LanguageIcon from '@material-ui/icons/Language';
 import PieChartIcon from '@material-ui/icons/PieChart';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import DescriptionIcon from '@material-ui/icons/Description';
@@ -20,14 +22,36 @@ export default function ListItems(props) {
   const classes = useStyles();
   return (
     <div>
-      <NavLink to="/dashboard/configuration" className={classes.link} activeClassName={classes.active}>
-        <ListItem button className={clsx(props.open && classes.button)}>
-          <ListItemIcon>
-            <BuildIcon className={classes.icon} />
-          </ListItemIcon>
-          <ListItemText primary="Configuration" className={classes.text} />
-        </ListItem>
-      </NavLink>
+      {props.currentUser.role === 'admin'
+        ? (
+          <div>
+            <NavLink to="/dashboard/list-website" className={classes.link} activeClassName={classes.active}>
+              <ListItem button className={clsx(props.open && classes.button)}>
+                <ListItemIcon>
+                  <LanguageIcon className={classes.icon} />
+                </ListItemIcon>
+                <ListItemText primary="Websites" className={classes.text} />
+              </ListItem>
+            </NavLink>
+            <NavLink to="/dashboard/list-category" className={classes.link} activeClassName={classes.active}>
+              <ListItem button className={clsx(props.open && classes.button)}>
+                <ListItemIcon>
+                  <CategoryIcon className={classes.icon} />
+                </ListItemIcon>
+                <ListItemText primary="Websites" className={classes.text} />
+              </ListItem>
+            </NavLink>
+            <NavLink to="/dashboard/configuration" className={classes.link} activeClassName={classes.active}>
+              <ListItem button className={clsx(props.open && classes.button)}>
+                <ListItemIcon>
+                  <BuildIcon className={classes.icon} />
+                </ListItemIcon>
+                <ListItemText primary="Configuration" className={classes.text} />
+              </ListItem>
+            </NavLink>
+          </div>
+        )
+        : (<div />)}
       <NavLink to="/dashboard/list-valid-articles" className={classes.link} activeClassName={classes.active}>
         <ListItem button className={clsx(props.open && classes.button)}>
           <ListItemIcon>

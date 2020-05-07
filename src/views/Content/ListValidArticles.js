@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Table, Tag, Form, Select, Button, Typography, Breadcrumb, DatePicker,
 } from 'antd';
-import { PlusCircleOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { css } from 'emotion';
 import axios from 'axios';
@@ -222,13 +222,6 @@ export default function ListValidArticles(props) {
           </Button>
         </Form.Item>
       </Form>
-      <Button
-        onClick={() => props.history.push('/dashboard/list-valid-articles/add')}
-        style={{ marginBottom: 15 }}
-        icon={<PlusCircleOutlined />}
-      >
-        Add article
-      </Button>
       {!data ? 'Loading data...' : (
         <Table
           className={tableCSS}

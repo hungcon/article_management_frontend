@@ -25,9 +25,8 @@ const useStyles = makeStyles(styles);
 
 export default function Dashboard(props) {
   const classes = useStyles();
-  // const count = useSelector(state => state.test);
   const [open, setOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState({ firstName: '', lastName: '' });
+  const [currentUser, setCurrentUser] = useState({ firstName: '', lastName: '', role: '' });
 
   useEffect(() => {
     let ignore = false;
@@ -36,9 +35,10 @@ export default function Dashboard(props) {
       const {
         firstName,
         lastName,
+        role,
       } = user;
       if (!ignore) {
-        setCurrentUser({ firstName, lastName });
+        setCurrentUser({ firstName, lastName, role });
       }
     }
     fetchData();
@@ -96,14 +96,14 @@ export default function Dashboard(props) {
         </div>
         <Divider />
         <List>
-          <ListItems open={open} />
+          <ListItems open={open} currentUser={currentUser} />
         </List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            <ContentRoute />
+            <ContentRoute currentUser={currentUser} />
           </Grid>
         </Container>
       </main>

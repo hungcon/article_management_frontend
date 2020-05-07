@@ -4,6 +4,7 @@ import { css } from 'emotion';
 import {
   Breadcrumb, Table, Tag, Button,
 } from 'antd';
+import { PlusCircleOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
 
@@ -103,6 +104,13 @@ export default function CleanText(props) {
           <a href="/dashboard/configuration">Clean Text</a>
         </Breadcrumb.Item>
       </Breadcrumb>
+      <Button
+        onClick={() => props.history.push('/dashboard/add-article')}
+        style={{ marginBottom: 15 }}
+        icon={<PlusCircleOutlined />}
+      >
+        Add article
+      </Button>
       <Table
         className={tableCSS}
         columns={columns}

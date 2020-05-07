@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -5,6 +6,8 @@ import {
   Form, Input, Button,
 } from 'antd';
 import { makeStyles } from '@material-ui/core/styles';
+import openNotification from '../Notifications';
+import { message } from '../../common';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -29,7 +32,6 @@ export default function ArticleForm(props) {
     async function fetchData() {
       const articleVal = (await axios.post('http://localhost:8000/get-valid-article-by-id', { articleId })).data;
       if (!ignore) {
-        console.log(articleVal);
         setArticle(articleVal);
       }
     }
@@ -37,8 +39,16 @@ export default function ArticleForm(props) {
     return () => { ignore = true; };
   }, [articleId]);
 
-  const onFinish = (values) => {
-    console.log(values);
+  const onFinish = async (values) => {
+    const { title, link, text } = values;
+    const updateResult = (await axios.post('http://localhost:8000/update-valid-article', {
+      title, link, text, id: article._id,
+    })).data;
+    if (updateResult.status === 1) {
+      openNotification('success', message.UPDATE_SUCCESS);
+    } else {
+      openNotification('error', message.ERROR);
+    }
   };
 
   useEffect(() => () => {
@@ -97,7 +107,7 @@ export default function ArticleForm(props) {
             Cancel
           </Button>
           <Button type="primary" htmlType="submit">
-            Submit
+            Update
           </Button>
         </Form.Item>
       </Form>

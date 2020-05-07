@@ -6,6 +6,7 @@ export const message = {
   ERROR: 'Have an error',
   UNAUTHORIZED: 'Unauthorized',
   RECRAWL_SUCCESS: 'Recrawl successfully',
+  RUN_SUCCESS: 'Running crawl successfully',
   RERUN_SUCCESS: 'Re-run schedule successfully',
 };
 
