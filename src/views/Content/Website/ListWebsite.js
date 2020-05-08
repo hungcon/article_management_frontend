@@ -208,7 +208,7 @@ export default function ListWebsite() {
       >
         Add website
       </Button>
-      <Table className={tableCSS} dataSource={websites} columns={columns} />
+      <Table className={tableCSS} dataSource={websites} columns={columns} scroll={{ y: 400 }} />
       <Modal
         forceRender
         style={{ fontFamily: 'Montserrat' }}

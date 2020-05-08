@@ -3,7 +3,7 @@ import 'antd/dist/antd.css';
 import './index.css';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  Steps, Breadcrumb,
+  Steps, Breadcrumb, Row, Col,
 } from 'antd';
 import { useDispatch } from 'react-redux';
 import Axios from 'axios';
@@ -26,19 +26,13 @@ const useStyles = makeStyles(() => ({
 
 const { Step } = Steps;
 const initGeneral = {
-  category: {
-    id: 0,
-    name: '',
-  },
-  website: {
-    id: 0,
-    name: '',
-  },
-  status: '',
-  crawlType: '',
+  category: '',
+  website: 'SOHA',
+  status: '01',
+  crawlType: 'RSS',
   schedules: [
   ],
-  articleDemoLink: '',
+  articleDemoLink: 'https://www.nguoiduatin.vn/dieu-tra-nguyen-nhan-nam-thanh-nien-tu-vong-trong-cua-hang-vat-lieu-a431171.html',
 };
 
 
@@ -60,14 +54,8 @@ export default function AddConfig(props) {
 
   const onGeneralCreate = (values) => {
     const generalVal = {
-      category: {
-        id: 0,
-        name: values.category,
-      },
-      website: {
-        id: 0,
-        name: values.website,
-      },
+      category: values.category,
+      website: values.website,
       status: values.status,
       crawlType: values.crawlType,
       schedules: values.schedules,
@@ -130,7 +118,7 @@ export default function AddConfig(props) {
       if (addResult.data.status === 1) {
         dispatch(allActions.configAction.reload());
         openNotification('success', message.ADD_SUCCESS);
-        props.history.push('/dashboard');
+        props.history.push('/dashboard/configuration');
       } else {
         openNotification('error', message.ERROR);
       }
@@ -174,7 +162,13 @@ export default function AddConfig(props) {
           <Step key={item.title} title={item.title} />
         ))}
       </Steps>
-      <div className="steps-content">{steps[current].content}</div>
+      <Row>
+        <Col span={6} />
+        <Col span={12}>
+          {steps[current].content}
+        </Col>
+        <Col span={6} />
+      </Row>
     </div>
   );
 }

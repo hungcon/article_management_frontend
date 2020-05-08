@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable import/no-named-as-default */
 /* eslint-disable import/no-named-as-default-member */
 /* eslint-disable no-shadow */
@@ -9,7 +11,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import { css } from 'emotion';
 import axios from 'axios';
-import { websites, categories, message } from '../../common';
+import { message } from '../../common';
 import openNotification from '../Notifications';
 
 
@@ -36,9 +38,46 @@ export default function ListInValidArticles() {
   const [reload, setReload] = useState(false);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
+  const [websites, setWebsites] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    let ignore = false;
+    async function fetchData() {
+      const listWebsite = (await axios.post('http://localhost:8000/get-websites')).data;
+      for (let i = 0; i < listWebsite.length; i += 1) {
+        listWebsite[i].key = i + 1;
+      }
+      if (!ignore) {
+        setWebsites(listWebsite);
+      }
+    }
+    fetchData();
+    return () => { ignore = true; };
+  }, []);
+
+  useEffect(() => {
+    let ignore = false;
+    async function fetchData() {
+      const listCategories = (await axios.post('http://localhost:8000/get-categories')).data;
+      for (let i = 0; i < listCategories.length; i += 1) {
+        listCategories[i].key = i + 1;
+      }
+      if (!ignore) {
+        setCategories(listCategories);
+      }
+    }
+    fetchData();
+    return () => { ignore = true; };
+  }, []);
+
 
   const crawlArticle = async (article) => {
     const { website, category } = article;
+    const listCategory = [];
+    for (const temp of category) {
+      listCategory.push(temp._id);
+    }
     const articleConfig = (await axios.post('http://localhost:8000/get-config-by-website', { website, category: category[0] })).data;
     const reCrawlArticle = (await axios.post('http://localhost:8000/crawl/article', {
       link: article.link,
@@ -50,8 +89,8 @@ export default function ListInValidArticles() {
       sapo: article.sapo,
       publicDate: new Date(article.createdAt),
       thumbnail: article.thumbnail,
-      category,
-      website,
+      category: listCategory,
+      website: website._id,
       sourceCode: article.sourceCode,
       text: `${article.title}\n\n${article.text}`,
       tags: article.tags || [],
@@ -73,14 +112,8 @@ export default function ListInValidArticles() {
     let ignore = false;
 
     async function fetchData() {
-      const website = {
-        id: 0,
-        name: filters ? filters.website : '',
-      };
-      const category = {
-        id: 0,
-        name: filters ? filters.category : '',
-      };
+      const website = filters ? filters.website : '';
+      const category = filters ? filters.category : '';
       const date = {
         startDate: startDate || '',
         endDate: endDate || '',
@@ -136,12 +169,12 @@ export default function ListInValidArticles() {
     {
       title: 'Actions',
       key: 'actions',
-      width: '20%',
+      width: '25%',
       align: 'center',
       render: (value, record) => (
         <div>
           <Button
-            disabled={record.reason === 'Number of words less than 100.'}
+            // disabled={record.reason === 'Number of words less than 100.'}
             onClick={() => crawlArticle(record)}
             danger
             type="primary"
@@ -222,7 +255,7 @@ export default function ListInValidArticles() {
             allowClear
           >
             {websites.map((website) => (
-              <Option key={website.id} value={website.name}>{website.name}</Option>
+              <Option key={website.key} value={website.name}>{website.name}</Option>
             ))}
           </Select>
         </Form.Item>
@@ -239,7 +272,7 @@ export default function ListInValidArticles() {
             allowClear
           >
             {categories.map((category) => (
-              <Option key={category}>{category}</Option>
+              <Option key={category.key} value={category.name}>{category.name}</Option>
             ))}
           </Select>
         </Form.Item>
@@ -267,6 +300,7 @@ export default function ListInValidArticles() {
           columns={columns}
           dataSource={data}
           bordered
+          scroll={{ y: 400 }}
           summary={() => (
 
             <tr>

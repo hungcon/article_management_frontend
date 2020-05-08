@@ -84,7 +84,7 @@ const ArticleConfig = (props) => {
       if (updateArticleResult.data.status === 1) {
         dispatch(allActions.configAction.reload());
         openNotification('success', message.UPDATE_SUCCESS);
-        props.history.push('/dashboard');
+        props.history.push('/dashboard/configuration');
       } else {
         openNotification('error', message.ERROR);
       }
@@ -256,10 +256,10 @@ const ArticleConfig = (props) => {
           </Form.Item>
 
           <Form.Item className="button-group">
-            <Button onClick={() => props.history.push('./dashboard/configuration')} className="button">
+            <Button onClick={() => props.history.push('/dashboard/configuration')} className="button">
               Cancel
             </Button>
-            <Button type="dashed" className="button" onClick={crawl}>
+            <Button type="dashed" className="button" onClick={() => crawl()}>
               Crawl
             </Button>
             <Button type="primary" htmlType="submit">

@@ -1,15 +1,19 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable import/no-named-as-default */
 /* eslint-disable import/no-named-as-default-member */
 /* eslint-disable no-shadow */
 import React, { useState, useEffect } from 'react';
 import {
-  Table, Tag, Form, Select, Button, Typography, Breadcrumb, DatePicker,
+  Table, Tag, Form, Select, Button, Typography, Breadcrumb, DatePicker, Modal,
 } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { css } from 'emotion';
 import axios from 'axios';
-import { websites, categories } from '../../common';
+import openNotification from '../Notifications';
+import { message } from '../../common';
+
+const { confirm } = Modal;
 
 const { Option } = Select;
 const { Text } = Typography;
@@ -31,19 +35,46 @@ export default function ListValidArticles(props) {
   const [counts, setCounts] = useState();
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
+  const [websites, setWebsites] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [reload, setReload] = useState(false);
+
+  useEffect(() => {
+    let ignore = false;
+    async function fetchData() {
+      const listWebsite = (await axios.post('http://localhost:8000/get-websites')).data;
+      for (let i = 0; i < listWebsite.length; i += 1) {
+        listWebsite[i].key = i + 1;
+      }
+      if (!ignore) {
+        setWebsites(listWebsite);
+      }
+    }
+    fetchData();
+    return () => { ignore = true; };
+  }, []);
+
+  useEffect(() => {
+    let ignore = false;
+    async function fetchData() {
+      const listCategories = (await axios.post('http://localhost:8000/get-categories')).data;
+      for (let i = 0; i < listCategories.length; i += 1) {
+        listCategories[i].key = i + 1;
+      }
+      if (!ignore) {
+        setCategories(listCategories);
+      }
+    }
+    fetchData();
+    return () => { ignore = true; };
+  }, []);
 
   useEffect(() => {
     let ignore = false;
 
     async function fetchData() {
-      const website = {
-        id: 0,
-        name: filters ? filters.website : '',
-      };
-      const category = {
-        id: 0,
-        name: filters ? filters.category : '',
-      };
+      const website = filters ? filters.website : '';
+      const category = filters ? filters.category : '';
       const date = {
         startDate: startDate || '',
         endDate: endDate || '',
@@ -60,8 +91,31 @@ export default function ListValidArticles(props) {
       fetchData();
     }
     return () => { ignore = true; };
-  }, [filters, startDate, endDate]);
+  }, [filters, startDate, endDate, reload]);
 
+
+  const showDeleteConfirm = (article) => {
+    confirm({
+      title: 'Are you sure delete this article?',
+      // eslint-disable-next-line react/jsx-filename-extension
+      icon: <ExclamationCircleOutlined />,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      centered: true,
+      async onOk() {
+        const status = (await axios.post('http://localhost:8000/delete-valid-article', { id: article._id })).data;
+        if (status.status === 1) {
+          setReload(!reload);
+          openNotification('success', message.DELETE_SUCCESS);
+        } else {
+          openNotification('error', message.ERROR);
+        }
+      },
+      onCancel() {
+      },
+    });
+  };
   const columns = [
     {
       title: 'Website',
@@ -98,7 +152,7 @@ export default function ListValidArticles(props) {
     {
       title: 'Actions',
       key: 'actions',
-      width: '20%',
+      width: '25%',
       align: 'center',
       render: (value, record) => (
         <div>
@@ -112,7 +166,7 @@ export default function ListValidArticles(props) {
           </Button>
           <Button
             danger
-            // onClick={() => showDeleteConfirm(record)}
+            onClick={() => showDeleteConfirm(record)}
             icon={<DeleteOutlined />}
           >
             Delete
@@ -184,7 +238,7 @@ export default function ListValidArticles(props) {
             allowClear
           >
             {websites.map((website) => (
-              <Option key={website.id} value={website.name}>{website.name}</Option>
+              <Option key={website.key} value={website.name}>{website.name}</Option>
             ))}
           </Select>
         </Form.Item>
@@ -201,7 +255,7 @@ export default function ListValidArticles(props) {
             allowClear
           >
             {categories.map((category) => (
-              <Option key={category}>{category}</Option>
+              <Option key={category.key} value={category.name}>{category.name}</Option>
             ))}
           </Select>
         </Form.Item>
@@ -228,6 +282,7 @@ export default function ListValidArticles(props) {
           columns={columns}
           dataSource={data}
           bordered
+          scroll={{ y: 400 }}
           summary={() => (
             <tr>
               <th>Total documents</th>

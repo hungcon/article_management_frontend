@@ -1,17 +1,49 @@
 /* eslint-disable prefer-promise-reject-errors */
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Form, Input, Select, Button,
 } from 'antd';
 
 import { isValidCron } from 'cron-validator';
-import { websites, categories } from '../../../../common';
+import axios from 'axios';
 import { init } from '../../../../common/init';
 
 const { Option } = Select;
 
 const General = ({ onCreate, general }) => {
   const [form] = Form.useForm();
+  const [websites, setWebsites] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    let ignore = false;
+    async function fetchData() {
+      const listWebsite = (await axios.post('http://localhost:8000/get-websites')).data;
+      for (let i = 0; i < listWebsite.length; i += 1) {
+        listWebsite[i].key = i + 1;
+      }
+      if (!ignore) {
+        setWebsites(listWebsite);
+      }
+    }
+    fetchData();
+    return () => { ignore = true; };
+  }, []);
+
+  useEffect(() => {
+    let ignore = false;
+    async function fetchData() {
+      const listCategories = (await axios.post('http://localhost:8000/get-categories')).data;
+      for (let i = 0; i < listCategories.length; i += 1) {
+        listCategories[i].key = i + 1;
+      }
+      if (!ignore) {
+        setCategories(listCategories);
+      }
+    }
+    fetchData();
+    return () => { ignore = true; };
+  }, []);
   const renderSelectTag = (children) => (
     <Select mode="multiple" style={{ width: '100%' }} tokenSeparators={[',']}>
       {children}
@@ -45,8 +77,8 @@ const General = ({ onCreate, general }) => {
       layout="vertical"
       form={form}
       initialValues={{
-        website: general.website.name,
-        category: general.category.name,
+        website: general.website,
+        category: general.category,
         status: general.status,
         crawlType: general.crawlType,
         schedules: general.schedules,
@@ -72,7 +104,7 @@ const General = ({ onCreate, general }) => {
           }
         >
           {websites.map((website) => (
-            <Option key={website.id} value={website.name}>{website.name}</Option>
+            <Option key={website.key} value={website.name}>{website.name}</Option>
           ))}
         </Select>
       </Form.Item>
@@ -93,7 +125,7 @@ const General = ({ onCreate, general }) => {
           }
         >
           {categories.map((category) => (
-            <Option key={category}>{category}</Option>
+            <Option key={category.key} value={category.name}>{category.name}</Option>
           ))}
         </Select>
       </Form.Item>

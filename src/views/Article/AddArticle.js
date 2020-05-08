@@ -3,7 +3,7 @@ import {
   Form, Input, Button, Select,
 } from 'antd';
 import { makeStyles } from '@material-ui/core/styles';
-import { websites, categories } from '../../common';
+import axios from 'axios';
 
 const { Option } = Select;
 
@@ -17,6 +17,39 @@ const useStyles = makeStyles(() => ({
 export default function AddArticle(props) {
   const classes = useStyles();
   const [form] = Form.useForm();
+  const [websites, setWebsites] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    let ignore = false;
+    async function fetchData() {
+      const listWebsite = (await axios.post('http://localhost:8000/get-websites')).data;
+      for (let i = 0; i < listWebsite.length; i += 1) {
+        listWebsite[i].key = i + 1;
+      }
+      if (!ignore) {
+        setWebsites(listWebsite);
+      }
+    }
+    fetchData();
+    return () => { ignore = true; };
+  }, []);
+
+  useEffect(() => {
+    let ignore = false;
+    async function fetchData() {
+      const listCategories = (await axios.post('http://localhost:8000/get-categories')).data;
+      for (let i = 0; i < listCategories.length; i += 1) {
+        listCategories[i].key = i + 1;
+      }
+      if (!ignore) {
+        setCategories(listCategories);
+      }
+    }
+    fetchData();
+    return () => { ignore = true; };
+  }, []);
+
   useEffect(() => () => {
     form.resetFields();
   });

@@ -208,7 +208,7 @@ export default function ListCategory() {
       >
         Add category
       </Button>
-      <Table className={tableCSS} dataSource={categorys} columns={columns} />
+      <Table className={tableCSS} dataSource={categorys} columns={columns} scroll={{ y: 400 }} />
       <Modal
         forceRender
         style={{ fontFamily: 'Montserrat' }}

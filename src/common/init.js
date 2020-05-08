@@ -19,11 +19,11 @@ export const init = {
   INIT_BLOCK: {
     configuration: {
       redundancySelectors: [],
-      itemSelector: '',
-      titleSelector: '',
-      linkSelector: '',
+      itemSelector: 'li',
+      titleSelector: 'a.mrk-click',
+      linkSelector: 'a.mrk-click',
     },
-    blockSelector: '',
+    blockSelector: '.list-news',
   },
   INIT_ARTICLE: {
     sapoSelector: '',

@@ -1,10 +1,10 @@
 /* eslint-disable prefer-promise-reject-errors */
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Modal, Form, Switch, Select,
 } from 'antd';
 import { isValidCron } from 'cron-validator';
-import { websites, categories } from '../../../common';
+import axios from 'axios';
 import { init } from '../../../common/init';
 
 const { Option } = Select;
@@ -13,6 +13,38 @@ const SourceForm = ({
   visible, onCreate, onCancel, record,
 }) => {
   const [form] = Form.useForm();
+  const [websites, setWebsites] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    let ignore = false;
+    async function fetchData() {
+      const listWebsite = (await axios.post('http://localhost:8000/get-websites')).data;
+      for (let i = 0; i < listWebsite.length; i += 1) {
+        listWebsite[i].key = i + 1;
+      }
+      if (!ignore) {
+        setWebsites(listWebsite);
+      }
+    }
+    fetchData();
+    return () => { ignore = true; };
+  }, []);
+
+  useEffect(() => {
+    let ignore = false;
+    async function fetchData() {
+      const listCategories = (await axios.post('http://localhost:8000/get-categories')).data;
+      for (let i = 0; i < listCategories.length; i += 1) {
+        listCategories[i].key = i + 1;
+      }
+      if (!ignore) {
+        setCategories(listCategories);
+      }
+    }
+    fetchData();
+    return () => { ignore = true; };
+  }, []);
   const renderSelectTag = (children) => (
     <Select mode="tags" style={{ width: '100%' }} tokenSeparators={[',']}>
       {children.map((tag) => {
@@ -106,7 +138,7 @@ const SourceForm = ({
           }
           >
             {websites.map((website) => (
-              <Option key={website.id} value={website.name}>{website.name}</Option>
+              <Option key={website.key} value={website.name}>{website.name}</Option>
             ))}
           </Select>
         </Form.Item>
@@ -127,7 +159,7 @@ const SourceForm = ({
           }
           >
             {categories.map((category) => (
-              <Option key={category}>{category}</Option>
+              <Option key={category.key} value={category.name}>{category.name}</Option>
             ))}
           </Select>
         </Form.Item>

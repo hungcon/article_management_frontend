@@ -134,24 +134,6 @@ export default function Configuration(props) {
       key: 'website',
       width: '10%',
       render: (value) => value.name,
-      filters: [{
-        text: 'VnExpress',
-        value: 'VnExpress',
-      },
-      {
-        text: 'Dân trí',
-        value: 'Dân trí',
-      },
-      {
-        text: 'Người đưa tin',
-        value: 'Người đưa tin',
-      },
-      {
-        text: 'SOHA',
-        value: 'SOHA',
-      },
-      ],
-      onFilter: (value, record) => record.website.name.indexOf(value) === 0,
     },
     {
       title: 'Category',
@@ -159,16 +141,6 @@ export default function Configuration(props) {
       key: 'category',
       width: '10%',
       render: (value) => value.name,
-      filters: [{
-        text: 'Thế giới',
-        value: 'Thế giới',
-      },
-      {
-        text: 'Giải trí',
-        value: 'Giải trí',
-      },
-      ],
-      onFilter: (value, record) => record.category.name.indexOf(value) === 0,
     },
     {
       title: 'Status',
@@ -314,7 +286,7 @@ export default function Configuration(props) {
           expandedRowRender: (record) => <MoreInfo record={record} props={props} />,
         }}
         bordered
-        scroll={{ y: 490 }}
+        scroll={{ y: 400 }}
       />
       <SourceForm
         visible={sourceVisible}
