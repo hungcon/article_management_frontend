@@ -11,11 +11,11 @@ import {
 import { css } from 'emotion';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import SourceForm from './Form/SourceForm';
-import allActions from '../../store/actions/allActions';
-import MoreInfo from './MoreInfo';
-import openNotification from '../Notifications';
-import { message } from '../../common';
+import SourceForm from '../Form/SourceForm';
+import allActions from '../../../store/actions/allActions';
+import MoreInfo from '../MoreInfo';
+import openNotification from '../../Notifications';
+import { message } from '../../../common';
 
 const { confirm } = Modal;
 

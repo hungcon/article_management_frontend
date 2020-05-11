@@ -165,12 +165,13 @@ export default function ListWebsite() {
     {
       title: 'Name',
       dataIndex: 'name',
-      width: '70%',
+      width: '65%',
       key: 'name',
     },
     {
       title: 'Action',
-      witdh: '20%',
+      witdh: '25%',
+      align: 'center',
       render: (value, record) => (
         <div>
           <Button
@@ -208,7 +209,13 @@ export default function ListWebsite() {
       >
         Add website
       </Button>
-      <Table className={tableCSS} dataSource={websites} columns={columns} scroll={{ y: 400 }} />
+      <Table
+        className={tableCSS}
+        dataSource={websites}
+        columns={columns}
+        scroll={{ y: 400 }}
+        bordered
+      />
       <Modal
         forceRender
         style={{ fontFamily: 'Montserrat' }}

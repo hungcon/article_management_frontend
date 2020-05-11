@@ -39,7 +39,7 @@ const tableCSS = css({
 export default function ListCategory() {
   const classes = useStyles();
   const [visible, setVisible] = useState(false);
-  const [categorys, setCategorys] = useState();
+  const [categories, setCategories] = useState();
   const [action, setAction] = useState();
   const [category, setCategory] = useState({ name: '' });
   const [reload, setReload] = useState(false);
@@ -108,12 +108,12 @@ export default function ListCategory() {
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
-      const listCategory = (await axios.post('http://localhost:8000/get-categories')).data;
-      for (let i = 0; i < listCategory.length; i += 1) {
-        listCategory[i].key = i + 1;
+      const listCategories = (await axios.post('http://localhost:8000/get-categories')).data;
+      for (let i = 0; i < listCategories.length; i += 1) {
+        listCategories[i].key = i + 1;
       }
       if (!ignore) {
-        setCategorys(listCategory);
+        setCategories(listCategories);
       }
     }
     fetchData();
@@ -165,12 +165,13 @@ export default function ListCategory() {
     {
       title: 'Name',
       dataIndex: 'name',
-      width: '70%',
+      width: '65%',
       key: 'name',
     },
     {
       title: 'Action',
-      witdh: '20%',
+      witdh: '25%',
+      align: 'center',
       render: (value, record) => (
         <div>
           <Button
@@ -208,7 +209,13 @@ export default function ListCategory() {
       >
         Add category
       </Button>
-      <Table className={tableCSS} dataSource={categorys} columns={columns} scroll={{ y: 400 }} />
+      <Table
+        className={tableCSS}
+        dataSource={categories}
+        columns={columns}
+        scroll={{ y: 400 }}
+        bordered
+      />
       <Modal
         forceRender
         style={{ fontFamily: 'Montserrat' }}

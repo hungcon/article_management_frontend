@@ -1,25 +1,24 @@
-/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-unused-expressions */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable import/no-named-as-default */
 /* eslint-disable import/no-named-as-default-member */
 /* eslint-disable no-shadow */
 import React, { useState, useEffect } from 'react';
 import {
-  Table, Tag, Form, Select, Button, Typography, Breadcrumb,
-  DatePicker,
+  Table, Tag, Form, Select, Button, Typography, Breadcrumb, DatePicker, Modal, Progress,
 } from 'antd';
+import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { css } from 'emotion';
 import axios from 'axios';
-import { message } from '../../common';
-import openNotification from '../Notifications';
+import openNotification from '../../Notifications';
+import { message } from '../../../common';
 
-
-const { RangePicker } = DatePicker;
-
+const { confirm } = Modal;
 
 const { Option } = Select;
 const { Text } = Typography;
+const { RangePicker } = DatePicker;
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -29,17 +28,17 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export default function ListInValidArticles() {
+export default function ListValidArticles(props) {
   const classes = useStyles();
   const [form] = Form.useForm();
   const [data, setData] = useState();
   const [filters, setFilters] = useState();
   const [counts, setCounts] = useState();
-  const [reload, setReload] = useState(false);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [websites, setWebsites] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     let ignore = false;
@@ -71,43 +70,6 @@ export default function ListInValidArticles() {
     return () => { ignore = true; };
   }, []);
 
-
-  const crawlArticle = async (article) => {
-    const { website, category } = article;
-    const listCategory = [];
-    for (const temp of category) {
-      listCategory.push(temp._id);
-    }
-    const articleConfig = (await axios.post('http://localhost:8000/get-config-by-website', { website, category: category[0] })).data;
-    const reCrawlArticle = (await axios.post('http://localhost:8000/crawl/article', {
-      link: article.link,
-      configuration: articleConfig.article,
-    })).data;
-    const newValidArticle = {
-      link: article.link,
-      title: article.title,
-      sapo: article.sapo,
-      publicDate: new Date(article.createdAt),
-      thumbnail: article.thumbnail,
-      category: listCategory,
-      website: website._id,
-      sourceCode: article.sourceCode,
-      text: `${article.title}\n\n${article.text}`,
-      tags: article.tags || [],
-      numberOfWords: !article.text ? 0 : article.text.split(' ').length,
-      images: article.images,
-    };
-    if (reCrawlArticle) {
-      const addResult = await axios.post('http://localhost:8000/add-valid-articles', { article: newValidArticle });
-      if (addResult.data.status === 1) {
-        setReload(!reload);
-        openNotification('success', message.RECRAWL_SUCCESS);
-      } else {
-        openNotification('error', message.ERROR);
-      }
-    }
-  };
-
   useEffect(() => {
     let ignore = false;
 
@@ -118,7 +80,7 @@ export default function ListInValidArticles() {
         startDate: startDate || '',
         endDate: endDate || '',
       };
-      const result = await axios.post('http://localhost:8000/get-invalid-articles', { website, category, date });
+      const result = await axios.post('http://localhost:8000/get-valid-articles', { website, category, date });
       const articleData = result.data;
       setCounts(articleData.length);
       for (let i = 0; i < articleData.length; i += 1) {
@@ -129,16 +91,38 @@ export default function ListInValidArticles() {
     if (!ignore) {
       fetchData();
     }
-
     return () => { ignore = true; };
-  }, [filters, reload, startDate, endDate]);
+  }, [filters, startDate, endDate, reload]);
 
+
+  const showDeleteConfirm = (article) => {
+    confirm({
+      title: 'Are you sure delete this article?',
+      // eslint-disable-next-line react/jsx-filename-extension
+      icon: <ExclamationCircleOutlined />,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      centered: true,
+      async onOk() {
+        const status = (await axios.post('http://localhost:8000/delete-valid-article', { id: article._id })).data;
+        if (status.status === 1) {
+          setReload(!reload);
+          openNotification('success', message.DELETE_SUCCESS);
+        } else {
+          openNotification('error', message.ERROR);
+        }
+      },
+      onCancel() {
+      },
+    });
+  };
   const columns = [
     {
       title: 'Website',
       dataIndex: 'website',
       key: 'website',
-      width: '17%',
+      width: '20%',
       render: (value) => value.name,
     },
     {
@@ -162,9 +146,17 @@ export default function ListInValidArticles() {
       key: 'title',
     },
     {
-      title: 'Reason',
-      dataIndex: 'reason',
-      key: 'reason',
+      title: 'Text Cleaned',
+      dataIndex: 'isCleaned',
+      key: 'isCleaned',
+      align: 'center',
+      width: '11%',
+      render: (value) => {
+        if (value === 1) {
+          return <Progress type="circle" percent={100} width={30} />;
+        }
+        return <Progress type="circle" percent={100} width={30} status="exception" />;
+      },
     },
     {
       title: 'Actions',
@@ -174,19 +166,19 @@ export default function ListInValidArticles() {
       render: (value, record) => (
         <div>
           <Button
-            // disabled={record.reason === 'Number of words less than 100.'}
-            onClick={() => crawlArticle(record)}
-            danger
-            type="primary"
+            // eslint-disable-next-line no-underscore-dangle
+            onClick={() => props.history.push(`/dashboard/list-valid-articles/${record._id}`)}
             style={{ marginRight: 10 }}
+            icon={<EditOutlined />}
           >
-            Recrawl
+            Update
           </Button>
           <Button
-            type="primary"
-            onClick={() => window.open(record.link)}
+            danger
+            onClick={() => showDeleteConfirm(record)}
+            icon={<DeleteOutlined />}
           >
-            Open link
+            Delete
           </Button>
         </div>
       ),
@@ -230,7 +222,7 @@ export default function ListInValidArticles() {
           <a href="/dashboard/configuration">Dashboard</a>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href="/dashboard/list-invalid-articles">Invalid Articles</a>
+          <a href="/dashboard/list-valid-articles">Valid Articles</a>
         </Breadcrumb.Item>
       </Breadcrumb>
       <Form
@@ -293,7 +285,6 @@ export default function ListInValidArticles() {
           </Button>
         </Form.Item>
       </Form>
-
       {!data ? 'Loading data...' : (
         <Table
           className={tableCSS}
@@ -302,7 +293,6 @@ export default function ListInValidArticles() {
           bordered
           scroll={{ y: 400 }}
           summary={() => (
-
             <tr>
               <th>Total documents</th>
               <td colSpan={2}>
@@ -312,6 +302,7 @@ export default function ListInValidArticles() {
           )}
         />
       )}
+
     </div>
   );
 }

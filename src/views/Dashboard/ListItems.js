@@ -8,6 +8,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import BuildIcon from '@material-ui/icons/Build';
 import CategoryIcon from '@material-ui/icons/Category';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import LanguageIcon from '@material-ui/icons/Language';
 import PieChartIcon from '@material-ui/icons/PieChart';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
@@ -25,6 +26,14 @@ export default function ListItems(props) {
       {props.currentUser.role === 'admin'
         ? (
           <div>
+            <NavLink to="/dashboard/list-accounts" className={classes.link} activeClassName={classes.active}>
+              <ListItem button className={clsx(props.open && classes.button)}>
+                <ListItemIcon>
+                  <AccountCircleIcon className={classes.icon} />
+                </ListItemIcon>
+                <ListItemText primary="Accounts" className={classes.text} />
+              </ListItem>
+            </NavLink>
             <NavLink to="/dashboard/list-website" className={classes.link} activeClassName={classes.active}>
               <ListItem button className={clsx(props.open && classes.button)}>
                 <ListItemIcon>
@@ -38,7 +47,7 @@ export default function ListItems(props) {
                 <ListItemIcon>
                   <CategoryIcon className={classes.icon} />
                 </ListItemIcon>
-                <ListItemText primary="Websites" className={classes.text} />
+                <ListItemText primary="Categories" className={classes.text} />
               </ListItem>
             </NavLink>
             <NavLink to="/dashboard/configuration" className={classes.link} activeClassName={classes.active}>
@@ -57,7 +66,7 @@ export default function ListItems(props) {
           <ListItemIcon>
             <DescriptionIcon className={classes.icon} />
           </ListItemIcon>
-          <ListItemText primary="List Valid Articles" className={classes.text} />
+          <ListItemText primary="Valid Articles" className={classes.text} />
         </ListItem>
       </NavLink>
       <NavLink to="/dashboard/list-invalid-articles" className={classes.link} activeClassName={classes.active}>
@@ -65,7 +74,7 @@ export default function ListItems(props) {
           <ListItemIcon>
             <ErrorOutlineIcon className={classes.icon} />
           </ListItemIcon>
-          <ListItemText primary="List Invalid Articles" className={classes.text} />
+          <ListItemText primary="Invalid Articles" className={classes.text} />
         </ListItem>
       </NavLink>
       <NavLink to="/dashboard/statistics" className={classes.link} activeClassName={classes.active}>
