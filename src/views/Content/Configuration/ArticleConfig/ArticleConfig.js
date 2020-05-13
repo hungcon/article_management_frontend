@@ -172,7 +172,7 @@ const ArticleConfig = (props) => {
             rules={[
               {
                 required: true,
-                message: 'Please input sapo selector',
+                message: 'Hãy nhập sapo selector',
               },
             ]}
           >
@@ -189,7 +189,7 @@ const ArticleConfig = (props) => {
             rules={[
               {
                 required: true,
-                message: 'Please input title selector',
+                message: 'Hãy nhập title selector',
               },
             ]}
           >
@@ -206,7 +206,7 @@ const ArticleConfig = (props) => {
             rules={[
               {
                 required: true,
-                message: 'Please input thumbnail selector',
+                message: 'Hãy nhập thumbnail selector',
               },
             ]}
           >
@@ -223,7 +223,7 @@ const ArticleConfig = (props) => {
             rules={[
               {
                 required: true,
-                message: 'Please input tags selector',
+                message: 'Hãy nhập tags selector',
               },
             ]}
           >
@@ -240,7 +240,7 @@ const ArticleConfig = (props) => {
             rules={[
               {
                 required: true,
-                message: 'Please input content selector',
+                message: 'Hãy nhập content selector',
               },
             ]}
           >
@@ -257,13 +257,13 @@ const ArticleConfig = (props) => {
 
           <Form.Item className="button-group">
             <Button onClick={() => props.history.push('/dashboard/configuration')} className="button">
-              Cancel
+              Huỷ
             </Button>
             <Button type="dashed" className="button" onClick={() => crawl()}>
-              Crawl
+              Thử
             </Button>
             <Button type="primary" htmlType="submit">
-              Update
+              Cập nhật
             </Button>
           </Form.Item>
         </Form>

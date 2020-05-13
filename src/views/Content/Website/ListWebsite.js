@@ -122,12 +122,12 @@ export default function ListWebsite() {
 
   const showDeleteConfirm = (websiteId) => {
     confirm({
-      title: 'Are you sure delete this website?',
+      title: 'Bạn có chắc chắn xoá đầu báo này không?',
       // eslint-disable-next-line react/jsx-filename-extension
       icon: <ExclamationCircleOutlined />,
-      okText: 'Yes',
+      okText: 'Có',
       okType: 'danger',
-      cancelText: 'No',
+      cancelText: 'Không',
       centered: true,
       async onOk() {
         axios.post('http://localhost:8000/delete-website', { websiteId }, {
@@ -157,19 +157,19 @@ export default function ListWebsite() {
 
   const columns = [
     {
-      title: 'Index',
+      title: 'STT',
       width: '10%',
       dataIndex: 'key',
       key: 'key',
     },
     {
-      title: 'Name',
+      title: 'Đầu báo',
       dataIndex: 'name',
       width: '65%',
       key: 'name',
     },
     {
-      title: 'Action',
+      title: 'Hành động',
       witdh: '25%',
       align: 'center',
       render: (value, record) => (
@@ -179,14 +179,14 @@ export default function ListWebsite() {
             style={{ marginRight: 10 }}
             icon={<EditOutlined />}
           >
-            Update
+            Cập nhật
           </Button>
           <Button
             danger
             onClick={() => showDeleteConfirm(record._id)}
             icon={<DeleteOutlined />}
           >
-            Delete
+            Xoá
           </Button>
         </div>
       ),
@@ -207,7 +207,7 @@ export default function ListWebsite() {
         style={{ marginBottom: 15 }}
         icon={<PlusCircleOutlined />}
       >
-        Add website
+        Thêm đầu báo
       </Button>
       <Table
         className={tableCSS}
@@ -220,9 +220,9 @@ export default function ListWebsite() {
         forceRender
         style={{ fontFamily: 'Montserrat' }}
         visible={visible}
-        title="Website"
-        okText={action === 'add' ? 'Add' : 'Update'}
-        cancelText="Cancel"
+        title={action === 'add' ? 'Thêm mới đầu báo' : 'Cập nhật đầu báo'}
+        okText={action === 'add' ? 'Thêm mới' : 'Cập nhật'}
+        cancelText="Huỷ"
         onCancel={onCancel}
         onOk={() => {
           form
@@ -245,11 +245,11 @@ export default function ListWebsite() {
         >
           <Form.Item
             name="name"
-            label="Website Name"
+            label="Tên đầu báo"
             rules={[
               {
                 required: true,
-                message: 'Please input website name',
+                message: 'Hãy nhập tên đầu báo',
               },
               () => ({
                 async validator(rule, value) {
@@ -257,7 +257,7 @@ export default function ListWebsite() {
                     return Promise.resolve();
                   }
                   // eslint-disable-next-line prefer-promise-reject-errors
-                  return Promise.reject('Website is existed');
+                  return Promise.reject('Đầu báo đã tồn tại');
                 },
               }),
             ]}

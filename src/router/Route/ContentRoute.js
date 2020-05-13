@@ -23,13 +23,13 @@ export default function ContentRoute() {
     <Switch>
       <PrivateRoute path="/dashboard/configuration" exact component={Configuration} />
       <PrivateRoute path="/dashboard/list-accounts" exact component={ListAccounts} />
-      <PrivateRoute path="/dashboard/list-accounts/:accountId" exact component={AccountForm} />
+      <PrivateRoute path="/dashboard/list-accounts/add-account" exact component={AccountForm} />
       <PrivateRoute path="/dashboard/list-website" exact component={ListWebsite} />
       <PrivateRoute path="/dashboard/list-category" exact component={ListCategory} />
       <PrivateRoute path="/dashboard/configuration/add-config" exact component={AddConfig} />
       <PrivateRoute path="/dashboard/configuration/article-config/:configId" exact component={ArticleConfig} />
       <PrivateRoute path="/dashboard/list-valid-articles" exact component={ListValidArticles} />
-      <PrivateRoute path="/dashboard/list-valid-articles/add-account" exact component={ArticleForm} />
+      <PrivateRoute path="/dashboard/list-valid-articles/:articleId" exact component={ArticleForm} />
       <PrivateRoute path="/dashboard/list-invalid-articles" exact component={ListInvalidArticles} />
       <PrivateRoute path="/dashboard/clean-text" exact component={CleanText} />
       <PrivateRoute path="/dashboard/clean-text/:cleanArticleId" exact component={CleanOption} />

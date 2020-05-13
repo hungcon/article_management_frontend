@@ -21,9 +21,9 @@ const BlockForm = ({
       forceRender
       style={{ fontFamily: 'Montserrat' }}
       visible={visible}
-      title="Block Config"
-      okText={type.type === 'localAdd' ? 'Add' : 'Update'}
-      cancelText="Cancel"
+      title={type.type === 'localAdd' ? 'Thêm mới cấu hình block' : 'Cập nhật cấu hình block'}
+      okText={type.type === 'localAdd' ? 'Thêm mới' : 'Cập nhật'}
+      cancelText="Huỷ"
       onCancel={onCancel}
       onOk={() => {
         form
@@ -54,7 +54,7 @@ const BlockForm = ({
           rules={[
             {
               required: true,
-              message: 'Please input block selector',
+              message: 'Hãy nhập block selector',
             },
           ]}
         >
@@ -66,7 +66,7 @@ const BlockForm = ({
           rules={[
             {
               required: true,
-              message: 'Please input item selector',
+              message: 'Hãy nhập item selector',
             },
           ]}
         >
@@ -78,7 +78,7 @@ const BlockForm = ({
           rules={[
             {
               required: true,
-              message: 'Please input title selector',
+              message: 'Hãy nhập title selector',
             },
           ]}
         >
@@ -90,7 +90,7 @@ const BlockForm = ({
           rules={[
             {
               required: true,
-              message: 'Please input link selector',
+              message: 'Hãy nhập link selector',
             },
           ]}
         >

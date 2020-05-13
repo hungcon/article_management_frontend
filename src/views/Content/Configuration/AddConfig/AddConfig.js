@@ -130,15 +130,15 @@ export default function AddConfig(props) {
 
   const steps = [
     {
-      title: 'General',
+      title: 'Cấu hình chung',
       content: <General onCreate={onGeneralCreate} general={general} />,
     },
     {
-      title: `${general.crawlType} Config`,
+      title: `Cấu hình ${general.crawlType}`,
       content: general.crawlType === 'HTML' ? <HtmlConfig onCreate={onHtmlCreate} prev={() => prev()} htmlVal={html} /> : <RssConfig onCreate={onRssCreate} prev={() => prev()} rssVal={rss} />,
     },
     {
-      title: 'Article',
+      title: 'Cấu hình báo',
       content: <ArticleConfig onCreate={onArticleCreate} prev={() => prev()} />,
     },
   ];

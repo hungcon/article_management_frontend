@@ -31,7 +31,7 @@ export default function ListItems(props) {
                 <ListItemIcon>
                   <AccountCircleIcon className={classes.icon} />
                 </ListItemIcon>
-                <ListItemText primary="Accounts" className={classes.text} />
+                <ListItemText primary="Người dùng" className={classes.text} />
               </ListItem>
             </NavLink>
             <NavLink to="/dashboard/list-website" className={classes.link} activeClassName={classes.active}>
@@ -39,7 +39,7 @@ export default function ListItems(props) {
                 <ListItemIcon>
                   <LanguageIcon className={classes.icon} />
                 </ListItemIcon>
-                <ListItemText primary="Websites" className={classes.text} />
+                <ListItemText primary="Đầu báo" className={classes.text} />
               </ListItem>
             </NavLink>
             <NavLink to="/dashboard/list-category" className={classes.link} activeClassName={classes.active}>
@@ -47,7 +47,7 @@ export default function ListItems(props) {
                 <ListItemIcon>
                   <CategoryIcon className={classes.icon} />
                 </ListItemIcon>
-                <ListItemText primary="Categories" className={classes.text} />
+                <ListItemText primary="Chuyên mục" className={classes.text} />
               </ListItem>
             </NavLink>
             <NavLink to="/dashboard/configuration" className={classes.link} activeClassName={classes.active}>
@@ -55,7 +55,7 @@ export default function ListItems(props) {
                 <ListItemIcon>
                   <BuildIcon className={classes.icon} />
                 </ListItemIcon>
-                <ListItemText primary="Configuration" className={classes.text} />
+                <ListItemText primary="Cấu hình" className={classes.text} />
               </ListItem>
             </NavLink>
           </div>
@@ -66,7 +66,7 @@ export default function ListItems(props) {
           <ListItemIcon>
             <DescriptionIcon className={classes.icon} />
           </ListItemIcon>
-          <ListItemText primary="Valid Articles" className={classes.text} />
+          <ListItemText primary="Báo hợp lệ" className={classes.text} />
         </ListItem>
       </NavLink>
       <NavLink to="/dashboard/list-invalid-articles" className={classes.link} activeClassName={classes.active}>
@@ -74,7 +74,7 @@ export default function ListItems(props) {
           <ListItemIcon>
             <ErrorOutlineIcon className={classes.icon} />
           </ListItemIcon>
-          <ListItemText primary="Invalid Articles" className={classes.text} />
+          <ListItemText primary="Báo không hợp lệ" className={classes.text} />
         </ListItem>
       </NavLink>
       <NavLink to="/dashboard/statistics" className={classes.link} activeClassName={classes.active}>
@@ -82,7 +82,7 @@ export default function ListItems(props) {
           <ListItemIcon>
             <PieChartIcon className={classes.icon} />
           </ListItemIcon>
-          <ListItemText primary="Statistics" className={classes.text} />
+          <ListItemText primary="Thống kê" className={classes.text} />
         </ListItem>
       </NavLink>
       <NavLink to="/dashboard/clean-text" className={classes.link} activeClassName={classes.active}>
@@ -90,7 +90,7 @@ export default function ListItems(props) {
           <ListItemIcon>
             <LayersIcon className={classes.icon} />
           </ListItemIcon>
-          <ListItemText primary="Clean Text" className={classes.text} />
+          <ListItemText primary="Chuẩn hoá" className={classes.text} />
         </ListItem>
       </NavLink>
     </div>

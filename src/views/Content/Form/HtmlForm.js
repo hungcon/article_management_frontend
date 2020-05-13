@@ -42,12 +42,12 @@ const HtmlForm = ({
 
   const showDeleteConfirm = (blockConfigId, htmlConfigId) => {
     confirm({
-      title: 'Are you sure delete this block config?',
+      title: 'Bạn có chắc muốn xoá cấu hình blog này không?',
       // eslint-disable-next-line react/jsx-filename-extension
       icon: <ExclamationCircleOutlined />,
-      okText: 'Yes',
+      okText: 'Có',
       okType: 'danger',
-      cancelText: 'No',
+      cancelText: 'Không',
       centered: true,
       async onOk() {
         console.log('block: ', blockConfigId, htmlConfigId);
@@ -130,9 +130,9 @@ const HtmlForm = ({
         forceRender
         style={{ fontFamily: 'Montserrat' }}
         visible={visible}
-        title="HTML Config"
-        okText={!record.url ? 'Add' : 'Update'}
-        cancelText="Cancel"
+        title={!record.url ? 'Thêm mới cấu hình HTML' : 'Cập nhật cấu hình HTML'}
+        okText={!record.url ? 'Thêm mới' : 'Cập nhật'}
+        cancelText="Huỷ"
         onCancel={handleCancel}
         onOk={() => {
           form
@@ -161,7 +161,7 @@ const HtmlForm = ({
             rules={[
               {
                 required: true,
-                message: 'Please input url',
+                message: 'Hãy nhập url',
               },
             ]}
           >
@@ -181,7 +181,7 @@ const HtmlForm = ({
                     style={{ marginBottom: 10 }}
                     icon={<EditOutlined />}
                   >
-                    Block Config
+                    Cấu hình block
                     {' '}
                     {index + 1}
                   </Button>
@@ -201,7 +201,7 @@ const HtmlForm = ({
                     style={{ marginBottom: 10 }}
                     icon={<EditOutlined />}
                   >
-                    New Block Config
+                    Cấu hình block
                     {' '}
                     {index + 1}
                   </Button>
@@ -217,7 +217,7 @@ const HtmlForm = ({
                 onClick={() => showBlockModal(init.INIT_BLOCK, 'localAdd')}
                 icon={<PlusOutlined />}
               >
-                Add Block
+                Thêm mới block
               </Button>
             </Input.Group>
           </Form.Item>

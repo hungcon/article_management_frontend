@@ -122,12 +122,12 @@ export default function ListCategory() {
 
   const showDeleteConfirm = (categoryId) => {
     confirm({
-      title: 'Are you sure delete this category?',
+      title: 'Bạn có chắc chắn xoá chuyên mục này không?',
       // eslint-disable-next-line react/jsx-filename-extension
       icon: <ExclamationCircleOutlined />,
-      okText: 'Yes',
+      okText: 'Có',
       okType: 'danger',
-      cancelText: 'No',
+      cancelText: 'Không',
       centered: true,
       async onOk() {
         axios.post('http://localhost:8000/delete-category', { categoryId }, {
@@ -157,19 +157,19 @@ export default function ListCategory() {
 
   const columns = [
     {
-      title: 'Index',
+      title: 'STT',
       width: '10%',
       dataIndex: 'key',
       key: 'key',
     },
     {
-      title: 'Name',
+      title: 'Chuyên mục',
       dataIndex: 'name',
       width: '65%',
       key: 'name',
     },
     {
-      title: 'Action',
+      title: 'Hành động',
       witdh: '25%',
       align: 'center',
       render: (value, record) => (
@@ -179,14 +179,14 @@ export default function ListCategory() {
             style={{ marginRight: 10 }}
             icon={<EditOutlined />}
           >
-            Update
+            Cập nhật
           </Button>
           <Button
             danger
             onClick={() => showDeleteConfirm(record._id)}
             icon={<DeleteOutlined />}
           >
-            Delete
+            Xoá
           </Button>
         </div>
       ),
@@ -207,7 +207,7 @@ export default function ListCategory() {
         style={{ marginBottom: 15 }}
         icon={<PlusCircleOutlined />}
       >
-        Add category
+        Thêm chuyên mục
       </Button>
       <Table
         className={tableCSS}
@@ -220,8 +220,8 @@ export default function ListCategory() {
         forceRender
         style={{ fontFamily: 'Montserrat' }}
         visible={visible}
-        title="Category"
-        okText={action === 'add' ? 'Add' : 'Update'}
+        title={action === 'add' ? 'Thêm mới chuyên mục' : 'Cập nhật chuyên mục'}
+        okText={action === 'add' ? 'Thêm mới' : 'Cập nhật'}
         cancelText="Cancel"
         onCancel={onCancel}
         onOk={() => {
@@ -245,11 +245,11 @@ export default function ListCategory() {
         >
           <Form.Item
             name="name"
-            label="Category Name"
+            label="Tên chuyên mục"
             rules={[
               {
                 required: true,
-                message: 'Please input category name',
+                message: 'Hãy nhật tên chuyên mục',
               },
               () => ({
                 async validator(rule, value) {

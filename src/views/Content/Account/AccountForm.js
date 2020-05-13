@@ -70,7 +70,7 @@ export default function AccountForm(props) {
           >
             <Form.Item
               name="firstName"
-              label="First name"
+              label="Họ"
               rules={[
                 {
                   required: true,
@@ -81,7 +81,7 @@ export default function AccountForm(props) {
             </Form.Item>
             <Form.Item
               name="lastName"
-              label="Last name"
+              label="Tên"
               rules={[
                 {
                   required: true,
@@ -92,7 +92,7 @@ export default function AccountForm(props) {
             </Form.Item>
             <Form.Item
               name="userName"
-              label="User name"
+              label="Tên đăng nhập"
               rules={[
                 {
                   required: true,
@@ -112,7 +112,7 @@ export default function AccountForm(props) {
             </Form.Item>
             <Form.Item
               name="password"
-              label="Password"
+              label="Mật khẩu"
               hasFeedback
               rules={[
                 {
@@ -124,7 +124,7 @@ export default function AccountForm(props) {
             </Form.Item>
             <Form.Item
               name="confirmPassword"
-              label="Confirm password"
+              label="Xác nhận mật khẩu"
               dependencies={['password']}
               hasFeedback
               rules={[
@@ -146,10 +146,10 @@ export default function AccountForm(props) {
             </Form.Item>
             <Form.Item>
               <Button style={{ marginRight: 15 }} onClick={() => props.history.push('/dashboard/list-accounts')}>
-                Cancel
+                Huỷ
               </Button>
               <Button type="primary" htmlType="submit">
-                Add
+                Thêm tài khoản
               </Button>
             </Form.Item>
           </Form>

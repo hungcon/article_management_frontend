@@ -182,7 +182,7 @@ export default function Statistics() {
           <Col span={4}>
             <Card>
               <Statistic
-                title={!error ? 'Running' : 'Error'}
+                title={!error ? 'Đang chạy' : 'Lỗi'}
                 value={queueLength}
                 valueStyle={{ color: '#3f8600' }}
               />
@@ -195,12 +195,12 @@ export default function Statistics() {
               icon={<PlayCircleOutlined />}
               type="primary"
             >
-              Re-run schedule
+              Chạy lại lịch
             </Button>
           </Col>
         </Row>
       </div>
-      { !listNumberArticle ? 'Loading info...' : (
+      { !listNumberArticle ? 'Đang tải thông tin...' : (
         <Row gutter={15}>
           {listNumberArticle.map((website) => (
             <Col
@@ -223,11 +223,11 @@ export default function Statistics() {
                     }
                 </div>
                 <br />
-                Valid:
+                Hợp lệ:
                 {' '}
                 {website.valid}
                 <br />
-                Invalid:
+                Không hợp lệ:
                 {' '}
                 {website.invalid}
                 <br />
@@ -247,7 +247,7 @@ export default function Statistics() {
         </Row>
       )}
       {
-      !listDataArticle ? 'Loading chart...' : (
+      !listDataArticle ? 'Đang tải biểu đồ...' : (
         <Row gutter={15}>
           {
           listDataArticle.map((dataChart) => (

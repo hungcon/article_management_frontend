@@ -84,12 +84,12 @@ export default function ListAccounts(props) {
 
   const showDeleteConfirm = (accountId) => {
     confirm({
-      title: 'Are you sure delete this user?',
+      title: 'Bạn có chắc chắn xoá tài khoản này không?',
       // eslint-disable-next-line react/jsx-filename-extension
       icon: <ExclamationCircleOutlined />,
-      okText: 'Yes',
+      okText: 'Có',
       okType: 'danger',
-      cancelText: 'No',
+      cancelText: 'Không',
       centered: true,
       async onOk() {
         axios.post('http://localhost:8000/delete-account', { accountId }, {
@@ -130,17 +130,17 @@ export default function ListAccounts(props) {
 
   const columns = [
     {
-      title: 'First Name',
+      title: 'Họ',
       dataIndex: 'firstName',
       key: 'firstName',
     },
     {
-      title: 'Last Name',
+      title: 'Tên',
       dataIndex: 'lastName',
       key: 'lastName',
     },
     {
-      title: 'Role',
+      title: 'Vai trò',
       dataIndex: 'role',
       key: 'role',
       render: (value) => {
@@ -156,12 +156,12 @@ export default function ListAccounts(props) {
       },
     },
     {
-      title: 'Username',
+      title: 'Tên đăng nhập',
       key: 'userName',
       dataIndex: 'userName',
     },
     {
-      title: 'Actions',
+      title: 'Hành động',
       key: 'action',
       width: '30%',
       align: 'center',
@@ -172,7 +172,7 @@ export default function ListAccounts(props) {
             style={{ marginRight: 15 }}
             icon={<ReloadOutlined />}
           >
-            Reset password
+            Đặt lại mật khẩu
           </Button>
           <Button
             danger
@@ -181,7 +181,7 @@ export default function ListAccounts(props) {
             onClick={() => showDeleteConfirm(record._id)}
             icon={<DeleteOutlined />}
           >
-            Delete
+            Xoá
           </Button>
         </div>
       ),
@@ -204,7 +204,7 @@ export default function ListAccounts(props) {
         style={{ marginBottom: 15 }}
         icon={<PlusCircleOutlined />}
       >
-        Add account
+        Thêm tài khoản
       </Button>
       <Table
         className={tableCSS}
@@ -216,9 +216,9 @@ export default function ListAccounts(props) {
         forceRender
         style={{ fontFamily: 'Montserrat' }}
         visible={visible}
-        title="New password"
-        okText="Update"
-        cancelText="Cancel"
+        title="Đặt lại mật khẩu"
+        okText="Cập nhật"
+        cancelText="Huỷ"
         onCancel={() => setVisible(false)}
         onOk={() => {
           form
@@ -240,12 +240,12 @@ export default function ListAccounts(props) {
         >
           <Form.Item
             name="newPassword"
-            label="New password"
+            label="Mật khẩu mới"
             hasFeedback
             rules={[
               {
                 required: true,
-                message: 'Please input new password',
+                message: 'Hãy nhập mật khẩu mới',
               },
             ]}
           >

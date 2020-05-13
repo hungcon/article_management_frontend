@@ -57,9 +57,9 @@ const General = ({ onCreate, general }) => {
     if (invalidInputs.length === 0) {
       return Promise.resolve();
     } if (invalidInputs.length === 1) {
-      return Promise.reject(`${invalidInputs.join('')} is not a valid schedule`);
+      return Promise.reject(`${invalidInputs.join('')} không phải lịch hợp lệ`);
     }
-    return Promise.reject(`${invalidInputs.slice(0, -1).join(', ')} and ${invalidInputs.slice(-1)} are not valid schedule`);
+    return Promise.reject(`${invalidInputs.slice(0, -1).join(', ')} và ${invalidInputs.slice(-1)} không phải lịch hợp lệ`);
   };
 
   const onSubmit = (values) => {
@@ -92,7 +92,7 @@ const General = ({ onCreate, general }) => {
         rules={[
           {
             required: true,
-            message: 'Please select website name',
+            message: 'Hãy chọn tên đầu báo',
           },
         ]}
       >
@@ -114,7 +114,7 @@ const General = ({ onCreate, general }) => {
         rules={[
           {
             required: true,
-            message: 'Please input category name',
+            message: 'Hãy chọn tên chuyên mục',
           },
         ]}
       >
@@ -135,7 +135,7 @@ const General = ({ onCreate, general }) => {
         rules={[
           {
             required: true,
-            message: 'Please select crawl type',
+            message: 'Hãy chọn loại cấu hình',
           },
         ]}
       >
@@ -150,7 +150,7 @@ const General = ({ onCreate, general }) => {
         rules={[
           {
             required: true,
-            message: 'Please input schedules',
+            message: 'Hãy nhập lịch',
           },
           {
             validator: scheduleValidator,
@@ -165,7 +165,7 @@ const General = ({ onCreate, general }) => {
         rules={[
           {
             required: true,
-            message: 'Please input status',
+            message: 'Hãy nhập trạng thái chạy lịch',
           },
         ]}
       >
@@ -177,7 +177,7 @@ const General = ({ onCreate, general }) => {
         rules={[
           {
             required: true,
-            message: 'Please input article demo link',
+            message: 'Hãy nhập link ví dụ bài báo',
           },
         ]}
       >
@@ -193,7 +193,7 @@ const General = ({ onCreate, general }) => {
         }}
       >
         <Button type="primary" htmlType="submit">
-          Next
+          Tiếp theo
         </Button>
       </div>
     </Form>

@@ -5,7 +5,7 @@
 /* eslint-disable no-shadow */
 import React, { useState, useEffect } from 'react';
 import {
-  Table, Tag, Form, Select, Button, Typography, Breadcrumb, DatePicker, Modal, Progress,
+  Table, Tag, Form, Select, Button, Typography, Breadcrumb, DatePicker, Modal, Progress, Row, Col,
 } from 'antd';
 import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { makeStyles } from '@material-ui/core/styles';
@@ -119,14 +119,14 @@ export default function ListValidArticles(props) {
   };
   const columns = [
     {
-      title: 'Website',
+      title: 'Đầu báo',
       dataIndex: 'website',
       key: 'website',
       width: '20%',
       render: (value) => value.name,
     },
     {
-      title: 'Category',
+      title: 'Chuyên mục',
       dataIndex: 'category',
       width: '25%',
       key: 'category',
@@ -141,12 +141,12 @@ export default function ListValidArticles(props) {
       ),
     },
     {
-      title: 'Title',
+      title: 'Tiêu đề',
       dataIndex: 'title',
       key: 'title',
     },
     {
-      title: 'Text Cleaned',
+      title: 'Chuẩn hoá máy',
       dataIndex: 'isCleaned',
       key: 'isCleaned',
       align: 'center',
@@ -159,7 +159,7 @@ export default function ListValidArticles(props) {
       },
     },
     {
-      title: 'Actions',
+      title: 'Hành động',
       key: 'actions',
       width: '25%',
       align: 'center',
@@ -171,14 +171,14 @@ export default function ListValidArticles(props) {
             style={{ marginRight: 10 }}
             icon={<EditOutlined />}
           >
-            Update
+            Cập nhật
           </Button>
           <Button
             danger
             onClick={() => showDeleteConfirm(record)}
             icon={<DeleteOutlined />}
           >
-            Delete
+            Xoá
           </Button>
         </div>
       ),
@@ -226,66 +226,74 @@ export default function ListValidArticles(props) {
         </Breadcrumb.Item>
       </Breadcrumb>
       <Form
-        style={{ marginBottom: '15px' }}
         form={form}
         name="basic"
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
-        layout="inline"
       >
-        <Form.Item
-          name="website"
-          label="Website"
-          style={{ width: '29%' }}
-        >
-          <Select
-            showSearch
-            optionFilterProp="children"
-            filterOption={
+        <Row gutter={16}>
+          <Col span={6}>
+            <Form.Item
+              name="website"
+              label="Đầu báo"
+            >
+              <Select
+                showSearch
+                optionFilterProp="children"
+                filterOption={
             (input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
           }
-            allowClear
-          >
-            {websites.map((website) => (
-              <Option key={website.key} value={website.name}>{website.name}</Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item
-          style={{ width: '29%' }}
-          name="category"
-          label="Category"
-        >
-          <Select
-            showSearch
-            filterOption={
+                allowClear
+              >
+                {websites.map((website) => (
+                  <Option key={website.key} value={website.name}>{website.name}</Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item
+              name="category"
+              label="Chuyên mục"
+            >
+              <Select
+                showSearch
+                filterOption={
             (input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
-            allowClear
-          >
-            {categories.map((category) => (
-              <Option key={category.key} value={category.name}>{category.name}</Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item
-          style={{ width: '29%' }}
-          label="Time"
-        >
-          <RangePicker
-            showTime={{ format: 'HH:mm' }}
-            format="YYYY-MM-DD HH:mm"
-            onChange={onChange}
-            onOk={onOk}
-          />
-        </Form.Item>
-        <Form.Item style={{ width: '5%' }}>
-          <Button type="primary" htmlType="submit">
-            Filter
-          </Button>
-        </Form.Item>
+                allowClear
+              >
+                {categories.map((category) => (
+                  <Option key={category.key} value={category.name}>{category.name}</Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item
+              label="Thời gian"
+            >
+              <RangePicker
+                showTime={{ format: 'HH:mm' }}
+                format="YYYY-MM-DD HH:mm"
+                onChange={onChange}
+                onOk={onOk}
+              />
+            </Form.Item>
+
+          </Col>
+          <Col span={6}>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Lọc
+              </Button>
+            </Form.Item>
+          </Col>
+        </Row>
+
+
       </Form>
-      {!data ? 'Loading data...' : (
+      {!data ? 'Đang tải dữ liệu...' : (
         <Table
           className={tableCSS}
           columns={columns}
@@ -294,7 +302,7 @@ export default function ListValidArticles(props) {
           scroll={{ y: 400 }}
           summary={() => (
             <tr>
-              <th>Total documents</th>
+              <th>Tổng số bài báo</th>
               <td colSpan={2}>
                 <Text type="danger">{counts}</Text>
               </td>

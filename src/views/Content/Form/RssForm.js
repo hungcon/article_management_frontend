@@ -16,9 +16,9 @@ const RssForm = ({
       forceRender
       style={{ fontFamily: 'Montserrat' }}
       visible={visible}
-      title="RSS Config"
-      okText={!record.url ? 'Add' : 'Update'}
-      cancelText="Cancel"
+      title={!record.url ? 'Thêm cấu hình RSS' : 'Cập nhật cấu hình RSS'}
+      okText={!record.url ? 'Thêm mới' : 'Cập nhật'}
+      cancelText="Huỷ"
       onCancel={onCancel}
       onOk={() => {
         form
@@ -35,7 +35,6 @@ const RssForm = ({
       <Form
         layout="vertical"
         form={form}
-        name={Date.now()}
         initialValues={{
           url: record.url,
           itemSelector: record.configuration.itemSelector,
@@ -51,7 +50,7 @@ const RssForm = ({
           rules={[
             {
               required: true,
-              message: 'Please input url',
+              message: 'Hãy nhập url',
             },
           ]}
         >
@@ -63,7 +62,7 @@ const RssForm = ({
           rules={[
             {
               required: true,
-              message: 'Please input item selector',
+              message: 'Hãy nhập item selector',
             },
           ]}
         >
@@ -75,7 +74,7 @@ const RssForm = ({
           rules={[
             {
               required: true,
-              message: 'Please input title selector',
+              message: 'Hãy nhập title selector',
             },
           ]}
         >
@@ -87,7 +86,7 @@ const RssForm = ({
           rules={[
             {
               required: true,
-              message: 'Please input link selector',
+              message: 'Hãy nhập link selector',
             },
           ]}
         >
@@ -99,7 +98,7 @@ const RssForm = ({
           rules={[
             {
               required: true,
-              message: 'Please input sapo selector',
+              message: 'Hãy nhập sapo selector',
             },
           ]}
         >
@@ -111,7 +110,7 @@ const RssForm = ({
           rules={[
             {
               required: true,
-              message: 'Please input publish date selector',
+              message: 'Hãy nhập publish date selector',
             },
           ]}
         >

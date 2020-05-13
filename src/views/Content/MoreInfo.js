@@ -147,12 +147,12 @@ const MoreInfo = ({ record, props }) => {
 
   const showDeleteConfirm = (type, deleteId, configId) => {
     confirm({
-      title: `Are you sure delete this ${type}?`,
+      title: `Bạn có chắn chắn xoá ${type} này không?`,
       // eslint-disable-next-line react/jsx-filename-extension
       icon: <ExclamationCircleOutlined />,
-      okText: 'Yes',
+      okText: 'Có',
       okType: 'danger',
-      cancelText: 'No',
+      cancelText: 'Không',
       centered: true,
       async onOk() {
         if (type === 'rss') {
@@ -200,7 +200,7 @@ const MoreInfo = ({ record, props }) => {
   const showHTMLConfig = (htmlConfig, configId) => (
     <Descriptions>
       {htmlConfig.length === 0 ? (
-        <Descriptions.Item>Have no HTML config</Descriptions.Item>
+        <Descriptions.Item>Không có cấu hình HTML</Descriptions.Item>
       )
         : (
           <Descriptions.Item>
@@ -211,7 +211,7 @@ const MoreInfo = ({ record, props }) => {
                   style={{ marginBottom: 10 }}
                   icon={<EditOutlined />}
                 >
-                  HTML Config
+                  Cấu hình HTML
                   {' '}
                   {index + 1}
                 </Button>
@@ -230,7 +230,7 @@ const MoreInfo = ({ record, props }) => {
           onClick={() => showHTMLModal(init.INIT_HTML, 'add')}
           icon={<PlusOutlined />}
         >
-          Add HTML
+          Thêm cấu hình HTML
         </Button>
       </Descriptions.Item>
     </Descriptions>
@@ -239,7 +239,7 @@ const MoreInfo = ({ record, props }) => {
   const showRSSConfig = (rssConfig, configId) => (
     <Descriptions>
       {rssConfig.length === 0 ? (
-        <Descriptions.Item>Have no RSS config</Descriptions.Item>
+        <Descriptions.Item>Không có cấu hình RSS</Descriptions.Item>
       ) : (
         <Descriptions.Item>
           { rssConfig.map((eachRss, index) => (
@@ -249,7 +249,7 @@ const MoreInfo = ({ record, props }) => {
                 style={{ marginBottom: 10 }}
                 icon={<EditOutlined />}
               >
-                RSS Config
+                Cấu hình RSS
                 {' '}
                 {index + 1}
               </Button>
@@ -268,30 +268,30 @@ const MoreInfo = ({ record, props }) => {
           onClick={() => showRSSModal(init.INIT_RSS, 'add')}
           icon={<PlusOutlined />}
         >
-          Add RSS
+          Thêm cấu hình RSS
         </Button>
       </Descriptions.Item>
     </Descriptions>
   );
   return (
     <div>
-      <Descriptions title="More Info" bordered>
-        <Descriptions.Item label="Created At">
+      <Descriptions title="Thông tin cấu hình" bordered>
+        <Descriptions.Item label="Thêm mới lúc">
           {new Intl.DateTimeFormat('en-GB', {
             year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit',
           }).format(new Date(record.createdAt).getTime())}
         </Descriptions.Item>
-        <Descriptions.Item label="Updated At">
+        <Descriptions.Item label="Cập nhật lúc">
           {new Intl.DateTimeFormat('en-GB', {
             year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit',
           }).format(new Date(record.updatedAt).getTime())}
         </Descriptions.Item>
-        <Descriptions.Item label="Schedule">
+        <Descriptions.Item label="Lịch chạy">
           {record.schedules.map((schedule) => {
             if (schedule === '0 */1 * * * *') {
               return (
                 <Text mark key={schedule} value={schedule}>
-                  Every 1 minute
+                  Mỗi 1 phút
                   <br />
                 </Text>
               );
@@ -299,7 +299,7 @@ const MoreInfo = ({ record, props }) => {
             if (schedule === '0 */5 * * * *') {
               return (
                 <Text mark key={schedule} value={schedule}>
-                  Every 5 minute
+                  Mỗi 5 phút
                   <br />
                 </Text>
               );
@@ -307,7 +307,7 @@ const MoreInfo = ({ record, props }) => {
             if (schedule === '0 */10 * * * *') {
               return (
                 <Text mark key={schedule} value={schedule}>
-                  Every 10 minute
+                  Mỗi 10 phút
                   <br />
                 </Text>
               );
@@ -315,7 +315,7 @@ const MoreInfo = ({ record, props }) => {
             if (schedule === '0 */15 * * * *') {
               return (
                 <Text mark key={schedule} value={schedule}>
-                  Every 15 minute
+                  Mỗi 15 phút
                   <br />
                 </Text>
               );
@@ -323,29 +323,29 @@ const MoreInfo = ({ record, props }) => {
             if (schedule === '0 */30 * * * *') {
               return (
                 <Text mark key={schedule} value={schedule}>
-                  Every 30 minute
+                  Mỗi 15 phút
                   <br />
                 </Text>
               );
             }
             return (
               <Text mark key={schedule} value={schedule}>
-                Every 1 hour
+                Mỗi 1 giờ
                 <br />
               </Text>
             );
           })}
         </Descriptions.Item>
-        <Descriptions.Item label={record.crawlType === 'HTML' ? 'HTML Config' : 'RSS Config'} span={3}>
+        <Descriptions.Item label={record.crawlType === 'HTML' ? 'Cấu hình HTML' : 'Cấu hình RSS'} span={3}>
           {record.crawlType === 'HTML' ? showHTMLConfig(record.html, record._id) : showRSSConfig(record.rss, record._id)}
         </Descriptions.Item>
-        <Descriptions.Item label="Article Config" span={3}>
+        <Descriptions.Item label="Cấu hình báo" span={3}>
           <Button
             onClick={() => props.history.push(`/dashboard/configuration/article-config/${record._id}`)}
             style={{ marginRight: 10, marginBottom: 10 }}
             icon={<EditOutlined />}
           >
-            Article Config
+            Cấu hình báo
           </Button>
         </Descriptions.Item>
       </Descriptions>

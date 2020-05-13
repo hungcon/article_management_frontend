@@ -69,11 +69,11 @@ export default function AddArticle(props) {
       >
         <Form.Item
           name="website"
-          label="Website"
+          label="Đầu báo"
           rules={[
             {
               required: true,
-              message: 'Please select website name',
+              message: 'Hãy chọn đầu báo',
             },
           ]}
         >
@@ -85,7 +85,7 @@ export default function AddArticle(props) {
           }
           >
             {websites.map((website) => (
-              <Option key={website.id} value={website.name}>{website.name}</Option>
+              <Option key={website.key} value={website.name}>{website.name}</Option>
             ))}
           </Select>
         </Form.Item>
@@ -106,7 +106,7 @@ export default function AddArticle(props) {
           }
           >
             {categories.map((category) => (
-              <Option key={category}>{category}</Option>
+              <Option key={category.key} value={category.name}>{category.name}</Option>
             ))}
           </Select>
         </Form.Item>

@@ -82,7 +82,7 @@ const HtmlConfig = ({ onCreate, prev, htmlVal }) => {
         rules={[
           {
             required: true,
-            message: 'Please input url',
+            message: 'Hãy nhập url',
           },
         ]}
       >
@@ -100,7 +100,7 @@ const HtmlConfig = ({ onCreate, prev, htmlVal }) => {
               style={{ marginBottom: 10 }}
               icon={<EditOutlined />}
             >
-              New Block Config
+              Cấu hình block
               {' '}
               {index + 1}
             </Button>
@@ -116,7 +116,7 @@ const HtmlConfig = ({ onCreate, prev, htmlVal }) => {
           onClick={() => showBlockModal(init.INIT_BLOCK, 'localAdd')}
           icon={<PlusOutlined />}
         >
-          Add Block
+          Thêm block
         </Button>
       </Form.Item>
       <div
@@ -131,10 +131,10 @@ const HtmlConfig = ({ onCreate, prev, htmlVal }) => {
         }}
       >
         <Button onClick={prev} style={{ marginRight: 10 }}>
-          Previous
+          Quay lại
         </Button>
         <Button type="primary" htmlType="submit">
-          Next
+          Tiếp theo
         </Button>
       </div>
       <BlockForm

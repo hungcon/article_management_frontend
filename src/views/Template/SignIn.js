@@ -109,7 +109,7 @@ export default function SignIn(props) {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign In
+            Đăng nhập
           </Typography>
           <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
             <TextField
@@ -120,7 +120,7 @@ export default function SignIn(props) {
               error={!!(errors && errors.userName)}
               helperText={(errors && errors.userName) ? errors.userName.message : ''}
               id="userName"
-              label="Username"
+              label="Tên đăng nhập"
               autoFocus
               inputRef={register({
                 required: 'Required',
@@ -135,18 +135,18 @@ export default function SignIn(props) {
               helperText={(errors && errors.password) ? errors.password.message : ''}
               margin="normal"
               fullWidth
-              label="Password"
+              label="Mật khẩu"
               type="password"
               id="password"
               inputRef={register({
                 required: 'Required',
                 maxLength: {
                   value: 15,
-                  message: 'Password must be less than 15 charaters',
+                  message: 'Mật khẩu phải nhỏ hơn 15 ký tự',
                 },
                 minLength: {
                   value: 6,
-                  message: 'Password must be more than 6 charaters',
+                  message: 'Mật khẩu phải lớn hơn 6 ký tự',
                 },
               })}
             />
@@ -158,20 +158,8 @@ export default function SignIn(props) {
               color="primary"
               className={classes.submit}
             >
-              Sign In
+              Đăng nhập
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link className={classes.link} to="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link className={classes.link} to="sign-up" variant="body2">
-                  Don't have an account? Sign Up
-                </Link>
-              </Grid>
-            </Grid>
           </form>
         </div>
       </Grid>

@@ -94,9 +94,9 @@ const SourceForm = ({
       style={{ fontFamily: 'Montserrat' }}
       forceRender
       visible={visible}
-      title="Configuration"
-      okText="Update"
-      cancelText="Cancel"
+      title="Cập nhật cấu hình"
+      okText="Cập nhật"
+      cancelText="Huỷ"
       onCancel={onCancel}
       onOk={() => {
         form
@@ -122,11 +122,11 @@ const SourceForm = ({
       >
         <Form.Item
           name="website"
-          label="Website"
+          label="Đầu báo"
           rules={[
             {
               required: true,
-              message: 'Please select website name',
+              message: 'Hãy chọn đầu báo',
             },
           ]}
         >
@@ -144,11 +144,11 @@ const SourceForm = ({
         </Form.Item>
         <Form.Item
           name="category"
-          label="Category"
+          label="Chuyên mục"
           rules={[
             {
               required: true,
-              message: 'Please input category name',
+              message: 'Hãy chọn chuyên mục',
             },
           ]}
         >
@@ -165,11 +165,11 @@ const SourceForm = ({
         </Form.Item>
         <Form.Item
           name="schedules"
-          label="Schedule"
+          label="Lịch"
           rules={[
             {
               required: true,
-              message: 'Please input schedules',
+              message: 'Hãy chọn lịch chạy',
             },
             {
               validator: scheduleValidator,
@@ -178,7 +178,7 @@ const SourceForm = ({
         >
           {renderSelectTag(record.schedules)}
         </Form.Item>
-        <Form.Item name="status" label="Status" valuePropName="checked">
+        <Form.Item name="status" label="Bật lịch" valuePropName="checked">
           <Switch />
         </Form.Item>
       </Form>

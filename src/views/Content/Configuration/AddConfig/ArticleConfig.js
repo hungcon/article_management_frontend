@@ -31,7 +31,7 @@ const ArticleConfig = ({
       style={{ fontFamily: 'Montserrat' }}
       layout="vertical"
       form={form}
-      id="rss_form"
+      id="article_form"
       initialValues={{
         sapoSelector: 'meta[name="description"]',
         sapoRedundancySelectors: [],
@@ -53,7 +53,7 @@ const ArticleConfig = ({
         rules={[
           {
             required: true,
-            message: 'Please input sapo selector',
+            message: 'Hãy nhập sapo selector',
           },
         ]}
       >
@@ -68,7 +68,7 @@ const ArticleConfig = ({
         rules={[
           {
             required: true,
-            message: 'Please input title selector',
+            message: 'Hãy nhập title selector',
           },
         ]}
       >
@@ -83,7 +83,7 @@ const ArticleConfig = ({
         rules={[
           {
             required: true,
-            message: 'Please input thumbnail selector',
+            message: 'Hãy nhập thumbnail selector',
           },
         ]}
       >
@@ -98,7 +98,7 @@ const ArticleConfig = ({
         rules={[
           {
             required: true,
-            message: 'Please input tags selector',
+            message: 'Hãy nhập tags selector',
           },
         ]}
       >
@@ -113,7 +113,7 @@ const ArticleConfig = ({
         rules={[
           {
             required: true,
-            message: 'Please input content selector',
+            message: 'Hãy nhập content selector',
           },
         ]}
       >
@@ -137,10 +137,10 @@ const ArticleConfig = ({
         }}
       >
         <Button onClick={prev} style={{ marginRight: 10 }}>
-          Previous
+          Quay lại
         </Button>
         <Button type="primary" htmlType="submit">
-          Finish
+          Thêm cấu hình
         </Button>
       </div>
     </Form>

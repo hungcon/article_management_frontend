@@ -72,7 +72,7 @@ export default function Dashboard(props) {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Article Configuration
+            Quản lý cấu hình báo nói
           </Typography>
 
           <IconButton color="inherit" onClick={signOut}>

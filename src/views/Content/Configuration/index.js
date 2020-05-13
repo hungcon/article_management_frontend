@@ -98,12 +98,12 @@ export default function Configuration(props) {
 
   const showDeleteConfirm = (toDelete) => {
     confirm({
-      title: 'Are you sure delete this config?',
+      title: 'Bạn có chắc chắn xoá cấu hình này không?',
       // eslint-disable-next-line react/jsx-filename-extension
       icon: <ExclamationCircleOutlined />,
-      okText: 'Yes',
+      okText: 'Có',
       okType: 'danger',
-      cancelText: 'No',
+      cancelText: 'Không',
       centered: true,
       async onOk() {
         axios.post('http://localhost:8000/delete-config', { configId: toDelete._id }, {
@@ -129,31 +129,31 @@ export default function Configuration(props) {
 
   const columns = [
     {
-      title: 'Website',
+      title: 'Đầu báo',
       dataIndex: 'website',
       key: 'website',
       width: '10%',
       render: (value) => value.name,
     },
     {
-      title: 'Category',
+      title: 'Chuyên mục',
       dataIndex: 'category',
       key: 'category',
       width: '10%',
       render: (value) => value.name,
     },
     {
-      title: 'Status',
+      title: 'Bật lịch',
       key: 'status',
       dataIndex: 'status',
       width: '8%',
       render: (value) => {
-        const checked = value === '01';
-        return <Switch checked={checked} />;
+        if (value === '01') return 'Có';
+        return 'Không';
       },
     },
     {
-      title: 'Crawl Type',
+      title: 'Loại cấu hình',
       key: 'crawlType',
       width: '10%',
       filters: [
@@ -170,7 +170,7 @@ export default function Configuration(props) {
       dataIndex: 'crawlType',
     },
     {
-      title: 'Actions',
+      title: 'Hành động',
       key: 'actions',
       width: '17%',
       align: 'center',
@@ -181,14 +181,14 @@ export default function Configuration(props) {
             style={{ marginRight: 10 }}
             icon={<EditOutlined />}
           >
-            Update
+            Cập nhật
           </Button>
           <Button
             danger
             onClick={() => showDeleteConfirm(record)}
             icon={<DeleteOutlined />}
           >
-            Delete
+            Xoá
           </Button>
         </div>
       ),
@@ -211,39 +211,39 @@ export default function Configuration(props) {
     return () => { ignore = true; };
   }, [reload, dispatch]);
 
-  const runSchedule = async () => {
-    axios.post('http://localhost:8000/crawl/run', null, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    }).then((result) => {
-      if (result.data.status === 1) {
-        openNotification('success', message.RUN_SUCCESS);
-      } else {
-        openNotification('error', message.ERROR);
-      }
-    }).catch((err) => {
-      console.log(err);
-      openNotification('error', message.UNAUTHORIZED);
-    });
-  };
+  // const runSchedule = async () => {
+  //   axios.post('http://localhost:8000/crawl/run', null, {
+  //     headers: {
+  //       Authorization: `Bearer ${localStorage.getItem('token')}`,
+  //     },
+  //   }).then((result) => {
+  //     if (result.data.status === 1) {
+  //       openNotification('success', message.RUN_SUCCESS);
+  //     } else {
+  //       openNotification('error', message.ERROR);
+  //     }
+  //   }).catch((err) => {
+  //     console.log(err);
+  //     openNotification('error', message.UNAUTHORIZED);
+  //   });
+  // };
 
-  const stopSchedule = async () => {
-    axios.post('http://localhost:8000/crawl/stop', null, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    }).then((result) => {
-      if (result.data.status === 1) {
-        openNotification('success', message.RUN_SUCCESS);
-      } else {
-        openNotification('error', message.ERROR);
-      }
-    }).catch((err) => {
-      console.log(err);
-      openNotification('error', message.UNAUTHORIZED);
-    });
-  };
+  // const stopSchedule = async () => {
+  //   axios.post('http://localhost:8000/crawl/stop', null, {
+  //     headers: {
+  //       Authorization: `Bearer ${localStorage.getItem('token')}`,
+  //     },
+  //   }).then((result) => {
+  //     if (result.data.status === 1) {
+  //       openNotification('success', message.RUN_SUCCESS);
+  //     } else {
+  //       openNotification('error', message.ERROR);
+  //     }
+  //   }).catch((err) => {
+  //     console.log(err);
+  //     openNotification('error', message.UNAUTHORIZED);
+  //   });
+  // };
 
   return (
     <div className={classes.root}>
@@ -260,9 +260,9 @@ export default function Configuration(props) {
         style={{ marginBottom: 15 }}
         icon={<PlusCircleOutlined />}
       >
-        Add config
+        Thêm cấu hình
       </Button>
-      <Button
+      {/* <Button
         type="primary"
         onClick={() => runSchedule()}
         style={{ marginLeft: 15 }}
@@ -277,7 +277,7 @@ export default function Configuration(props) {
         icon={<PlayCircleOutlined />}
       >
         Stop crawl
-      </Button>
+      </Button> */}
       <Table
         className={tableCSS}
         columns={columns}
