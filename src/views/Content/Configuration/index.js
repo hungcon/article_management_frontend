@@ -144,9 +144,19 @@ export default function Configuration(props) {
     },
     {
       title: 'Bật lịch',
-      key: 'status',
-      dataIndex: 'status',
+      key: 'turnOnSchedule',
+      dataIndex: 'turnOnSchedule',
       width: '8%',
+      render: (value) => {
+        if (value === '01') return 'Có';
+        return 'Không';
+      },
+    },
+    {
+      title: 'Tự động tổng hợp',
+      key: 'autoSynthetic',
+      dataIndex: 'autoSynthetic',
+      width: '10%',
       render: (value) => {
         if (value === '01') return 'Có';
         return 'Không';
@@ -155,7 +165,7 @@ export default function Configuration(props) {
     {
       title: 'Loại cấu hình',
       key: 'crawlType',
-      width: '10%',
+      width: '8%',
       filters: [
         {
           text: 'HTML',

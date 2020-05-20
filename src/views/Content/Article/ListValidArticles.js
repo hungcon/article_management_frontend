@@ -5,7 +5,7 @@
 /* eslint-disable no-shadow */
 import React, { useState, useEffect } from 'react';
 import {
-  Table, Tag, Form, Select, Button, Typography, Breadcrumb, DatePicker, Modal, Progress, Row, Col,
+  Table, Tag, Form, Select, Button, Typography, Breadcrumb, DatePicker, Modal, Row, Col,
 } from 'antd';
 import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { makeStyles } from '@material-ui/core/styles';
@@ -39,6 +39,19 @@ export default function ListValidArticles(props) {
   const [websites, setWebsites] = useState([]);
   const [categories, setCategories] = useState([]);
   const [reload, setReload] = useState(false);
+
+  const listStatus = [
+    {
+      key: 1,
+      name: 'Đã chuẩn hoá máy',
+      value: '3',
+    },
+    {
+      key: 2,
+      name: 'Chuẩn hoá máy lỗi',
+      value: '2',
+    },
+  ];
 
   useEffect(() => {
     let ignore = false;
@@ -76,11 +89,15 @@ export default function ListValidArticles(props) {
     async function fetchData() {
       const website = filters ? filters.website : '';
       const category = filters ? filters.category : '';
+      const status = filters ? filters.status : '';
       const date = {
         startDate: startDate || '',
         endDate: endDate || '',
       };
-      const result = await axios.post('http://localhost:8000/get-valid-articles', { website, category, date });
+      console.log(website, category, date, status);
+      const result = await axios.post('http://localhost:8000/get-valid-articles', {
+        website, category, date, status,
+      });
       const articleData = result.data;
       setCounts(articleData.length);
       for (let i = 0; i < articleData.length; i += 1) {
@@ -122,13 +139,13 @@ export default function ListValidArticles(props) {
       title: 'Đầu báo',
       dataIndex: 'website',
       key: 'website',
-      width: '20%',
+      width: '10%',
       render: (value) => value.name,
     },
     {
       title: 'Chuyên mục',
       dataIndex: 'category',
-      width: '25%',
+      width: '20%',
       key: 'category',
       render: (tags) => (
         <span>
@@ -146,16 +163,19 @@ export default function ListValidArticles(props) {
       key: 'title',
     },
     {
-      title: 'Chuẩn hoá máy',
-      dataIndex: 'isCleaned',
-      key: 'isCleaned',
+      title: 'Trạng thái',
+      dataIndex: 'status',
+      key: 'status',
       align: 'center',
-      width: '11%',
+      width: '16%',
       render: (value) => {
         if (value === 1) {
-          return <Progress type="circle" percent={100} width={30} />;
+          return 'Đã thu thập';
         }
-        return <Progress type="circle" percent={100} width={30} status="exception" />;
+        if (value === 2) {
+          return 'Chuẩn hoá máy lỗi';
+        }
+        return 'Đã chuẩn hoá máy';
       },
     },
     {
@@ -196,9 +216,11 @@ export default function ListValidArticles(props) {
     },
   });
   const onFinish = (values) => {
+    console.log(values);
     setFilters({
       website: values.website || '',
       category: values.category || '',
+      status: values.status || '',
     });
   };
 
@@ -231,8 +253,8 @@ export default function ListValidArticles(props) {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
       >
-        <Row gutter={16}>
-          <Col span={6}>
+        <Row gutter={10}>
+          <Col span={5}>
             <Form.Item
               name="website"
               label="Đầu báo"
@@ -251,7 +273,7 @@ export default function ListValidArticles(props) {
               </Select>
             </Form.Item>
           </Col>
-          <Col span={6}>
+          <Col span={5}>
             <Form.Item
               name="category"
               label="Chuyên mục"
@@ -283,6 +305,25 @@ export default function ListValidArticles(props) {
 
           </Col>
           <Col span={6}>
+            <Form.Item
+              name="status"
+              label="Trạng thái"
+            >
+              <Select
+                showSearch
+                filterOption={
+            (input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+                allowClear
+              >
+                {listStatus.map((status) => (
+                  <Option key={status.key} value={status.value}>{status.name}</Option>
+                ))}
+              </Select>
+            </Form.Item>
+
+          </Col>
+          <Col>
             <Form.Item>
               <Button type="primary" htmlType="submit">
                 Lọc
@@ -290,8 +331,6 @@ export default function ListValidArticles(props) {
             </Form.Item>
           </Col>
         </Row>
-
-
       </Form>
       {!data ? 'Đang tải dữ liệu...' : (
         <Table

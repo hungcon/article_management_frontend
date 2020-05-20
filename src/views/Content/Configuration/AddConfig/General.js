@@ -1,7 +1,7 @@
 /* eslint-disable prefer-promise-reject-errors */
 import React, { useState, useEffect } from 'react';
 import {
-  Form, Input, Select, Button,
+  Form, Input, Select, Button, Checkbox,
 } from 'antd';
 
 import { isValidCron } from 'cron-validator';
@@ -79,16 +79,17 @@ const General = ({ onCreate, general }) => {
       initialValues={{
         website: general.website,
         category: general.category,
-        status: general.status,
         crawlType: general.crawlType,
         schedules: general.schedules,
+        turnOnSchedule: general.turnOnSchedule,
+        autoSynthetic: general.autoSynthetic,
         articleDemoLink: general.articleDemoLink,
       }}
       onFinish={onSubmit}
     >
       <Form.Item
         name="website"
-        label="Website"
+        label="Tên đầu báo"
         rules={[
           {
             required: true,
@@ -110,7 +111,7 @@ const General = ({ onCreate, general }) => {
       </Form.Item>
       <Form.Item
         name="category"
-        label="Category"
+        label="Tên chuyên mục"
         rules={[
           {
             required: true,
@@ -131,7 +132,7 @@ const General = ({ onCreate, general }) => {
       </Form.Item>
       <Form.Item
         name="crawlType"
-        label="Crawl Type"
+        label="Loại cấu hình"
         rules={[
           {
             required: true,
@@ -160,16 +161,18 @@ const General = ({ onCreate, general }) => {
         {renderSelectTag(general.schedules)}
       </Form.Item>
       <Form.Item
-        name="status"
-        label="Status"
-        rules={[
-          {
-            required: true,
-            message: 'Hãy nhập trạng thái chạy lịch',
-          },
-        ]}
+        name="turnOnSchedule"
+        label="Bật lịch chạy"
+        valuePropName="checked"
       >
-        <Input />
+        <Checkbox checked={general.turnOnSchedule} />
+      </Form.Item>
+      <Form.Item
+        name="autoSynthetic"
+        label="Tự động tổng hợp"
+        valuePropName="checked"
+      >
+        <Checkbox checked={general.autoSynthetic} />
       </Form.Item>
       <Form.Item
         name="articleDemoLink"

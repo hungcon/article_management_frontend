@@ -29,6 +29,20 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const listStatus = [
+  {
+    key: 1,
+    name: 'Đã chuẩn hoá máy',
+    value: '3',
+  },
+  {
+    key: 2,
+    name: 'Chuẩn hoá máy lỗi',
+    value: 2,
+  },
+];
+
+
 export default function ListInValidArticles() {
   const classes = useStyles();
   const [form] = Form.useForm();
@@ -239,8 +253,8 @@ export default function ListInValidArticles() {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
       >
-        <Row gutter={16}>
-          <Col span={6}>
+        <Row gutter={10}>
+          <Col span={5}>
             <Form.Item
               name="website"
               label="Đầu báo"
@@ -259,7 +273,7 @@ export default function ListInValidArticles() {
               </Select>
             </Form.Item>
           </Col>
-          <Col span={6}>
+          <Col span={5}>
             <Form.Item
               name="category"
               label="Chuyên mục"
@@ -291,6 +305,25 @@ export default function ListInValidArticles() {
 
           </Col>
           <Col span={6}>
+            <Form.Item
+              name="status"
+              label="Trạng thái"
+            >
+              <Select
+                showSearch
+                filterOption={
+            (input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+                allowClear
+              >
+                {listStatus.map((status) => (
+                  <Option key={status.key} value={status.value}>{status.name}</Option>
+                ))}
+              </Select>
+            </Form.Item>
+
+          </Col>
+          <Col>
             <Form.Item>
               <Button type="primary" htmlType="submit">
                 Lọc
@@ -298,6 +331,8 @@ export default function ListInValidArticles() {
             </Form.Item>
           </Col>
         </Row>
+
+
       </Form>
 
       {!data ? 'Đang tải dữ liệu...' : (

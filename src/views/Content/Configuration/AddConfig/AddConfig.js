@@ -27,12 +27,13 @@ const useStyles = makeStyles(() => ({
 const { Step } = Steps;
 const initGeneral = {
   category: '',
-  website: 'SOHA',
-  status: '01',
-  crawlType: 'RSS',
+  website: '',
+  crawlType: '',
   schedules: [
   ],
-  articleDemoLink: 'https://www.nguoiduatin.vn/dieu-tra-nguyen-nhan-nam-thanh-nien-tu-vong-trong-cua-hang-vat-lieu-a431171.html',
+  turnOnSchedule: false,
+  autoSynthetic: false,
+  articleDemoLink: '',
 };
 
 
@@ -56,10 +57,10 @@ export default function AddConfig(props) {
     const generalVal = {
       category: values.category,
       website: values.website,
-      status: values.status,
       crawlType: values.crawlType,
       schedules: values.schedules,
-      queue: values.queue,
+      turnOnSchedule: values.turnOnSchedule,
+      autoSynthetic: values.autoSynthetic,
       articleDemoLink: values.articleDemoLink,
     };
     setGeneral(generalVal);

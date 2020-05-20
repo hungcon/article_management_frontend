@@ -41,9 +41,9 @@ const ArticleConfig = ({
         thumbnailRedundancySelectors: [],
         tagsSelector: 'meta[name="keywords"]',
         tagsRedundancySelectors: [],
-        contentSelector: '.post-content',
-        contentRedundancySelectors: ['.kbwscwl-relatedbox', '.link-content-footer', '.link-inline-content', '.link-source'],
-        textRedundancySelectors: ['.PhotoCMS_Caption', '.VideoCMS_Caption'],
+        contentSelector: '',
+        contentRedundancySelectors: [],
+        textRedundancySelectors: [],
       }}
       onFinish={onSubmit}
     >

@@ -30,7 +30,7 @@ export default function Highlighter({
           ? text
           : (
             <Text
-              onPress={() => onPressHighlightedText(text, chunk.start)}
+              onPress={() => onPressHighlightedText(text, chunk.end)}
               key={index}
               style={chunk.highlight && highlightStyle}
             >

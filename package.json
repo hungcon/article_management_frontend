@@ -13,6 +13,7 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "chartist": "^0.11.4",
+    "cheerio": "^1.0.0-rc.3",
     "cron-validator": "^1.1.1",
     "elasticsearch": "^16.6.0",
     "emotion": "^10.0.27",
@@ -37,7 +38,8 @@
     "reactstrap": "^8.4.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "rn-highlight-words": "^1.0.2"
+    "rn-highlight-words": "^1.0.2",
+    "sentence-tokenizer": "^1.0.1"
   },
   "scripts": {
     "start": "react-scripts start",

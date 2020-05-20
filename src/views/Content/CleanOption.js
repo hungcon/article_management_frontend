@@ -10,11 +10,13 @@ import axios from 'axios';
 import {
   useParams,
 } from 'react-router-dom';
+// import Tokenizer from 'sentence-tokenizer';
 import Highlighter from './Highlighter';
 import ReplaceForm from './Form/ReplaceForm';
 import ReplaceAllForm from './Form/ReplaceAllForm';
 import { init } from '../../common/init';
 
+// const tokenizer = new Tokenizer('Chuck');
 const useStyles = makeStyles(() => ({
   root: {
     width: '100%',
@@ -74,7 +76,6 @@ export default function CleanOption() {
     let ignore = false;
     async function fetchData() {
       const cleanArticle = (await axios.post('http://localhost:8000/get-clean-article-by-id', { cleanArticleId })).data;
-
       if (!ignore) {
         setCleanArticle(cleanArticle);
       }
@@ -121,7 +122,7 @@ export default function CleanOption() {
   //  + what + string.substring(end);
 
   const onReplaceCreate = async (values) => {
-    // console.log(values);
+    console.log(values);
     // console.log(replaceBetween(
     //   record.cleanText,
     //   values.position,
@@ -130,34 +131,34 @@ export default function CleanOption() {
     // ));
     // const cleanArticle = (await axios.post('http://localhost:8000/get-clean-article-by-id', { cleanArticleId: record._id })).data;
     // eslint-disable-next-line no-unused-vars
-    let normarlizeInfo;
-    cleanArticle.loanwords.forEach((loanword) => {
-      loanword.normalize.forEach((wordInfo) => {
-        if (wordInfo.position === values.position) {
-          normarlizeInfo = {
-            type: 'Loanword',
-            id: wordInfo._id,
-          };
-        }
-      });
-    });
+    // let normarlizeInfo;
+    // cleanArticle.loanwords.forEach((loanword) => {
+    //   loanword.normalize.forEach((wordInfo) => {
+    //     if (wordInfo.position === values.position) {
+    //       normarlizeInfo = {
+    //         type: 'Loanword',
+    //         id: wordInfo._id,
+    //       };
+    //     }
+    //   });
+    // });
 
-    cleanArticle.abbreviations.forEach((abbreviation) => {
-      abbreviation.normalize.forEach((wordInfo) => {
-        if (wordInfo.position === values.position) {
-          normarlizeInfo = {
-            type: 'Abbreviation',
-            id: wordInfo._id,
-          };
-        }
-      });
-    });
-    console.log(normarlizeInfo);
-    if (normarlizeInfo.type === 'Abbreviation') {
-      console.log('a');
-    } else {
-      console.log('b');
-    }
+    // cleanArticle.abbreviations.forEach((abbreviation) => {
+    //   abbreviation.normalize.forEach((wordInfo) => {
+    //     if (wordInfo.position === values.position) {
+    //       normarlizeInfo = {
+    //         type: 'Abbreviation',
+    //         id: wordInfo._id,
+    //       };
+    //     }
+    //   });
+    // });
+    // console.log(normarlizeInfo);
+    // if (normarlizeInfo.type === 'Abbreviation') {
+    //   console.log('a');
+    // } else {
+    //   console.log('b');
+    // }
     setReplaceVisible(false);
   };
 
@@ -169,27 +170,49 @@ export default function CleanOption() {
     setReplaceAllVisible(false);
   };
 
+  const getIndexOfWords = (text, words) => {
+    let i = 0;
+    for (
+      let index = text.indexOf(words);
+      index >= 0;
+      index = text.indexOf(words, index + 1)
+    ) {
+      i += 1;
+    }
+    console.log(i);
+    return i;
+  };
+
   const showArticleText = (record) => {
     const { loanwords, abbreviations } = record;
-    const highlights = [];
-    for (const loanword of loanwords) {
-      highlights.push(loanword.words);
-    }
-    for (const abbreviation of abbreviations) {
-      highlights.push(abbreviation.words);
-    }
+    // const highlights = [];
+    // for (const loanword of loanwords) {
+    //   highlights.push(loanword.words);
+    // }
+    // for (const abbreviation of abbreviations) {
+    //   highlights.push(abbreviation.words);
+    // }
 
+    // tokenizer.setEntry(record.article.text);
+    // console.log(tokenizer.getSentences());
+    // const text = record.article.text.trim().subString(0);
+    // console.log(text.indexOf('F-22'));
+    // for (let index = text.indexOf('F-22'); index >= 0; index = text.indexOf('F-22', index + 1)) {
+    //   console.log('a');
+    // }
     return (
       <Highlighter
         style={{ fontFamily: 'Montserrat', fontSize: 13 }}
         highlightStyle={{ backgroundColor: 'rgba(0, 128, 0, 0.42)' }}
-        searchWords={highlights}
-        textToHighlight={record.article.text.trim().replace(/\.\s/g, '.\n\n')}
-        onPressHighlightedText={(text, position) => console.log(`highlighted text that click: ${text}, ${position}`)}
+        searchWords={['F-22', 'Cole']}
+        textToHighlight={record.article.text.trim()}
+        onPressHighlightedText={
+          (text, position) => showReplaceOption(text, getIndexOfWords(record.article.text
+            .trim().substring(0, position), text))
+        }
       />
     );
   };
-
   const showCleanText = (record) => {
     const { loanwords, abbreviations } = record;
     const highlights = [];
@@ -205,7 +228,7 @@ export default function CleanOption() {
           style={{ fontFamily: 'Montserrat', fontSize: 13 }}
           highlightStyle={{ backgroundColor: 'rgba(255, 255, 0, 0.43)' }}
           searchWords={highlights}
-          textToHighlight={record.cleanText.trim().replace(/\.\s/g, '.\n\n')}
+          textToHighlight={record.cleanText}
           onPressHighlightedText={(text, position) => showReplaceOption(text, position)}
         />
       </div>
