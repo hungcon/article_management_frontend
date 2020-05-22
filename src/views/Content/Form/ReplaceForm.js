@@ -17,9 +17,9 @@ const ReplaceForm = ({
       forceRender
       style={{ fontFamily: 'Montserrat' }}
       visible={visible}
-      title="Replace Option"
-      okText="Replace"
-      cancelText="Cancel"
+      title="Chuẩn hoá từ"
+      okText="Chuẩn hoá"
+      cancelText="Huỷ"
       onCancel={onCancel}
       onOk={() => {
         form
@@ -38,29 +38,36 @@ const ReplaceForm = ({
         form={form}
         initialValues={{
           position: word.position,
+          orig: word.orig,
           machineNormalize: word.machineNormalize,
           peopleNormalize: word.peopleNormalize,
         }}
       >
         <Form.Item
           name="position"
-          label="Position"
+          label="Vị trí"
+        >
+          <Input disabled />
+        </Form.Item>
+        <Form.Item
+          name="orig"
+          label="Từ gốc"
         >
           <Input disabled />
         </Form.Item>
         <Form.Item
           name="machineNormalize"
-          label="Machine normalize"
+          label="Máy chuẩn hoá"
         >
           <Input disabled />
         </Form.Item>
         <Form.Item
           name="peopleNormalize"
-          label="Replace with"
+          label="Chuẩn hoá lại bằng"
           rules={[
             {
               required: true,
-              message: 'Please input normalize word',
+              message: 'Hãy nhập từ chuẩn hoá lại',
             },
           ]}
         >

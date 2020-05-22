@@ -3,10 +3,10 @@ import React, { useState, useEffect } from 'react';
 import 'antd/dist/antd.css';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  Table, Button, Switch, Modal, Breadcrumb,
+  Table, Button, Modal, Breadcrumb,
 } from 'antd';
 import {
-  ExclamationCircleOutlined, DeleteOutlined, EditOutlined, PlusCircleOutlined, PlayCircleOutlined,
+  ExclamationCircleOutlined, DeleteOutlined, EditOutlined, PlusCircleOutlined,
 } from '@ant-design/icons';
 import { css } from 'emotion';
 import axios from 'axios';

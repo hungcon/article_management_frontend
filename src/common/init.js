@@ -66,6 +66,7 @@ export const init = {
   },
   INIT_WORD_INFO: {
     position: 0,
+    orig: '',
     machineNormalize: '',
     peopleNormalize: '',
   },
