@@ -65,7 +65,10 @@ export const init = {
     ],
   },
   INIT_WORD_INFO: {
+    sentenceId: '',
+    allophones: '',
     position: 0,
+    type: '',
     orig: '',
     machineNormalize: '',
     peopleNormalize: '',

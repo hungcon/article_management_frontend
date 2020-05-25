@@ -1,3 +1,4 @@
+/* eslint-disable func-names */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-shadow */
@@ -68,6 +69,7 @@ const useStyles = makeStyles(() => ({
 
 export default function CleanOption() {
   // console.log(record);
+  const classes = useStyles();
   const { cleanArticleId } = useParams();
   const [cleanArticle, setCleanArticle] = useState(
     {
@@ -78,7 +80,10 @@ export default function CleanOption() {
     },
   );
   const [sentences, setSentences] = useState();
-  const [currentSentenceId, setCurrentSentenceId] = useState();
+  const [replaceVisible, setReplaceVisible] = useState(false);
+  const [replaceAllVisible, setReplaceAllVisible] = useState(false);
+  const [word, setWord] = useState(init.INIT_WORD_INFO);
+  const [selectWord, setSelectWord] = useState(init.INIT_WORD_SELECT);
 
   useEffect(() => {
     let ignore = false;
@@ -99,6 +104,7 @@ export default function CleanOption() {
           const sentenceObj = {
             text: listSentencesStr[i],
             _id: cleanArticle.sentences[i]._id,
+            allophones: cleanArticle.sentences[i].allophones,
           };
           listSentencesObj.push(sentenceObj);
         }
@@ -108,15 +114,13 @@ export default function CleanOption() {
     fetchData();
     return () => { ignore = true; };
   }, [cleanArticleId]);
-  const classes = useStyles();
-  const [replaceVisible, setReplaceVisible] = useState(false);
-  const [replaceAllVisible, setReplaceAllVisible] = useState(false);
-  const [word, setWord] = useState(init.INIT_WORD_INFO);
-  const [selectWord, setSelectWord] = useState(init.INIT_WORD_SELECT);
 
-  const showReplaceOption = (text, position, id, normalize) => {
-    setCurrentSentenceId(id);
+
+  const showReplaceOption = (text, position, id, allophones, normalize, type) => {
     const wordInfo = {
+      sentenceId: id,
+      allophones,
+      type,
       position,
       orig: text,
       machineNormalize: normalize,
@@ -146,9 +150,32 @@ export default function CleanOption() {
   };
 
   const onReplaceCreate = async (values) => {
-    console.log(values);
-    console.log(currentSentenceId);
-    // const { data } = await axios.post('http://localhost:8000/replace-sentence', { id: currentSentenceId });
+    const {
+      orig,
+      type,
+      machineNormalize,
+      peopleNormalize, position, sentenceId,
+    } = values;
+
+    const { data } = await axios({
+      method: 'POST',
+      url: 'http://baonoi-tts.vbeecore.com/api/v1/tts',
+      data: {
+        function_call_invoke:
+          'arn:aws:lambda:ap-southeast-1:279297658413:function:serverless-tts-vbee-2020-04-26-tts',
+        input_text: peopleNormalize,
+        rate: 1,
+        voice: 'vbee-tts-voice-hn_male_manhdung_news_48k-h',
+        bit_rate: '128000',
+        user_id: '46030',
+        app_id: '5b8776d92942cc5b459928b5',
+        input_type: 'TEXT',
+        request_id: 'dec0f360-959e-11ea-b171-9973230931a1',
+        output_type: 'ALLOPHONES',
+        call_back: `https://111586e0.ngrok.io/get-allophones-of-words?sentenceId=${sentenceId}&position=${position}&orig=${orig}&type=${type}`,
+      },
+    });
+    console.log(data);
     setReplaceVisible(false);
   };
 
@@ -194,8 +221,8 @@ export default function CleanOption() {
         .each(function () {
           if ($(this).attr('nsw') === 'abbreviation') {
             const abbreviation = {
-              // type: 'abbreviation',
-              // index,
+              type: 'abbreviation',
+              sentenceId: sentence._id,
               orig: $(this).attr('orig'),
               normalize: $(this).children().text().trim()
                 .replace(/\s\s+/g, ' ')
@@ -206,8 +233,8 @@ export default function CleanOption() {
           }
           if ($(this).attr('nsw') === 'loanword') {
             const loanword = {
-              // type: 'loanword',
-              // index,
+              type: 'loanword',
+              sentenceId: sentence._id,
               orig: $(this).attr('orig'),
               normalize: $(this).children().text().trim()
                 .replace(/\s\s+/g, ' ')
@@ -224,19 +251,35 @@ export default function CleanOption() {
         highlights.push(abbreviation.orig);
       }
     });
-    const getNormalize = (text) => {
+    const getNormalize = (text, sentenceId) => {
       let normalize = '';
       for (const loanword of listLoanwords) {
-        if (loanword.orig === text.toLowerCase()) {
+        if (loanword.orig === text.toLowerCase() && loanword.sentenceId === sentenceId) {
           normalize = loanword.normalize;
         }
       }
       for (const abbreviation of listAbbreviations) {
-        if (abbreviation.orig.toLowerCase() === text.toLowerCase()) {
+        if (abbreviation.orig.toLowerCase() === text.toLowerCase()
+         && abbreviation.sentenceId === sentenceId) {
           normalize = abbreviation.normalize;
         }
       }
       return normalize;
+    };
+
+    const getType = (text) => {
+      let type = '';
+      for (const loanword of listLoanwords) {
+        if (loanword.orig === text.toLowerCase()) {
+          type = loanword.type;
+        }
+      }
+      for (const abbreviation of listAbbreviations) {
+        if (abbreviation.orig.toLowerCase() === text.toLowerCase()) {
+          type = abbreviation.type;
+        }
+      }
+      return type;
     };
     if (sentences) {
       return sentences.map((sentence, index) => (
@@ -250,7 +293,9 @@ export default function CleanOption() {
               (text, position) => showReplaceOption(text,
                 getIndexOfWords(sentence.text.substring(0, position), text),
                 sentence._id,
-                getNormalize(text))
+                sentence.allophones,
+                getNormalize(text, sentence._id),
+                getType(text))
             }
           />
         </div>

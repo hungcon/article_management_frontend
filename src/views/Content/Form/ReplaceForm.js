@@ -7,7 +7,6 @@ import {
 const ReplaceForm = ({
   visible, onCreate, onCancel, word,
 }) => {
-  // console.log(word);
   const [form] = Form.useForm();
   useEffect(() => () => {
     form.resetFields();
@@ -26,7 +25,11 @@ const ReplaceForm = ({
           .validateFields()
           .then((values) => {
             form.resetFields();
-            onCreate(values);
+            const replaceInfo = values;
+            replaceInfo.sentenceId = word.sentenceId;
+            replaceInfo.allophones = word.allophones;
+            replaceInfo.type = word.type;
+            onCreate(replaceInfo);
           })
           .catch((info) => {
             console.log('Validate Failed:', info);
@@ -37,6 +40,8 @@ const ReplaceForm = ({
         layout="vertical"
         form={form}
         initialValues={{
+          sentenceId: word.sentenceId,
+          allophones: word.allophones,
           position: word.position,
           orig: word.orig,
           machineNormalize: word.machineNormalize,
