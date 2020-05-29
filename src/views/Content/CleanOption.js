@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable func-names */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-underscore-dangle */
@@ -17,6 +18,8 @@ import Highlighter from './Highlighter';
 import ReplaceForm from './Form/ReplaceForm';
 import ReplaceAllForm from './Form/ReplaceAllForm';
 import { init } from '../../common/init';
+import { message } from '../../common';
+import openNotification from '../Notifications';
 
 // const tokenizer = new Tokenizer('Chuck');
 const useStyles = makeStyles(() => ({
@@ -79,6 +82,7 @@ export default function CleanOption() {
       },
     },
   );
+  const [reload, setReload] = useState(false);
   const [sentences, setSentences] = useState();
   const [replaceVisible, setReplaceVisible] = useState(false);
   const [replaceAllVisible, setReplaceAllVisible] = useState(false);
@@ -113,7 +117,7 @@ export default function CleanOption() {
     }
     fetchData();
     return () => { ignore = true; };
-  }, [cleanArticleId]);
+  }, [cleanArticleId, reload]);
 
 
   const showReplaceOption = (text, position, id, allophones, normalize, type) => {
@@ -153,7 +157,6 @@ export default function CleanOption() {
     const {
       orig,
       type,
-      machineNormalize,
       peopleNormalize, position, sentenceId,
     } = values;
 
@@ -172,10 +175,15 @@ export default function CleanOption() {
         input_type: 'TEXT',
         request_id: 'dec0f360-959e-11ea-b171-9973230931a1',
         output_type: 'ALLOPHONES',
-        call_back: `https://111586e0.ngrok.io/get-allophones-of-words?sentenceId=${sentenceId}&position=${position}&orig=${orig}&type=${type}`,
+        call_back: `https://c6f6371e.ngrok.io/get-allophones-of-words?sentenceId=${sentenceId}&position=${position}&orig=${orig}&type=${type}`,
       },
     });
     console.log(data);
+    setTimeout(() => {
+      setReload(!reload);
+      openNotification('success', message.NORMALIZE_SUCCESS);
+    }, 2000);
+
     setReplaceVisible(false);
   };
 
@@ -187,21 +195,29 @@ export default function CleanOption() {
     setReplaceAllVisible(false);
   };
 
-  const getIndexOfWords = (text, words) => {
-    // const listWords = text.split(' ');
+  const getIndexOfWords = (text, words, listLoanwords, listAbbreviations) => {
+    for (const loanword of listLoanwords) {
+      if (loanword.orig !== words.toLowerCase()
+      && !words.toLowerCase().includes(loanword.orig)) {
+        text = text.toLowerCase().replace(loanword.orig, ' ');
+      }
+    }
+    for (const abbreviation of listAbbreviations) {
+      if (abbreviation.orig !== words.toLowerCase()
+      && !words.toLowerCase().includes(abbreviation.orig)) {
+        text = text.toLowerCase().replace(abbreviation.orig, ' ');
+      }
+    }
     let i = 0;
+    console.log(text);
     for (
-      let index = text.indexOf(words);
+      let index = text.indexOf(words.toLowerCase());
       index >= 0;
-      index = text.indexOf(words, index + 1)
+      index = text.indexOf(words.toLowerCase(), index + 1)
     ) {
       i += 1;
     }
-    // for (const word of listWords) {
-    //   if (word === words) {
-    //     i += 1;
-    //   }
-    // }
+
     return i;
   };
 
@@ -291,7 +307,8 @@ export default function CleanOption() {
             textToHighlight={sentence.text}
             onPressHighlightedText={
               (text, position) => showReplaceOption(text,
-                getIndexOfWords(sentence.text.substring(0, position), text),
+                getIndexOfWords(sentence.text.substring(0, position),
+                  text, listLoanwords, listAbbreviations),
                 sentence._id,
                 sentence.allophones,
                 getNormalize(text, sentence._id),

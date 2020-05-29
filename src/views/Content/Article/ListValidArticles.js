@@ -43,13 +43,43 @@ export default function ListValidArticles(props) {
   const listStatus = [
     {
       key: 1,
-      name: 'Đã chuẩn hoá máy',
-      value: '3',
+      name: 'Đã thu thập',
+      value: '1',
     },
     {
       key: 2,
       name: 'Chuẩn hoá máy lỗi',
       value: '2',
+    },
+    {
+      key: 3,
+      name: 'Đã chuẩn hoá máy',
+      value: '3',
+    },
+    {
+      key: 4,
+      name: 'Đang chuẩn hoá tay',
+      value: '4',
+    },
+    {
+      key: 5,
+      name: 'Đã chuẩn hoá tay',
+      value: '5',
+    },
+    {
+      key: 6,
+      name: 'Đang chuyển audio',
+      value: '6',
+    },
+    {
+      key: 7,
+      name: 'Chuyển audio lỗi',
+      value: '7',
+    },
+    {
+      key: 8,
+      name: 'Đã chuyển audio',
+      value: '8',
     },
   ];
 
@@ -175,7 +205,22 @@ export default function ListValidArticles(props) {
         if (value === 2) {
           return 'Chuẩn hoá máy lỗi';
         }
-        return 'Đã chuẩn hoá máy';
+        if (value === 3) {
+          return 'Đã chuẩn hoá máy';
+        }
+        if (value === 4) {
+          return 'Đang chuẩn hoá tay';
+        }
+        if (value === 5) {
+          return 'Đã chuẩn hoá tay';
+        }
+        if (value === 6) {
+          return 'Đang chuyển audio';
+        }
+        if (value === 7) {
+          return 'Chuyển audio lỗi';
+        }
+        return 'Đã chuyển audio';
       },
     },
     {
