@@ -71,7 +71,7 @@ export default function CleanText(props) {
             // eslint-disable-next-line no-underscore-dangle
             onClick={() => props.history.push(`/dashboard/clean-text/${record._id}`)}
           >
-            Detail
+            Chi tiết
           </Button>
         </div>
       ),

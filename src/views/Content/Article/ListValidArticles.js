@@ -124,7 +124,6 @@ export default function ListValidArticles(props) {
         startDate: startDate || '',
         endDate: endDate || '',
       };
-      console.log(website, category, date, status);
       const result = await axios.post('http://localhost:8000/get-valid-articles', {
         website, category, date, status,
       });
@@ -164,6 +163,13 @@ export default function ListValidArticles(props) {
       },
     });
   };
+
+  const openLinkAudio = async (articleId) => {
+    const { data } = await axios.post('http://localhost:8000/get-clean-article-by-article-id', { articleId });
+    const { linkAudio } = data;
+    window.open(`http://${linkAudio}`);
+  };
+
   const columns = [
     {
       title: 'Đầu báo',
@@ -175,7 +181,7 @@ export default function ListValidArticles(props) {
     {
       title: 'Chuyên mục',
       dataIndex: 'category',
-      width: '20%',
+      width: '15%',
       key: 'category',
       render: (tags) => (
         <span>
@@ -226,27 +232,62 @@ export default function ListValidArticles(props) {
     {
       title: 'Hành động',
       key: 'actions',
-      width: '25%',
+      width: '30%',
       align: 'center',
-      render: (value, record) => (
-        <div>
-          <Button
+      render: (value, record) => {
+        console.log(record);
+        return (
+          <div>
+            {record.status === 1 && (
+            <Button
             // eslint-disable-next-line no-underscore-dangle
-            onClick={() => props.history.push(`/dashboard/list-valid-articles/${record._id}`)}
-            style={{ marginRight: 10 }}
-            icon={<EditOutlined />}
-          >
-            Cập nhật
-          </Button>
-          <Button
-            danger
-            onClick={() => showDeleteConfirm(record)}
-            icon={<DeleteOutlined />}
-          >
-            Xoá
-          </Button>
-        </div>
-      ),
+              onClick={() => props.history.push(`/dashboard/list-valid-articles/${record._id}`)}
+              style={{ marginRight: 10 }}
+              icon={<EditOutlined />}
+            >
+              Cập nhật
+            </Button>
+            )}
+            {record.status === 2 && (
+            <Button
+            // eslint-disable-next-line no-underscore-dangle
+              onClick={() => props.history.push(`/dashboard/list-valid-articles/${record._id}`)}
+              style={{ marginRight: 10 }}
+              icon={<EditOutlined />}
+            >
+              Chuẩn hoá máy lại
+            </Button>
+            )}
+            {record.status === 3 && (
+            <Button
+            // eslint-disable-next-line no-underscore-dangle
+              onClick={() => props.history.push(`/dashboard/list-valid-articles/${record._id}`)}
+              style={{ marginRight: 10 }}
+              icon={<EditOutlined />}
+            >
+              Chuẩn hoá tay
+            </Button>
+            )}
+            {record.status === 8 && (
+            <Button
+            // eslint-disable-next-line no-underscore-dangle
+              onClick={() => openLinkAudio(record._id)}
+              style={{ marginRight: 10 }}
+              icon={<EditOutlined />}
+            >
+              Nghe thử
+            </Button>
+            )}
+            <Button
+              danger
+              onClick={() => showDeleteConfirm(record)}
+              icon={<DeleteOutlined />}
+            >
+              Xoá
+            </Button>
+          </div>
+        );
+      },
     },
   ];
   const tableCSS = css({

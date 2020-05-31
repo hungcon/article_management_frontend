@@ -17,6 +17,7 @@ import ListWebsite from '../../views/Content/Website/ListWebsite';
 import ListCategory from '../../views/Content/Category/ListCategory';
 import ListAccounts from '../../views/Content/Account/ListAccounts';
 import AccountForm from '../../views/Content/Account/AccountForm';
+import NormalizeWord from '../../views/Content/NormalizeWord';
 
 export default function ContentRoute() {
   return (
@@ -33,6 +34,7 @@ export default function ContentRoute() {
       <PrivateRoute path="/dashboard/list-invalid-articles" exact component={ListInvalidArticles} />
       <PrivateRoute path="/dashboard/clean-text" exact component={CleanText} />
       <PrivateRoute path="/dashboard/clean-text/:cleanArticleId" exact component={CleanOption} />
+      <PrivateRoute path="/dashboard/clean-text/:cleanArticleId/:type/:word" exact component={NormalizeWord} />
       <PrivateRoute path="/dashboard/add-article" exact component={AddArticle} />
       <PrivateRoute path="/dashboard/statistics" exact component={Statistics} />
     </Switch>

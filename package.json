@@ -39,7 +39,8 @@
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "rn-highlight-words": "^1.0.2",
-    "sentence-tokenizer": "^1.0.1"
+    "sentence-tokenizer": "^1.0.1",
+    "styled-components": "^5.1.1"
   },
   "scripts": {
     "start": "react-scripts start",

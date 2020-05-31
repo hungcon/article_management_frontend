@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable no-param-reassign */
 /* eslint-disable func-names */
 /* eslint-disable no-restricted-syntax */
@@ -14,10 +15,10 @@ import {
 } from 'react-router-dom';
 // import Tokenizer from 'sentence-tokenizer';
 import cheerio from 'cheerio';
-import Highlighter from './Highlighter';
-import ReplaceForm from './Form/ReplaceForm';
-import ReplaceAllForm from './Form/ReplaceAllForm';
-import { init } from '../../common/init';
+// import Highlighter from './Highlighter';
+// import ReplaceForm from './Form/ReplaceForm';
+// import ReplaceAllForm from './Form/ReplaceAllForm';
+// import { init } from '../../common/init';
 import { message } from '../../common';
 import openNotification from '../Notifications';
 
@@ -70,7 +71,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 
-export default function CleanOption() {
+export default function CleanOption(props) {
   // console.log(record);
   const classes = useStyles();
   const { cleanArticleId } = useParams();
@@ -83,11 +84,11 @@ export default function CleanOption() {
     },
   );
   const [reload, setReload] = useState(false);
-  const [sentences, setSentences] = useState();
-  const [replaceVisible, setReplaceVisible] = useState(false);
-  const [replaceAllVisible, setReplaceAllVisible] = useState(false);
-  const [word, setWord] = useState(init.INIT_WORD_INFO);
-  const [selectWord, setSelectWord] = useState(init.INIT_WORD_SELECT);
+  // const [sentences, setSentences] = useState();
+  // const [replaceVisible, setReplaceVisible] = useState(false);
+  // const [replaceAllVisible, setReplaceAllVisible] = useState(false);
+  // const [word, setWord] = useState(init.INIT_WORD_INFO);
+  // const [selectWord, setSelectWord] = useState(init.INIT_WORD_SELECT);
 
   useEffect(() => {
     let ignore = false;
@@ -95,24 +96,24 @@ export default function CleanOption() {
       const cleanArticle = (await axios.post('http://localhost:8000/get-clean-article-by-id', { cleanArticleId })).data;
       if (!ignore) {
         setCleanArticle(cleanArticle);
-        const { data } = await axios.post('http://baonoi-tts.vbeecore.com/api/v1/tts', {
-          function_call_invoke:
-          'arn:aws:lambda:ap-southeast-1:279297658413:function:serverless-split-release-hello',
-          text: cleanArticle.article.text,
-          input_text: 'A',
-        });
-        const listSentencesStr = JSON.parse(data.message);
-        const listSentencesObj = [];
-        // set Id
-        for (let i = 0; i < cleanArticle.sentences.length; i += 1) {
-          const sentenceObj = {
-            text: listSentencesStr[i],
-            _id: cleanArticle.sentences[i]._id,
-            allophones: cleanArticle.sentences[i].allophones,
-          };
-          listSentencesObj.push(sentenceObj);
-        }
-        setSentences(listSentencesObj);
+        // const { data } = await axios.post('http://baonoi-tts.vbeecore.com/api/v1/tts', {
+        //   function_call_invoke:
+        //   'arn:aws:lambda:ap-southeast-1:279297658413:function:serverless-split-release-hello',
+        //   text: cleanArticle.article.text,
+        //   input_text: 'A',
+        // });
+        // const listSentencesStr = JSON.parse(data.message);
+        // const listSentencesObj = [];
+        // // set Id
+        // for (let i = 0; i < cleanArticle.sentences.length; i += 1) {
+        //   const sentenceObj = {
+        //     text: listSentencesStr[i],
+        //     _id: cleanArticle.sentences[i]._id,
+        //     allophones: cleanArticle.sentences[i].allophones,
+        //   };
+        //   listSentencesObj.push(sentenceObj);
+        // }
+        // setSentences(listSentencesObj);
       }
     }
     fetchData();
@@ -120,37 +121,19 @@ export default function CleanOption() {
   }, [cleanArticleId, reload]);
 
 
-  const showReplaceOption = (text, position, id, allophones, normalize, type) => {
-    const wordInfo = {
-      sentenceId: id,
-      allophones,
-      type,
-      position,
-      orig: text,
-      machineNormalize: normalize,
-      peopleNormalize: '',
-    };
-    setWord(wordInfo);
-    setReplaceVisible(true);
-  };
-
-  const showReplaceAllForm = (record) => {
-    const { loanwords, abbreviations } = record;
-    const loanwordsSelect = [];
-    const abbreviationsSelect = [];
-    for (const loanword of loanwords) {
-      loanwordsSelect.push(loanword.words);
-    }
-
-    for (const abbreviation of abbreviations) {
-      abbreviationsSelect.push(abbreviation.words);
-    }
-    const selectWordValue = {
-      loanwordsSelect,
-      abbreviationsSelect,
-    };
-    setSelectWord(selectWordValue);
-    setReplaceAllVisible(true);
+  const showReplaceOption = (word) => {
+    // const wordInfo = {
+    //   sentenceId: id,
+    //   allophones,
+    //   type,
+    //   position,
+    //   orig: text,
+    //   machineNormalize: normalize,
+    //   peopleNormalize: '',
+    // };
+    // setWord(wordInfo);
+    console.log(word);
+    // setReplaceVisible(true);
   };
 
   const onReplaceCreate = async (values) => {
@@ -175,157 +158,33 @@ export default function CleanOption() {
         input_type: 'TEXT',
         request_id: 'dec0f360-959e-11ea-b171-9973230931a1',
         output_type: 'ALLOPHONES',
-        call_back: `https://c6f6371e.ngrok.io/get-allophones-of-words?sentenceId=${sentenceId}&position=${position}&orig=${orig}&type=${type}`,
+        call_back: `https://ef4739fcbeeb.ngrok.io/get-allophones-of-words?sentenceId=${sentenceId}&position=${position}&orig=${orig}&type=${type}`,
       },
     });
     console.log(data);
     setTimeout(() => {
       setReload(!reload);
       openNotification('success', message.NORMALIZE_SUCCESS);
-    }, 2000);
+    }, 3000);
 
-    setReplaceVisible(false);
+    // setReplaceVisible(false);
   };
 
-  const onReplaceAllCreate = (values, type, secondWord) => {
-    console.log(values);
-    console.log(type);
-    console.log(secondWord);
-    setSelectWord(init.INIT_WORD_SELECT);
-    setReplaceAllVisible(false);
-  };
-
-  const getIndexOfWords = (text, words, listLoanwords, listAbbreviations) => {
-    for (const loanword of listLoanwords) {
-      if (loanword.orig !== words.toLowerCase()
-      && !words.toLowerCase().includes(loanword.orig)) {
-        text = text.toLowerCase().replace(loanword.orig, ' ');
-      }
-    }
-    for (const abbreviation of listAbbreviations) {
-      if (abbreviation.orig !== words.toLowerCase()
-      && !words.toLowerCase().includes(abbreviation.orig)) {
-        text = text.toLowerCase().replace(abbreviation.orig, ' ');
-      }
-    }
-    let i = 0;
-    console.log(text);
-    for (
-      let index = text.indexOf(words.toLowerCase());
-      index >= 0;
-      index = text.indexOf(words.toLowerCase(), index + 1)
-    ) {
-      i += 1;
-    }
-
-    return i;
-  };
-
-
-  const showArticleText = (cleanArticle) => {
-    const sentences1 = cleanArticle.sentences;
-    const highlights = [];
-    const listLoanwords = [];
-    const listAbbreviations = [];
-    sentences1.forEach((sentence) => {
-      const { allophones } = sentence;
-      const $ = cheerio.load(allophones, { xmlMode: true, decodeEntities: false });
-      const $mtu = cheerio.load($.html($('mtu')));
-      $mtu('body')
-        .children()
-      // eslint-disable-next-line func-names
-        .each(function () {
-          if ($(this).attr('nsw') === 'abbreviation') {
-            const abbreviation = {
-              type: 'abbreviation',
-              sentenceId: sentence._id,
-              orig: $(this).attr('orig'),
-              normalize: $(this).children().text().trim()
-                .replace(/\s\s+/g, ' ')
-                .replace(/\t/g, ' ')
-                .replace(/\n/g, ' '),
-            };
-            listAbbreviations.push(abbreviation);
-          }
-          if ($(this).attr('nsw') === 'loanword') {
-            const loanword = {
-              type: 'loanword',
-              sentenceId: sentence._id,
-              orig: $(this).attr('orig'),
-              normalize: $(this).children().text().trim()
-                .replace(/\s\s+/g, ' ')
-                .replace(/\t/g, ' ')
-                .replace(/\n/g, ' '),
-            };
-            listLoanwords.push(loanword);
-          }
-        });
-      for (const loanword of listLoanwords) {
-        highlights.push(loanword.orig);
-      }
-      for (const abbreviation of listAbbreviations) {
-        highlights.push(abbreviation.orig);
-      }
-    });
-    const getNormalize = (text, sentenceId) => {
-      let normalize = '';
-      for (const loanword of listLoanwords) {
-        if (loanword.orig === text.toLowerCase() && loanword.sentenceId === sentenceId) {
-          normalize = loanword.normalize;
-        }
-      }
-      for (const abbreviation of listAbbreviations) {
-        if (abbreviation.orig.toLowerCase() === text.toLowerCase()
-         && abbreviation.sentenceId === sentenceId) {
-          normalize = abbreviation.normalize;
-        }
-      }
-      return normalize;
-    };
-
-    const getType = (text) => {
-      let type = '';
-      for (const loanword of listLoanwords) {
-        if (loanword.orig === text.toLowerCase()) {
-          type = loanword.type;
-        }
-      }
-      for (const abbreviation of listAbbreviations) {
-        if (abbreviation.orig.toLowerCase() === text.toLowerCase()) {
-          type = abbreviation.type;
-        }
-      }
-      return type;
-    };
-    if (sentences) {
-      return sentences.map((sentence, index) => (
-        <div key={index} style={{ padding: 10 }}>
-          <Highlighter
-            style={{ fontFamily: 'Montserrat', fontSize: 13 }}
-            highlightStyle={{ backgroundColor: 'rgba(0, 128, 0, 0.42)' }}
-            searchWords={highlights}
-            textToHighlight={sentence.text}
-            onPressHighlightedText={
-              (text, position) => showReplaceOption(text,
-                getIndexOfWords(sentence.text.substring(0, position),
-                  text, listLoanwords, listAbbreviations),
-                sentence._id,
-                sentence.allophones,
-                getNormalize(text, sentence._id),
-                getType(text))
-            }
-          />
-        </div>
-      ));
-    }
-    return '';
-  };
+  // const onReplaceAllCreate = (values, type, secondWord) => {
+  //   console.log(values);
+  //   console.log(type);
+  //   console.log(secondWord);
+  //   setSelectWord(init.INIT_WORD_SELECT);
+  //   setReplaceAllVisible(false);
+  // };
 
   const showCleanText = (cleanArticle) => {
     const { sentences } = cleanArticle;
     return sentences.map((sentence) => {
       const { allophones } = sentence;
       const $ = cheerio.load(allophones, { xmlMode: true, decodeEntities: false });
+      const $phrase = cheerio.load($.html($('phrase')));
+      const words = [];
       const $mtu = cheerio.load($.html($('mtu')));
       const listLoanwords = [];
       const listAbbreviations = [];
@@ -365,39 +224,174 @@ export default function CleanOption() {
       for (const abbreviation of listAbbreviations) {
         highlights.push(abbreviation.normalize);
       }
-      // const getOrigin = (text) => {
-      //   let orig = '';
-      //   for (const loanword of listLoanwords) {
-      //     if (loanword.orig === text) {
-      //       orig = loanword.orig;
-      //     }
-      //   }
-      //   for (const abbreviation of listAbbreviations) {
-      //     if (abbreviation.orig === text) {
-      //       orig = abbreviation.orig;
-      //     }
-      //   }
-      //   return orig;
-      // };
-      // console.log(listLoanwords);
-      // console.log(listAbbreviations);
+      $phrase('body').children().each(function () {
+        $(this).children().each(function () {
+          if ($(this).get(0).name === 'mtu') {
+            // console.log($(this).attr('orig'));
+            // words.push($(this).text().trim().replace(/\s+/g, ' '));
+            if ($(this).find('mtu').length !== 0) {
+              $(this).children().each(function () {
+                if ($(this).get(0).name === 'mtu') {
+                  words.push($(this).text().trim().replace(/\s+/g, ' '));
+                } else {
+                  words.push($(this).text().trim().replace(/\s+/g, ' '));
+                }
+              });
+            } else {
+              words.push($(this).text().trim().replace(/\s+/g, ' '));
+            }
+          } else {
+            words.push($(this).text().trim().replace(/\s+/g, ' '));
+          }
+        });
+      });
       return (
         <div key={sentence.sentenceId} style={{ padding: 10 }}>
-          <Highlighter
-            style={{ fontFamily: 'Montserrat', fontSize: 13 }}
-            highlightStyle={{
-              color: 'red',
-              padding: '3px 10px',
-              background: 'yellow',
-              fontWeight: 600,
-              margin: '0 5px',
-            }}
-            searchWords={highlights}
-            textToHighlight={sentence.text.trim()}
-            onPressHighlightedText={
-              (text) => console.log(text, sentence._id)
+          {words.map((word, index) => {
+            if (highlights.includes(word)) {
+              return (
+                // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+                <span
+                  key={index}
+                  style={{
+                    color: 'white',
+                    background: '#208ef0',
+                    paddingLeft: '4px',
+                    margin: '4px',
+                    fontWeight: 400,
+                  }}
+                >
+                  {word}
+                  {' '}
+                </span>
+              );
             }
-          />
+            return (
+              <span key={index}>
+                {word}
+                {' '}
+              </span>
+            );
+          })}
+        </div>
+      );
+    });
+  };
+
+
+  const showArticleText = (cleanArticle) => {
+    const { sentences } = cleanArticle;
+    return sentences.map((sentence) => {
+      const { allophones } = sentence;
+      const $ = cheerio.load(allophones, { xmlMode: true, decodeEntities: false });
+      const $phrase = cheerio.load($.html($('phrase')));
+      const words = [];
+      const $mtu = cheerio.load($.html($('mtu')));
+      const listLoanwords = [];
+      const listAbbreviations = [];
+      $mtu('body')
+        .children()
+      // eslint-disable-next-line func-names
+        .each(function () {
+          if ($(this).attr('nsw') === 'abbreviation') {
+            const abbreviation = {
+              // type: 'abbreviation',
+              // index,
+              orig: $(this).attr('orig'),
+              normalize: $(this).children().text().trim()
+                .replace(/\s\s+/g, ' ')
+                .replace(/\t/g, ' ')
+                .replace(/\n/g, ' '),
+            };
+            listAbbreviations.push(abbreviation);
+          }
+          if ($(this).attr('nsw') === 'loanword') {
+            const loanword = {
+              // type: 'loanword',
+              // index,
+              orig: $(this).attr('orig'),
+              normalize: $(this).children().text().trim()
+                .replace(/\s\s+/g, ' ')
+                .replace(/\t/g, ' ')
+                .replace(/\n/g, ' '),
+            };
+            listLoanwords.push(loanword);
+          }
+        });
+      const highlights = [];
+      for (const loanword of listLoanwords) {
+        highlights.push(loanword.orig);
+      }
+      for (const abbreviation of listAbbreviations) {
+        highlights.push(abbreviation.orig);
+      }
+      $phrase('body').children().each(function () {
+        $(this).children().each(function () {
+          if ($(this).get(0).name === 'mtu') {
+            if ($(this).find('mtu').length !== 0) {
+              $(this).children().each(function () {
+                if ($(this).get(0).name === 'mtu') {
+                  const word = {
+                    type: $(this).attr('nsw'),
+                    word: $(this).attr('orig'),
+                  };
+                  words.push(word);
+                } else {
+                  const word = {
+                    type: 'normal',
+                    word: $(this).text().trim().replace(/\s+/g, ' '),
+                  };
+                  words.push(word);
+                  // words.push($(this).text().trim().replace(/\s+/g, ' '));
+                }
+              });
+            } else {
+              const word = {
+                type: $(this).attr('nsw'),
+                word: $(this).attr('orig'),
+              };
+              words.push(word);
+            }
+          } else {
+            const word = {
+              type: 'normal',
+              word: $(this).text().trim().replace(/\s+/g, ' '),
+            };
+            words.push(word);
+          }
+        });
+      });
+      return (
+        <div key={sentence.sentenceId} style={{ padding: 10 }}>
+          {words.map((word, index) => {
+            const orig = word.word;
+            const { type } = word;
+            if (highlights.includes(word.word)) {
+              return (
+                // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+                <span
+                  key={index}
+                  style={{
+                    color: 'white',
+                    background: '#ee4035',
+                    margin: '4px',
+                    paddingLeft: '4px',
+                    fontWeight: 400,
+                  }}
+                  onClick={() => props.history.push(`/dashboard/clean-text/${cleanArticle._id}/${type}/${orig}`)}
+                >
+                  {word.word}
+                  {' '}
+                </span>
+              );
+            }
+            return (
+              <span key={index}>
+                {word.word}
+                {' '}
+              </span>
+            );
+          })}
         </div>
       );
     });
@@ -416,14 +410,6 @@ export default function CleanOption() {
           Clean Option
         </Breadcrumb.Item>
       </Breadcrumb>
-      <Col span={24}>
-        <Button
-          onClick={() => showReplaceAllForm(cleanArticle)}
-          style={{ marginBottom: '15px' }}
-        >
-          Replace All
-        </Button>
-      </Col>
       <Row gutter={16}>
         <Col span={12}>
           {showArticleText(cleanArticle)}
@@ -432,10 +418,10 @@ export default function CleanOption() {
           {showCleanText(cleanArticle)}
         </Col>
       </Row>
-      <ReplaceForm
+      {/* <ReplaceForm
         visible={replaceVisible}
         onCreate={onReplaceCreate}
-        word={word}
+        // word={word}
         onCancel={() => setReplaceVisible(false)}
       />
       <ReplaceAllForm
@@ -443,7 +429,7 @@ export default function CleanOption() {
         onCreate={onReplaceAllCreate}
         selectWord={selectWord}
         onCancel={() => setReplaceAllVisible(false)}
-      />
+      /> */}
     </div>
   );
 }
