@@ -2,12 +2,12 @@
 import React, { useEffect, useState } from 'react';
 
 import { Tabs } from 'antd';
-// import renderHTML from 'react-render-html';
+// import renderHTML from 'react-render-article';
 import Axios from 'axios';
 
 const { TabPane } = Tabs;
 export default function Preview({ content }) {
-  const [html, setHtml] = useState();
+  const [article, setArticle] = useState();
   function callback(key) {
     console.log(key);
   }
@@ -18,7 +18,7 @@ export default function Preview({ content }) {
       if (content) {
         const data = await Axios.post('http://localhost:8000/crawl/article', content);
         if (!ignore) {
-          setHtml(data.data);
+          setArticle(data.data);
         }
       }
     }
@@ -27,8 +27,8 @@ export default function Preview({ content }) {
   }, [content]);
 
   // const renderPreview = () => {
-  //   if (html) {
-  //     return renderHTML(`${html}`);
+  //   if (article) {
+  //     return renderHTML(`${article}`);
   //   }
   //   return renderHTML('<b>Have no content</b>');
   // };
@@ -36,24 +36,24 @@ export default function Preview({ content }) {
     <Tabs defaultActiveKey="1" onChange={callback}>
       <TabPane tab="Preview" key="1">
         {
-          html && (
+          article && (
             <div>
               <b>Title:</b>
-                {html.title && html.title}
+                {article.title && article.title}
               <br />
               <b>Description:</b>
-                {html.sapo && html.sapo}
+                {article.sapo && article.sapo}
               <br />
               <b>Tags:</b>
-                {html.tags && html.tags.join(', ')}
+                {article.tags && article.tags.join(', ')}
               <br />
               <b>Thumbnail:</b>
               <br />
-              <img src={html.thumbnail} />
+              <img src={article.thumbnail} />
               <br />
               <b>Images:</b>
               <br />
-                {html.images.map((image) => (
+                {article.images.map((image) => (
                   <img key={image} src={image} />
                 ))}
               <br />
@@ -62,7 +62,7 @@ export default function Preview({ content }) {
         }
       </TabPane>
       <TabPane tab="Text" key="2">
-        {html && `${html.sapo}\n\n${html.text}`}
+        {article && `${article.sapo}\n\n${article.text}`}
       </TabPane>
     </Tabs>
   );

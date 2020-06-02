@@ -4,14 +4,14 @@ import { css } from 'emotion';
 import {
   Breadcrumb, Table, Tag, Button,
 } from 'antd';
-import { PlusCircleOutlined } from '@ant-design/icons';
+import { PlusCircleOutlined, FileSearchOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
 
 const useStyles = makeStyles(() => ({
   root: {
     width: '100%',
-    maxHeight: 440,
+    maxHeight: 400,
     fontFamily: 'Montserrat',
   },
 }));
@@ -34,15 +34,17 @@ export default function CleanText(props) {
 
   const columns = [
     {
-      title: 'Website',
+      title: 'Đầu báo',
       dataIndex: 'article',
+      width: '15%',
       key: 'article',
       render: (value) => value.website.name,
     },
     {
-      title: 'Category',
+      title: 'Chuyên mục',
       dataIndex: 'article',
       key: 'article',
+      width: '20%',
       render: (value) => (
         <span>
           {value.category.map((caegory) => (
@@ -54,13 +56,43 @@ export default function CleanText(props) {
       ),
     },
     {
-      title: 'Title',
+      title: 'Tiêu đề',
       dataIndex: 'article',
       key: 'article',
       render: (value) => value.title,
     },
     {
-      title: 'Actions',
+      title: 'Trạng thái',
+      dataIndex: 'article',
+      key: 'article',
+      render: (value) => {
+        const { status } = value;
+        if (status === 1) {
+          return 'Đã thu thập';
+        }
+        if (status === 2) {
+          return 'Chuẩn hoá máy lỗi';
+        }
+        if (status === 3) {
+          return 'Đã chuẩn hoá máy';
+        }
+        if (status === 4) {
+          return 'Đang chuẩn hoá tay';
+        }
+        if (status === 5) {
+          return 'Đã chuẩn hoá tay';
+        }
+        if (status === 6) {
+          return 'Đang chuyển audio';
+        }
+        if (status === 7) {
+          return 'Chuyển audio lỗi';
+        }
+        return 'Đã chuyển audio';
+      },
+    },
+    {
+      title: 'Hành động',
       key: 'actions',
       width: '20%',
       align: 'center',
@@ -70,6 +102,7 @@ export default function CleanText(props) {
             type="primary"
             // eslint-disable-next-line no-underscore-dangle
             onClick={() => props.history.push(`/dashboard/clean-text/${record._id}`)}
+            icon={<FileSearchOutlined />}
           >
             Chi tiết
           </Button>
@@ -109,14 +142,14 @@ export default function CleanText(props) {
         style={{ marginBottom: 15 }}
         icon={<PlusCircleOutlined />}
       >
-        Add article
+        Thêm bài báo
       </Button>
       <Table
         className={tableCSS}
         columns={columns}
         dataSource={data}
         bordered
-        scroll={{ y: 490 }}
+        scroll={{ y: 400 }}
       />
     </div>
   );

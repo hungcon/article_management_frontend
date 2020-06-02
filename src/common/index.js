@@ -9,4 +9,5 @@ export const message = {
   RUN_SUCCESS: 'Chạy thu thập thành công',
   RERUN_SUCCESS: 'Chạy lại lịch thành công',
   NORMALIZE_SUCCESS: 'Chuẩn hoá từ thành công',
+  ALERT: 'Bạn phải nhập cách đọc',
 };

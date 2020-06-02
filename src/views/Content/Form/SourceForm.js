@@ -1,7 +1,7 @@
 /* eslint-disable prefer-promise-reject-errors */
 import React, { useState, useEffect } from 'react';
 import {
-  Modal, Form, Switch, Select,
+  Modal, Form, Select, Checkbox,
 } from 'antd';
 import { isValidCron } from 'cron-validator';
 import axios from 'axios';
@@ -49,21 +49,21 @@ const SourceForm = ({
     <Select mode="tags" style={{ width: '100%' }} tokenSeparators={[',']}>
       {children.map((tag) => {
         if (tag === '0 */1 * * * *') {
-          return <Option key={tag} value={tag}>Every 1 minute</Option>;
+          return <Option key={tag} value={tag}>Mỗi 1 phút</Option>;
         }
         if (tag === '0 */5 * * * *') {
-          return <Option key={tag} value={tag}>Every 5 minute</Option>;
+          return <Option key={tag} value={tag}>Mỗi 5 phút</Option>;
         }
         if (tag === '0 */10 * * * *') {
-          return <Option key={tag} value={tag}>Every 10 minute</Option>;
+          return <Option key={tag} value={tag}>Mỗi 10 phút</Option>;
         }
         if (tag === '0 */15 * * * *') {
-          return <Option key={tag} value={tag}>Every 15 minute</Option>;
+          return <Option key={tag} value={tag}>Mỗi 15 phút</Option>;
         }
         if (tag === '0 */30 * * * *') {
-          return <Option key={tag} value={tag}>Every 30 minute</Option>;
+          return <Option key={tag} value={tag}>Mỗi 30 phút</Option>;
         }
-        return <Option key={tag} value={tag}>Every 1 hour</Option>;
+        return <Option key={tag} value={tag}>Mỗi 1 tiếng</Option>;
       })}
       {init.INIT_SCHEDULES.scheduleDefault
         .map((tag) => children.map((childrenTag) => {
@@ -117,7 +117,8 @@ const SourceForm = ({
           website: record.website.name,
           category: record.category.name,
           schedules: record.schedules,
-          status: record.status === '01',
+          autoSynthetic: record.autoSynthetic === '01',
+          turnOnSchedule: record.turnOnSchedule === '01',
         }}
       >
         <Form.Item
@@ -178,8 +179,22 @@ const SourceForm = ({
         >
           {renderSelectTag(record.schedules)}
         </Form.Item>
-        <Form.Item name="status" label="Bật lịch" valuePropName="checked">
+        {/* <Form.Item name="turnOnSchedule" label="Bật lịch" valuePropName="checked">
           <Switch />
+        </Form.Item> */}
+        <Form.Item
+          name="autoSynthetic"
+          label="Tự động tổng hợp"
+          valuePropName="checked"
+        >
+          <Checkbox />
+        </Form.Item>
+        <Form.Item
+          name="turnOnSchedule"
+          label="Bật lịch chạy"
+          valuePropName="checked"
+        >
+          <Checkbox />
         </Form.Item>
       </Form>
     </Modal>

@@ -17,6 +17,8 @@ import axios from 'axios';
 import {
   useParams,
 } from 'react-router-dom';
+import openNotification from '../../Notifications';
+import { message } from '../../../common';
 
 
 const useStyles = makeStyles(() => ({
@@ -36,6 +38,7 @@ export default function NormalizeWord(props) {
   const classes = useStyles();
   const { cleanArticleId, word, type } = useParams();
   const [cleanArticle, setCleanArticle] = useState();
+  const [articleId, setArticleId] = useState();
   const [contexts, setContexts] = useState([]);
   const [expansion, setExpansion] = useState();
   const [isChange, setIsChange] = useState();
@@ -46,11 +49,13 @@ export default function NormalizeWord(props) {
     setIsChange(true);
   };
 
-  const handleChangeExpansionRow = (e, sentenceId, word) => {
+  const handleChangeExpansionRow = (e, sentenceId, word, index) => {
     setContexts(
       contexts.map((ctx) => {
-        if (ctx.id === sentenceId && ctx.word === word) {
-          return { ...ctx, expansion: e.target.value, isChange: true };
+        if (ctx.id === sentenceId && ctx.index === index) {
+          return {
+            ...ctx, expansion: e.target.value, isChange: true, word, type,
+          };
         }
         return ctx;
       }),
@@ -58,34 +63,58 @@ export default function NormalizeWord(props) {
   };
 
   const handleApply = () => {
-    setContexts(
-      contexts.map((ctx) => ({ ...ctx, expansion, isChange })),
-    );
+    if (expansion === undefined) {
+      openNotification('warning', message.ALERT);
+    } else {
+      setContexts(
+        contexts.map((ctx) => ({
+          ...ctx, expansion, isChange, word, type,
+        })),
+      );
+    }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const listExpansionChange = contexts.filter((ctx) => ctx.isChange === true);
-    console.log(listExpansionChange);
+    const { data } = await axios.post('http://localhost:8000/normalize-word', { listExpansionChange, articleId });
+    console.log(data);
   };
 
-  const getExpansionOfWord = (allophones, word) => {
-    const $ = cheerio.load(allophones, { xmlMode: true, decodeEntities: false });
-    const $mtu = cheerio.load($.html($('mtu')));
-    let expansion = '';
-    $mtu('body')
-      .children()
-      .each(function () {
-        if ($(this).attr('nsw') === type && $(this).attr('orig') === word) {
-          expansion = $(this).text().trim().replace(/\s+/g, ' ');
-        }
-      });
-    return expansion;
+  const handleFinish = async () => {
+    // const { data } = await axios.post('http://localhost:8000/finish-normalize', { cleanArticleId });
+    // console.log(data);
   };
-
 
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
+      const getExpansionOfWord = (allophones, word) => {
+        const $ = cheerio.load(allophones, { xmlMode: true, decodeEntities: false });
+        const $mtu = cheerio.load($.html($('mtu')));
+        let expansion = '';
+        $mtu('body')
+          .children()
+          .each(function () {
+            if ($(this).attr('nsw') === type && $(this).attr('orig') === word) {
+              expansion = $(this).text().trim().replace(/\s+/g, ' ');
+            }
+          });
+        return expansion;
+      };
+
+      const getNUmberOfWord = (allophones, word) => {
+        const $ = cheerio.load(allophones, { xmlMode: true, decodeEntities: false });
+        const $mtu = cheerio.load($.html($('mtu')));
+        let number = 0;
+        $mtu('body')
+          .children()
+          .each(function () {
+            if ($(this).attr('nsw') === type && $(this).attr('orig') === word) {
+              number += 1;
+            }
+          });
+        return number;
+      };
       const cleanArticle = (await axios.post('http://localhost:8000/get-clean-article-by-id', { cleanArticleId })).data;
       if (!ignore) {
         const { sentences } = cleanArticle;
@@ -106,24 +135,41 @@ export default function NormalizeWord(props) {
         });
         const contexts = [];
         for (let i = 0; i < listSentences.length; i += 1) {
-          const context = {
-            id: listSentences[i]._id,
-            key: i,
-            sentence: listSentences[i].allophones,
-            expansion: getExpansionOfWord(listSentences[i].allophones, word),
-            isChange: false,
-          };
-          contexts.push(context);
+          const numberOfWords = getNUmberOfWord(listSentences[i].allophones, word);
+          if (numberOfWords > 1) {
+            for (let j = 0; j < numberOfWords; j += 1) {
+              const context = {
+                id: listSentences[i]._id,
+                key: i,
+                allophones: listSentences[i].allophones,
+                expansion: getExpansionOfWord(listSentences[i].allophones, word),
+                isChange: false,
+                index: j,
+              };
+              contexts.push(context);
+            }
+          } else {
+            const context = {
+              id: listSentences[i]._id,
+              key: i,
+              allophones: listSentences[i].allophones,
+              expansion: getExpansionOfWord(listSentences[i].allophones, word),
+              isChange: false,
+              index: 0,
+            };
+            contexts.push(context);
+          }
         }
         setContexts(contexts);
         setCleanArticle(cleanArticle);
+        setArticleId(cleanArticle.article._id);
       }
     }
     fetchData();
     return () => { ignore = true; };
-  }, []);
+  }, [cleanArticleId, type, word]);
 
-  const getSentences = (allophones) => {
+  const getSentences = (allophones, position) => {
     const $ = cheerio.load(allophones, { xmlMode: true, decodeEntities: false });
     const $phrase = cheerio.load($.html($('phrase')));
     const words = [];
@@ -144,7 +190,6 @@ export default function NormalizeWord(props) {
                   word: $(this).text().trim().replace(/\s+/g, ' '),
                 };
                 words.push(word);
-                // words.push($(this).text().trim().replace(/\s+/g, ' '));
               }
             });
           } else {
@@ -163,10 +208,20 @@ export default function NormalizeWord(props) {
         }
       });
     });
+    let i = 0;
+    for (const temp of words) {
+      if (temp.type === type && temp.word === word) {
+        i += 1;
+      }
+      if (i === (position + 1)) {
+        temp.mark = true;
+        break;
+      }
+    }
     return (
       <div style={{ padding: 10 }}>
         {words.map((temp, index) => {
-          if ([word].includes(temp.word)) {
+          if (temp.word === word && temp.type === type && temp.mark) {
             return (
               // eslint-disable-next-line jsx-a11y/no-static-element-interactions
               <span
@@ -206,8 +261,8 @@ export default function NormalizeWord(props) {
       title: 'Câu',
       key: 2,
       width: 600,
-      dataIndex: 'sentence',
-      render: (value) => getSentences(value),
+      dataIndex: 'allophones',
+      render: (value, record) => getSentences(value, record.index),
     },
     {
       title: 'Cách đọc',
@@ -218,7 +273,7 @@ export default function NormalizeWord(props) {
         <Input
           style={{ width: 150 }}
           value={record.expansion}
-          onChange={(e) => handleChangeExpansionRow(e, record.id, record.word)}
+          onChange={(e) => handleChangeExpansionRow(e, record.id, word, record.index)}
         />
       ),
     },
@@ -274,11 +329,14 @@ export default function NormalizeWord(props) {
         marginTop: '30px',
       }}
       >
-        <Button style={{ marginRight: 10 }} type="primary" onClick={() => props.history.push(`/dashboard/clean-text/${cleanArticle._id}`)}>
+        <Button style={{ marginRight: 10 }} onClick={() => props.history.push(`/dashboard/clean-text/${cleanArticle._id}`)}>
           Quay lại
         </Button>
-        <Button type="danger" onClick={handleSave}>
+        <Button style={{ marginRight: 10 }} type="danger" onClick={handleSave}>
           Lưu
+        </Button>
+        <Button style={{ marginRight: 10 }} type="primary" onClick={handleFinish}>
+          Hoàn thành
         </Button>
       </ButtonGroup>
     </div>

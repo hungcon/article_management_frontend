@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/media-has-caption */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable no-param-reassign */
 /* eslint-disable func-names */
@@ -6,7 +7,7 @@
 /* eslint-disable no-shadow */
 import React, { useState, useEffect } from 'react';
 import {
-  Row, Col, Button, Breadcrumb,
+  Row, Col, Breadcrumb, Button,
 } from 'antd';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
@@ -15,12 +16,7 @@ import {
 } from 'react-router-dom';
 // import Tokenizer from 'sentence-tokenizer';
 import cheerio from 'cheerio';
-// import Highlighter from './Highlighter';
-// import ReplaceForm from './Form/ReplaceForm';
-// import ReplaceAllForm from './Form/ReplaceAllForm';
-// import { init } from '../../common/init';
-import { message } from '../../common';
-import openNotification from '../Notifications';
+
 
 // const tokenizer = new Tokenizer('Chuck');
 const useStyles = makeStyles(() => ({
@@ -83,100 +79,19 @@ export default function CleanOption(props) {
       },
     },
   );
-  const [reload, setReload] = useState(false);
-  // const [sentences, setSentences] = useState();
-  // const [replaceVisible, setReplaceVisible] = useState(false);
-  // const [replaceAllVisible, setReplaceAllVisible] = useState(false);
-  // const [word, setWord] = useState(init.INIT_WORD_INFO);
-  // const [selectWord, setSelectWord] = useState(init.INIT_WORD_SELECT);
-
+  const [audio, setAudio] = useState();
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
       const cleanArticle = (await axios.post('http://localhost:8000/get-clean-article-by-id', { cleanArticleId })).data;
       if (!ignore) {
         setCleanArticle(cleanArticle);
-        // const { data } = await axios.post('http://baonoi-tts.vbeecore.com/api/v1/tts', {
-        //   function_call_invoke:
-        //   'arn:aws:lambda:ap-southeast-1:279297658413:function:serverless-split-release-hello',
-        //   text: cleanArticle.article.text,
-        //   input_text: 'A',
-        // });
-        // const listSentencesStr = JSON.parse(data.message);
-        // const listSentencesObj = [];
-        // // set Id
-        // for (let i = 0; i < cleanArticle.sentences.length; i += 1) {
-        //   const sentenceObj = {
-        //     text: listSentencesStr[i],
-        //     _id: cleanArticle.sentences[i]._id,
-        //     allophones: cleanArticle.sentences[i].allophones,
-        //   };
-        //   listSentencesObj.push(sentenceObj);
-        // }
-        // setSentences(listSentencesObj);
+        setAudio(cleanArticle.linkAudio);
       }
     }
     fetchData();
     return () => { ignore = true; };
-  }, [cleanArticleId, reload]);
-
-
-  const showReplaceOption = (word) => {
-    // const wordInfo = {
-    //   sentenceId: id,
-    //   allophones,
-    //   type,
-    //   position,
-    //   orig: text,
-    //   machineNormalize: normalize,
-    //   peopleNormalize: '',
-    // };
-    // setWord(wordInfo);
-    console.log(word);
-    // setReplaceVisible(true);
-  };
-
-  const onReplaceCreate = async (values) => {
-    const {
-      orig,
-      type,
-      peopleNormalize, position, sentenceId,
-    } = values;
-
-    const { data } = await axios({
-      method: 'POST',
-      url: 'http://baonoi-tts.vbeecore.com/api/v1/tts',
-      data: {
-        function_call_invoke:
-          'arn:aws:lambda:ap-southeast-1:279297658413:function:serverless-tts-vbee-2020-04-26-tts',
-        input_text: peopleNormalize,
-        rate: 1,
-        voice: 'vbee-tts-voice-hn_male_manhdung_news_48k-h',
-        bit_rate: '128000',
-        user_id: '46030',
-        app_id: '5b8776d92942cc5b459928b5',
-        input_type: 'TEXT',
-        request_id: 'dec0f360-959e-11ea-b171-9973230931a1',
-        output_type: 'ALLOPHONES',
-        call_back: `https://ef4739fcbeeb.ngrok.io/get-allophones-of-words?sentenceId=${sentenceId}&position=${position}&orig=${orig}&type=${type}`,
-      },
-    });
-    console.log(data);
-    setTimeout(() => {
-      setReload(!reload);
-      openNotification('success', message.NORMALIZE_SUCCESS);
-    }, 3000);
-
-    // setReplaceVisible(false);
-  };
-
-  // const onReplaceAllCreate = (values, type, secondWord) => {
-  //   console.log(values);
-  //   console.log(type);
-  //   console.log(secondWord);
-  //   setSelectWord(init.INIT_WORD_SELECT);
-  //   setReplaceAllVisible(false);
-  // };
+  }, [cleanArticleId]);
 
   const showCleanText = (cleanArticle) => {
     const { sentences } = cleanArticle;
@@ -397,6 +312,11 @@ export default function CleanOption(props) {
     });
   };
 
+  const synthetic = async () => {
+    const { data } = await axios.post('http://localhost:8000/synthetic-article', { cleanArticleId });
+    console.log(data);
+  };
+
   return (
     <div className={classes.root}>
       <Breadcrumb style={{ marginBottom: 10 }}>
@@ -411,6 +331,18 @@ export default function CleanOption(props) {
         </Breadcrumb.Item>
       </Breadcrumb>
       <Row gutter={16}>
+        <Col span={24}>
+          {cleanArticle.linkAudio && (
+            <audio controls style={{ width: 650 }}>
+              <source src={`${audio}`} />
+            </audio>
+          )}
+        </Col>
+      </Row>
+      <Button type="primary" onClick={synthetic}>
+        Tổng hợp
+      </Button>
+      <Row gutter={16}>
         <Col span={12}>
           {showArticleText(cleanArticle)}
         </Col>
@@ -418,18 +350,6 @@ export default function CleanOption(props) {
           {showCleanText(cleanArticle)}
         </Col>
       </Row>
-      {/* <ReplaceForm
-        visible={replaceVisible}
-        onCreate={onReplaceCreate}
-        // word={word}
-        onCancel={() => setReplaceVisible(false)}
-      />
-      <ReplaceAllForm
-        visible={replaceAllVisible}
-        onCreate={onReplaceAllCreate}
-        selectWord={selectWord}
-        onCancel={() => setReplaceAllVisible(false)}
-      /> */}
     </div>
   );
 }

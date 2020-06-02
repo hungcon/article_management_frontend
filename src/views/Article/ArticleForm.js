@@ -1,3 +1,5 @@
+/* eslint-disable no-alert */
+/* eslint-disable no-restricted-globals */
 /* eslint-disable no-underscore-dangle */
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
@@ -5,6 +7,7 @@ import axios from 'axios';
 import {
   Form, Input, Button,
 } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import openNotification from '../Notifications';
 import { message } from '../../common';
@@ -25,6 +28,29 @@ export default function ArticleForm(props) {
     link: '',
     title: '',
   });
+
+  // const showDeleteConfirm = (id) => {
+  //   confirm({
+  //     title: 'Bạn có chắc chắn muốn xoá bài báo này không?',
+  //     // eslint-disable-next-line react/jsx-filename-extension
+  //     icon: <ExclamationCircleOutlined />,
+  //     okText: 'Có',
+  //     okType: 'danger',
+  //     cancelText: 'Không',
+  //     centered: true,
+  //     async onOk() {
+  //       const status = (await axios.post('http://localhost:8000/delete-valid-article', { id })).data;
+  //       if (status.status === 1) {
+  //         openNotification('success', message.DELETE_SUCCESS);
+  //         props.history.push('/dashboard/list-valid-articles');
+  //       } else {
+  //         openNotification('error', message.ERROR);
+  //       }
+  //     },
+  //     onCancel() {
+  //     },
+  //   });
+  // };
 
 
   useEffect(() => {
@@ -103,11 +129,14 @@ export default function ArticleForm(props) {
           />
         </Form.Item>
         <Form.Item>
-          <Button style={{ marginRight: 15 }} onClick={() => props.history.push('/dashboard/list-valid-articles')}>
-            Cancel
+          <Button
+            style={{ marginRight: 15 }}
+            onClick={() => props.history.push('/dashboard/list-valid-articles')}
+          >
+            Huỷ
           </Button>
-          <Button type="primary" htmlType="submit">
-            Update
+          <Button type="primary" htmlType="submit" icon={<EditOutlined />}>
+            Cập nhật
           </Button>
         </Form.Item>
       </Form>

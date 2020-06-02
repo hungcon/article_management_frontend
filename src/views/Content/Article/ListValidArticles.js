@@ -5,16 +5,13 @@
 /* eslint-disable no-shadow */
 import React, { useState, useEffect } from 'react';
 import {
-  Table, Tag, Form, Select, Button, Typography, Breadcrumb, DatePicker, Modal, Row, Col,
+  Table, Tag, Form, Select, Button, Typography, Breadcrumb, DatePicker, Row, Col,
 } from 'antd';
-import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+// import { EditOutlined } from '@ant-design/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { css } from 'emotion';
 import axios from 'axios';
-import openNotification from '../../Notifications';
-import { message } from '../../../common';
 
-const { confirm } = Modal;
 
 const { Option } = Select;
 const { Text } = Typography;
@@ -38,7 +35,6 @@ export default function ListValidArticles(props) {
   const [endDate, setEndDate] = useState();
   const [websites, setWebsites] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [reload, setReload] = useState(false);
 
   const listStatus = [
     {
@@ -138,37 +134,7 @@ export default function ListValidArticles(props) {
       fetchData();
     }
     return () => { ignore = true; };
-  }, [filters, startDate, endDate, reload]);
-
-
-  const showDeleteConfirm = (article) => {
-    confirm({
-      title: 'Are you sure delete this article?',
-      // eslint-disable-next-line react/jsx-filename-extension
-      icon: <ExclamationCircleOutlined />,
-      okText: 'Yes',
-      okType: 'danger',
-      cancelText: 'No',
-      centered: true,
-      async onOk() {
-        const status = (await axios.post('http://localhost:8000/delete-valid-article', { id: article._id })).data;
-        if (status.status === 1) {
-          setReload(!reload);
-          openNotification('success', message.DELETE_SUCCESS);
-        } else {
-          openNotification('error', message.ERROR);
-        }
-      },
-      onCancel() {
-      },
-    });
-  };
-
-  const openLinkAudio = async (articleId) => {
-    const { data } = await axios.post('http://localhost:8000/get-clean-article-by-article-id', { articleId });
-    const { linkAudio } = data;
-    window.open(`http://${linkAudio}`);
-  };
+  }, [filters, startDate, endDate]);
 
   const columns = [
     {
@@ -197,6 +163,13 @@ export default function ListValidArticles(props) {
       title: 'Tiêu đề',
       dataIndex: 'title',
       key: 'title',
+      render: (value, record) => (
+        <Typography
+          onClick={() => window.open(record.link)}
+        >
+          {value}
+        </Typography>
+      ),
     },
     {
       title: 'Trạng thái',
@@ -229,66 +202,40 @@ export default function ListValidArticles(props) {
         return 'Đã chuyển audio';
       },
     },
-    {
-      title: 'Hành động',
-      key: 'actions',
-      width: '30%',
-      align: 'center',
-      render: (value, record) => {
-        console.log(record);
-        return (
-          <div>
-            {record.status === 1 && (
-            <Button
-            // eslint-disable-next-line no-underscore-dangle
-              onClick={() => props.history.push(`/dashboard/list-valid-articles/${record._id}`)}
-              style={{ marginRight: 10 }}
-              icon={<EditOutlined />}
-            >
-              Cập nhật
-            </Button>
-            )}
-            {record.status === 2 && (
-            <Button
-            // eslint-disable-next-line no-underscore-dangle
-              onClick={() => props.history.push(`/dashboard/list-valid-articles/${record._id}`)}
-              style={{ marginRight: 10 }}
-              icon={<EditOutlined />}
-            >
-              Chuẩn hoá máy lại
-            </Button>
-            )}
-            {record.status === 3 && (
-            <Button
-            // eslint-disable-next-line no-underscore-dangle
-              onClick={() => props.history.push(`/dashboard/list-valid-articles/${record._id}`)}
-              style={{ marginRight: 10 }}
-              icon={<EditOutlined />}
-            >
-              Chuẩn hoá tay
-            </Button>
-            )}
-            {record.status === 8 && (
-            <Button
-            // eslint-disable-next-line no-underscore-dangle
-              onClick={() => openLinkAudio(record._id)}
-              style={{ marginRight: 10 }}
-              icon={<EditOutlined />}
-            >
-              Nghe thử
-            </Button>
-            )}
-            <Button
-              danger
-              onClick={() => showDeleteConfirm(record)}
-              icon={<DeleteOutlined />}
-            >
-              Xoá
-            </Button>
-          </div>
-        );
-      },
-    },
+    // {
+    //   title: 'Hành động',
+    //   key: 'actions',
+    //   width: '20%',
+    //   align: 'center',
+    //   render: (value, record) => (
+    //     <div>
+    //       {record.status === 2 && (
+    //       <Button
+    //         onClick={() => console.log(record)}
+    //         style={{ marginRight: 10 }}
+    //       >
+    //         Chuẩn hoá máy lại
+    //       </Button>
+    //       )}
+    //       {record.status === 3 && (
+    //       <Button
+    //         onClick={() => console.log(record)}
+    //         style={{ marginRight: 10 }}
+    //       >
+    //         Tổng hợp
+    //       </Button>
+    //       )}
+    //       {record.status === 7 && (
+    //       <Button
+    //         onClick={() => console.log(record)}
+    //         style={{ marginRight: 10 }}
+    //       >
+    //         Tổng hợp lại
+    //       </Button>
+    //       )}
+    //     </div>
+    //   ),
+    // },
   ];
   const tableCSS = css({
     backgroundColor: 'white',
