@@ -80,11 +80,6 @@ export default function NormalizeWord(props) {
     console.log(data);
   };
 
-  const handleFinish = async () => {
-    // const { data } = await axios.post('http://localhost:8000/finish-normalize', { cleanArticleId });
-    // console.log(data);
-  };
-
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
@@ -329,14 +324,11 @@ export default function NormalizeWord(props) {
         marginTop: '30px',
       }}
       >
-        <Button style={{ marginRight: 10 }} onClick={() => props.history.push(`/dashboard/clean-text/${cleanArticle._id}`)}>
+        <Button style={{ marginRight: 10 }} onClick={() => props.history.push(`/dashboard/clean-article/${cleanArticle._id}`)}>
           Quay lại
         </Button>
         <Button style={{ marginRight: 10 }} type="danger" onClick={handleSave}>
           Lưu
-        </Button>
-        <Button style={{ marginRight: 10 }} type="primary" onClick={handleFinish}>
-          Hoàn thành
         </Button>
       </ButtonGroup>
     </div>

@@ -7,7 +7,7 @@
 /* eslint-disable no-shadow */
 import React, { useState, useEffect } from 'react';
 import {
-  Row, Col, Breadcrumb, Button,
+  Row, Col, Breadcrumb, Button, Select,
 } from 'antd';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
@@ -16,6 +16,9 @@ import {
 } from 'react-router-dom';
 // import Tokenizer from 'sentence-tokenizer';
 import cheerio from 'cheerio';
+import { listVoice } from '../../common/voice';
+
+const { Option } = Select;
 
 
 // const tokenizer = new Tokenizer('Chuck');
@@ -79,14 +82,25 @@ export default function CleanOption(props) {
       },
     },
   );
-  const [audio, setAudio] = useState();
+  const [audioLink, setAudioLink] = useState();
+  const [voiceSelect, setVoiceSelect] = useState('vbee-tts-voice-hn_male_manhdung_news_48k-h');
+
+  const handleChange = (value) => {
+    setVoiceSelect(value);
+  };
+
+  const handleFinish = async () => {
+    const { data } = await axios.post('http://localhost:8000/finish-normalize', { cleanArticleId });
+    console.log(data);
+  };
+
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
       const cleanArticle = (await axios.post('http://localhost:8000/get-clean-article-by-id', { cleanArticleId })).data;
       if (!ignore) {
         setCleanArticle(cleanArticle);
-        setAudio(cleanArticle.linkAudio);
+        setAudioLink(cleanArticle.linkAudio);
       }
     }
     fetchData();
@@ -293,7 +307,7 @@ export default function CleanOption(props) {
                     paddingLeft: '4px',
                     fontWeight: 400,
                   }}
-                  onClick={() => props.history.push(`/dashboard/clean-text/${cleanArticle._id}/${type}/${orig}`)}
+                  onClick={() => props.history.push(`/dashboard/clean-article/${cleanArticle._id}/${type}/${orig}`)}
                 >
                   {word.word}
                   {' '}
@@ -313,7 +327,8 @@ export default function CleanOption(props) {
   };
 
   const synthetic = async () => {
-    const { data } = await axios.post('http://localhost:8000/synthetic-article', { cleanArticleId });
+    console.log(voiceSelect);
+    const { data } = await axios.post('http://localhost:8000/synthetic-article', { cleanArticleId, voiceSelect });
     console.log(data);
   };
 
@@ -324,24 +339,51 @@ export default function CleanOption(props) {
           Dashboard
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href="/dashboard/clean-text">Clean Text</a>
+          <a href="/dashboard/list-valid-articles">Valid Articles</a>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          Clean Option
+          Clean Article
         </Breadcrumb.Item>
       </Breadcrumb>
       <Row gutter={16}>
-        <Col span={24}>
-          {cleanArticle.linkAudio && (
-            <audio controls style={{ width: 650 }}>
-              <source src={`${audio}`} />
+        <Col span={8}>
+          {
+          cleanArticle.linkAudio && (
+            <audio controls style={{ width: 400 }}>
+              <source src={`${audioLink}`} />
             </audio>
-          )}
+          )
+          }
+        </Col>
+        <Col span={8}>
+          Chọn giọng
+          {': '}
+          <Select
+            defaultValue="vbee-tts-voice-hn_male_manhdung_news_48k-h"
+            style={{ width: 300, marginTop: 10 }}
+            onChange={handleChange}
+          >
+            {listVoice.map((voice) => (
+              <Option key={voice.key} value={voice.value}>{voice.name}</Option>
+            ))}
+          </Select>
+        </Col>
+        <Col span={8}>
+          <Button
+            style={{ marginRight: 10 }}
+            onClick={() => props.history.push('/dashboard/list-valid-articles')}
+          >
+            Quay lại
+          </Button>
+          <Button danger style={{ marginRight: 10 }} type="primary" onClick={handleFinish}>
+            Lưu & Hoàn thành
+          </Button>
+          <Button style={{ marginTop: 10, marginRight: 10 }} type="primary" onClick={synthetic}>
+            Tổng hợp
+          </Button>
         </Col>
       </Row>
-      <Button type="primary" onClick={synthetic}>
-        Tổng hợp
-      </Button>
+
       <Row gutter={16}>
         <Col span={12}>
           {showArticleText(cleanArticle)}

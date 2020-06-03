@@ -101,7 +101,7 @@ export default function CleanText(props) {
           <Button
             type="primary"
             // eslint-disable-next-line no-underscore-dangle
-            onClick={() => props.history.push(`/dashboard/clean-text/${record._id}`)}
+            onClick={() => props.history.push(`/dashboard/clean-article/${record._id}`)}
             icon={<FileSearchOutlined />}
           >
             Chi tiết
@@ -134,7 +134,7 @@ export default function CleanText(props) {
           Dashboard
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href="/dashboard/configuration">Clean Text</a>
+          <a href="/dashboard/configuration">Clean Article</a>
         </Breadcrumb.Item>
       </Breadcrumb>
       <Button

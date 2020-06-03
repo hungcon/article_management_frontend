@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable import/no-named-as-default */
@@ -7,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Table, Tag, Form, Select, Button, Typography, Breadcrumb, DatePicker, Row, Col,
 } from 'antd';
-// import { EditOutlined } from '@ant-design/icons';
+import { FileSearchOutlined, ReloadOutlined } from '@ant-design/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { css } from 'emotion';
 import axios from 'axios';
@@ -79,6 +80,17 @@ export default function ListValidArticles(props) {
     },
   ];
 
+  const reCleanArticle = async (articleId) => {
+    const result = await axios.post('http://localhost:8000/clean-article', { articleId });
+    console.log(result.data);
+  };
+
+  const reSyntheticArticle = async (cleanArticleId) => {
+    const result = await axios.post('http://localhost:8000/synthetic-article',
+      { cleanArticleId, voiceSelect: 'vbee-tts-voice-hn_male_manhdung_news_48k-h' });
+    console.log(result.data);
+  };
+
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
@@ -125,9 +137,6 @@ export default function ListValidArticles(props) {
       });
       const articleData = result.data;
       setCounts(articleData.length);
-      for (let i = 0; i < articleData.length; i += 1) {
-        articleData[i].key = i;
-      }
       setData(articleData);
     }
     if (!ignore) {
@@ -202,40 +211,52 @@ export default function ListValidArticles(props) {
         return 'Đã chuyển audio';
       },
     },
-    // {
-    //   title: 'Hành động',
-    //   key: 'actions',
-    //   width: '20%',
-    //   align: 'center',
-    //   render: (value, record) => (
-    //     <div>
-    //       {record.status === 2 && (
-    //       <Button
-    //         onClick={() => console.log(record)}
-    //         style={{ marginRight: 10 }}
-    //       >
-    //         Chuẩn hoá máy lại
-    //       </Button>
-    //       )}
-    //       {record.status === 3 && (
-    //       <Button
-    //         onClick={() => console.log(record)}
-    //         style={{ marginRight: 10 }}
-    //       >
-    //         Tổng hợp
-    //       </Button>
-    //       )}
-    //       {record.status === 7 && (
-    //       <Button
-    //         onClick={() => console.log(record)}
-    //         style={{ marginRight: 10 }}
-    //       >
-    //         Tổng hợp lại
-    //       </Button>
-    //       )}
-    //     </div>
-    //   ),
-    // },
+    {
+      title: 'Hành động',
+      key: 'actions',
+      width: '20%',
+      align: 'center',
+      render: (value, record) => (
+        <div>
+          {record.status === 2 && (
+          <Button
+            onClick={() => reCleanArticle(record._id)}
+            style={{ marginRight: 10, width: 165 }}
+            type="primary"
+            danger
+            icon={<ReloadOutlined />}
+          >
+            Chuẩn hoá lại
+          </Button>
+          )}
+          {(
+            record.status === 3
+            || record.status === 4
+            || record.status === 5
+            || record.status === 6
+            || record.status === 7
+            || record.status === 8)
+          && (
+          <Button
+            onClick={() => props.history.push(`/dashboard/clean-article/${record.cleanArticleId}`)}
+            style={{ marginRight: 10, width: 165 }}
+            type="primary"
+            icon={<FileSearchOutlined />}
+          >
+            Chi tiết
+          </Button>
+          )}
+          {record.status === 7 && (
+          <Button
+            onClick={() => reSyntheticArticle(record.cleanArticleId)}
+            style={{ marginRight: 10, width: 165 }}
+          >
+            Tổng hợp lại
+          </Button>
+          )}
+        </div>
+      ),
+    },
   ];
   const tableCSS = css({
     backgroundColor: 'white',
@@ -249,7 +270,6 @@ export default function ListValidArticles(props) {
     },
   });
   const onFinish = (values) => {
-    console.log(values);
     setFilters({
       website: values.website || '',
       category: values.category || '',

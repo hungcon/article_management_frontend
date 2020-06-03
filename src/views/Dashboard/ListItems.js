@@ -85,14 +85,14 @@ export default function ListItems(props) {
           <ListItemText primary="Thống kê" className={classes.text} />
         </ListItem>
       </NavLink>
-      <NavLink to="/dashboard/clean-text" className={classes.link} activeClassName={classes.active}>
+      {/* <NavLink to="/dashboard/clean-text" className={classes.link} activeClassName={classes.active}>
         <ListItem button className={clsx(props.open && classes.button)}>
           <ListItemIcon>
             <LayersIcon className={classes.icon} />
           </ListItemIcon>
           <ListItemText primary="Chuẩn hoá" className={classes.text} />
         </ListItem>
-      </NavLink>
+      </NavLink> */}
     </div>
   );
 }

@@ -5,7 +5,7 @@ import { Switch } from 'react-router-dom';
 import Configuration from '../../views/Content/Configuration';
 import ListValidArticles from '../../views/Content/Article/ListValidArticles';
 import ListInvalidArticles from '../../views/Content/Article/ListInvalidArticles';
-import CleanText from '../../views/Content/CleanText';
+import CleanArticle from '../../views/Content/CleanArticle';
 import CleanOption from '../../views/Content/CleanOption';
 import AddConfig from '../../views/Content/Configuration/AddConfig/AddConfig';
 import ArticleConfig from '../../views/Content/Configuration/ArticleConfig/ArticleConfig';
@@ -32,9 +32,9 @@ export default function ContentRoute() {
       <PrivateRoute path="/dashboard/list-valid-articles" exact component={ListValidArticles} />
       <PrivateRoute path="/dashboard/list-valid-articles/:articleId" exact component={ArticleForm} />
       <PrivateRoute path="/dashboard/list-invalid-articles" exact component={ListInvalidArticles} />
-      <PrivateRoute path="/dashboard/clean-text" exact component={CleanText} />
-      <PrivateRoute path="/dashboard/clean-text/:cleanArticleId" exact component={CleanOption} />
-      <PrivateRoute path="/dashboard/clean-text/:cleanArticleId/:type/:word" exact component={NormalizeWord} />
+      <PrivateRoute path="/dashboard/clean-text" exact component={CleanArticle} />
+      <PrivateRoute path="/dashboard/clean-article/:cleanArticleId" exact component={CleanOption} />
+      <PrivateRoute path="/dashboard/clean-article/:cleanArticleId/:type/:word" exact component={NormalizeWord} />
       <PrivateRoute path="/dashboard/add-article" exact component={AddArticle} />
       <PrivateRoute path="/dashboard/statistics" exact component={Statistics} />
     </Switch>
