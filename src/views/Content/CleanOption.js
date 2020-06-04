@@ -17,6 +17,8 @@ import {
 // import Tokenizer from 'sentence-tokenizer';
 import cheerio from 'cheerio';
 import { listVoice } from '../../common/voice';
+import { message } from '../../common';
+import openNotification from '../Notifications';
 
 const { Option } = Select;
 
@@ -92,6 +94,9 @@ export default function CleanOption(props) {
   const handleFinish = async () => {
     const { data } = await axios.post('http://localhost:8000/finish-normalize', { cleanArticleId });
     console.log(data);
+    if (data.status === 1) {
+      openNotification('success', message.NORMALIZE_SUCCESS);
+    }
   };
 
   useEffect(() => {
@@ -327,9 +332,10 @@ export default function CleanOption(props) {
   };
 
   const synthetic = async () => {
-    console.log(voiceSelect);
     const { data } = await axios.post('http://localhost:8000/synthetic-article', { cleanArticleId, voiceSelect });
-    console.log(data);
+    if (data.status === 1) {
+      openNotification('success', message.SYNTHETIC_SUCCESS);
+    }
   };
 
   return (

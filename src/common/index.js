@@ -8,6 +8,7 @@ export const message = {
   RECRAWL_SUCCESS: 'Thu thập lại thành công',
   RUN_SUCCESS: 'Chạy thu thập thành công',
   RERUN_SUCCESS: 'Chạy lại lịch thành công',
-  NORMALIZE_SUCCESS: 'Chuẩn hoá từ thành công',
   ALERT: 'Bạn phải nhập cách đọc',
+  NORMALIZE_SUCCESS: 'Chuẩn hoá từ thành công, cách đọc sẽ cập nhật sớm nhất',
+  SYNTHETIC_SUCCESS: 'Tổng hợp thành công, audio sẽ cập nhật sớm nhất',
 };

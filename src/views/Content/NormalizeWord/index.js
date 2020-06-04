@@ -77,7 +77,9 @@ export default function NormalizeWord(props) {
   const handleSave = async () => {
     const listExpansionChange = contexts.filter((ctx) => ctx.isChange === true);
     const { data } = await axios.post('http://localhost:8000/normalize-word', { listExpansionChange, articleId });
-    console.log(data);
+    if (data.status === 1) {
+      openNotification('success', message.NORMALIZE_SUCCESS);
+    }
   };
 
   useEffect(() => {
