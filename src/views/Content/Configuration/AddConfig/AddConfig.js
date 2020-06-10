@@ -149,13 +149,13 @@ export default function AddConfig(props) {
     <div className={classes.root}>
       <Breadcrumb style={{ marginBottom: 10 }}>
         <Breadcrumb.Item>
-          Dashboard
+          Bảng điều khiển
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href="/dashboard/configuration">Configuration</a>
+          <a href="/dashboard/configuration">Cấu hình</a>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href="/dashboard/configuration/add-config">Add Config</a>
+          <a href="/dashboard/configuration/add-config">Thêm cấu hình</a>
         </Breadcrumb.Item>
       </Breadcrumb>
       <Steps current={current}>

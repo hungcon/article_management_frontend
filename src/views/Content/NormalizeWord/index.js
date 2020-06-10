@@ -36,9 +36,8 @@ const useStyles = makeStyles(() => ({
 
 export default function NormalizeWord(props) {
   const classes = useStyles();
-  const { cleanArticleId, word, type } = useParams();
-  const [cleanArticle, setCleanArticle] = useState();
-  const [articleId, setArticleId] = useState();
+  const { articleId, word, type } = useParams();
+  const [article, setArticle] = useState();
   const [contexts, setContexts] = useState([]);
   const [expansion, setExpansion] = useState();
   const [isChange, setIsChange] = useState();
@@ -112,9 +111,9 @@ export default function NormalizeWord(props) {
           });
         return number;
       };
-      const cleanArticle = (await axios.post('http://localhost:8000/get-clean-article-by-id', { cleanArticleId })).data;
+      const article = (await axios.post('http://localhost:8000/get-valid-article-by-id', { articleId })).data;
       if (!ignore) {
-        const { sentences } = cleanArticle;
+        const { sentences } = article;
         const listSentences = [];
         sentences.forEach((sentence) => {
           const { allophones } = sentence;
@@ -158,13 +157,12 @@ export default function NormalizeWord(props) {
           }
         }
         setContexts(contexts);
-        setCleanArticle(cleanArticle);
-        setArticleId(cleanArticle.article._id);
+        setArticle(article);
       }
     }
     fetchData();
     return () => { ignore = true; };
-  }, [cleanArticleId, type, word]);
+  }, [articleId, type, word]);
 
   const getSentences = (allophones, position) => {
     const $ = cheerio.load(allophones, { xmlMode: true, decodeEntities: false });
@@ -326,7 +324,7 @@ export default function NormalizeWord(props) {
         marginTop: '30px',
       }}
       >
-        <Button style={{ marginRight: 10 }} onClick={() => props.history.push(`/dashboard/clean-article/${cleanArticle._id}`)}>
+        <Button style={{ marginRight: 10 }} onClick={() => props.history.push(`/dashboard/list-valid-articles/${articleId}`)}>
           Quay lại
         </Button>
         <Button style={{ marginRight: 10 }} type="danger" onClick={handleSave}>

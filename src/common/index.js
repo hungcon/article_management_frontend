@@ -11,4 +11,5 @@ export const message = {
   ALERT: 'Bạn phải nhập cách đọc',
   NORMALIZE_SUCCESS: 'Chuẩn hoá từ thành công, cách đọc sẽ cập nhật sớm nhất',
   SYNTHETIC_SUCCESS: 'Tổng hợp thành công, audio sẽ cập nhật sớm nhất',
+  FINISH_NORMALIZE: 'Đã cập nhật trạng thái bài báo thành đã chuẩn hoá tay'
 };

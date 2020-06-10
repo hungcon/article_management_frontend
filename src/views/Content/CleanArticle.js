@@ -131,10 +131,10 @@ export default function CleanText(props) {
     <div className={classes.root}>
       <Breadcrumb style={{ marginBottom: 10 }}>
         <Breadcrumb.Item>
-          Dashboard
+          Bảng điều khiển
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href="/dashboard/configuration">Clean Article</a>
+          <a href="/dashboard/configuration">Bài báo chuẩn hoá</a>
         </Breadcrumb.Item>
       </Breadcrumb>
       <Button

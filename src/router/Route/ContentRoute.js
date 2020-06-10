@@ -11,7 +11,6 @@ import AddConfig from '../../views/Content/Configuration/AddConfig/AddConfig';
 import ArticleConfig from '../../views/Content/Configuration/ArticleConfig/ArticleConfig';
 import Statistics from '../../views/Content/Statistics';
 import PrivateRoute from '../../PrivateRoute';
-import ArticleForm from '../../views/Article/ArticleForm';
 import AddArticle from '../../views/Article/AddArticle';
 import ListWebsite from '../../views/Content/Website/ListWebsite';
 import ListCategory from '../../views/Content/Category/ListCategory';
@@ -30,11 +29,10 @@ export default function ContentRoute() {
       <PrivateRoute path="/dashboard/configuration/add-config" exact component={AddConfig} />
       <PrivateRoute path="/dashboard/configuration/article-config/:configId" exact component={ArticleConfig} />
       <PrivateRoute path="/dashboard/list-valid-articles" exact component={ListValidArticles} />
-      <PrivateRoute path="/dashboard/list-valid-articles/:articleId" exact component={ArticleForm} />
+      <PrivateRoute path="/dashboard/list-valid-articles/:articleId" exact component={CleanOption} />
       <PrivateRoute path="/dashboard/list-invalid-articles" exact component={ListInvalidArticles} />
       <PrivateRoute path="/dashboard/clean-text" exact component={CleanArticle} />
-      <PrivateRoute path="/dashboard/clean-article/:cleanArticleId" exact component={CleanOption} />
-      <PrivateRoute path="/dashboard/clean-article/:cleanArticleId/:type/:word" exact component={NormalizeWord} />
+      <PrivateRoute path="/dashboard/list-valid-articles/:articleId/:type/:word" exact component={NormalizeWord} />
       <PrivateRoute path="/dashboard/add-article" exact component={AddArticle} />
       <PrivateRoute path="/dashboard/statistics" exact component={Statistics} />
     </Switch>

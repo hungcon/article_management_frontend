@@ -196,10 +196,10 @@ export default function ListCategory() {
     <div className={classes.root}>
       <Breadcrumb style={{ marginBottom: 10 }}>
         <Breadcrumb.Item>
-          Dashboard
+          Bảng điều khiển
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href="/dashboard/list-category">List Category</a>
+          <a href="/dashboard/list-category">Danh sách chuyên mục</a>
         </Breadcrumb.Item>
       </Breadcrumb>
       <Button

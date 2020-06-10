@@ -23,6 +23,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import image from '../../assets/images/login.jpg';
 import allActions from '../../store/actions/allActions';
+import openNotification from '../Notifications';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -75,20 +76,22 @@ export default function SignIn(props) {
     const { accessToken } = (await axios.post('http://localhost:8000/sign-in', { userName, password })).data;
     if (accessToken) {
       if (!accessToken.success) {
-        setSnackbar({
-          message: accessToken.err,
-          open: true,
-        });
+        // setSnackbar({
+        //   message: accessToken.err,
+        //   open: true,
+        // });
+        openNotification('error', accessToken.message);
       } else {
         localStorage.setItem('userName', userName);
         localStorage.setItem('token', accessToken.token);
         props.history.push('/dashboard');
       }
     } else {
-      setSnackbar({
-        message: 'Internal server error',
-        open: true,
-      });
+      // setSnackbar({
+      //   message: 'Internal server error',
+      //   open: true,
+      // });
+      openNotification('error', 'Server đang có lỗi');
     }
   };
 
@@ -163,12 +166,12 @@ export default function SignIn(props) {
           </form>
         </div>
       </Grid>
-      <Snackbar
+      {/* <Snackbar
         autoHideDuration={2000}
         message={snackbar.message}
         open={snackbar.open}
         onClose={closeSnackbar}
-      />
+      /> */}
     </Grid>
   );
 }

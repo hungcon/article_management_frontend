@@ -103,7 +103,7 @@ export default function AccountForm(props) {
                       return Promise.resolve();
                     }
                     // eslint-disable-next-line prefer-promise-reject-errors
-                    return Promise.reject('Username is existed');
+                    return Promise.reject('Tài khoản đã tồn tại');
                   },
                 }),
               ]}
@@ -137,7 +137,7 @@ export default function AccountForm(props) {
                       return Promise.resolve();
                     }
                     // eslint-disable-next-line prefer-promise-reject-errors
-                    return Promise.reject('The confirm passwords that you entered do not match!');
+                    return Promise.reject('Xác nhận mật khẩu không khớp!');
                   },
                 }),
               ]}

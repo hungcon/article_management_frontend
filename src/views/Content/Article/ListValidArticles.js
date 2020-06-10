@@ -85,9 +85,9 @@ export default function ListValidArticles(props) {
     console.log(result.data);
   };
 
-  const reSyntheticArticle = async (cleanArticleId) => {
+  const reSyntheticArticle = async (articleId) => {
     const result = await axios.post('http://localhost:8000/synthetic-article',
-      { cleanArticleId, voiceSelect: 'vbee-tts-voice-hn_male_manhdung_news_48k-h' });
+      { articleId, voiceSelect: 'vbee-tts-voice-hn_male_manhdung_news_48k-h' });
     console.log(result.data);
   };
 
@@ -136,6 +136,9 @@ export default function ListValidArticles(props) {
         website, category, date, status,
       });
       const articleData = result.data;
+      for (let i = 0; i < articleData.length; i += 1) {
+        articleData[i].key = i;
+      }
       setCounts(articleData.length);
       setData(articleData);
     }
@@ -234,11 +237,10 @@ export default function ListValidArticles(props) {
             || record.status === 4
             || record.status === 5
             || record.status === 6
-            || record.status === 7
             || record.status === 8)
           && (
           <Button
-            onClick={() => props.history.push(`/dashboard/clean-article/${record.cleanArticleId}`)}
+            onClick={() => props.history.push(`/dashboard/list-valid-articles/${record._id}`)}
             style={{ marginRight: 10, width: 165 }}
             type="primary"
             icon={<FileSearchOutlined />}
@@ -248,7 +250,7 @@ export default function ListValidArticles(props) {
           )}
           {record.status === 7 && (
           <Button
-            onClick={() => reSyntheticArticle(record.cleanArticleId)}
+            onClick={() => reSyntheticArticle(record._id)}
             style={{ marginRight: 10, width: 165 }}
           >
             Tổng hợp lại
@@ -294,10 +296,10 @@ export default function ListValidArticles(props) {
     <div className={classes.root}>
       <Breadcrumb style={{ marginBottom: 10 }}>
         <Breadcrumb.Item>
-          <a href="/dashboard/configuration">Dashboard</a>
+          <a href="/dashboard/configuration">Bảng điều khiển</a>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href="/dashboard/list-valid-articles">Valid Articles</a>
+          <a href="/dashboard/list-valid-articles">Bài báo hợp lệ</a>
         </Breadcrumb.Item>
       </Breadcrumb>
       <Form

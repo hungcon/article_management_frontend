@@ -171,10 +171,10 @@ export default function Statistics() {
     <div className={classes.root}>
       <Breadcrumb style={{ marginBottom: 10 }}>
         <Breadcrumb.Item>
-          <a href="/dashboard/configuration">Dashboard</a>
+          <a href="/dashboard/configuration">Bảng điều khiển</a>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href="/dashboard/statistics">Statistic</a>
+          <a href="/dashboard/statistics">Thống kê</a>
         </Breadcrumb.Item>
       </Breadcrumb>
       <div style={{ marginBottom: 15 }}>

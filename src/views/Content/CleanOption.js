@@ -75,13 +75,10 @@ const useStyles = makeStyles(() => ({
 export default function CleanOption(props) {
   // console.log(record);
   const classes = useStyles();
-  const { cleanArticleId } = useParams();
-  const [cleanArticle, setCleanArticle] = useState(
+  const { articleId } = useParams();
+  const [article, setArticle] = useState(
     {
       sentences: [],
-      article: {
-        text: '',
-      },
     },
   );
   const [audioLink, setAudioLink] = useState();
@@ -92,28 +89,27 @@ export default function CleanOption(props) {
   };
 
   const handleFinish = async () => {
-    const { data } = await axios.post('http://localhost:8000/finish-normalize', { cleanArticleId });
-    console.log(data);
+    const { data } = await axios.post('http://localhost:8000/finish-normalize', { articleId });
     if (data.status === 1) {
-      openNotification('success', message.NORMALIZE_SUCCESS);
+      openNotification('success', message.FINISH_NORMALIZE);
     }
   };
 
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
-      const cleanArticle = (await axios.post('http://localhost:8000/get-clean-article-by-id', { cleanArticleId })).data;
+      const { data } = await axios.post('http://localhost:8000/get-valid-article-by-id', { articleId });
       if (!ignore) {
-        setCleanArticle(cleanArticle);
-        setAudioLink(cleanArticle.linkAudio);
+        setArticle(data);
+        setAudioLink(data.linkAudio);
       }
     }
     fetchData();
     return () => { ignore = true; };
-  }, [cleanArticleId]);
+  }, [articleId]);
 
-  const showCleanText = (cleanArticle) => {
-    const { sentences } = cleanArticle;
+  const showCleanText = (article) => {
+    const { sentences } = article;
     return sentences.map((sentence) => {
       const { allophones } = sentence;
       const $ = cheerio.load(allophones, { xmlMode: true, decodeEntities: false });
@@ -213,8 +209,8 @@ export default function CleanOption(props) {
   };
 
 
-  const showArticleText = (cleanArticle) => {
-    const { sentences } = cleanArticle;
+  const showArticleText = (article) => {
+    const { sentences } = article;
     return sentences.map((sentence) => {
       const { allophones } = sentence;
       const $ = cheerio.load(allophones, { xmlMode: true, decodeEntities: false });
@@ -312,7 +308,7 @@ export default function CleanOption(props) {
                     paddingLeft: '4px',
                     fontWeight: 400,
                   }}
-                  onClick={() => props.history.push(`/dashboard/clean-article/${cleanArticle._id}/${type}/${orig}`)}
+                  onClick={() => props.history.push(`/dashboard/list-valid-articles/${article._id}/${type}/${orig}`)}
                 >
                   {word.word}
                   {' '}
@@ -332,7 +328,7 @@ export default function CleanOption(props) {
   };
 
   const synthetic = async () => {
-    const { data } = await axios.post('http://localhost:8000/synthetic-article', { cleanArticleId, voiceSelect });
+    const { data } = await axios.post('http://localhost:8000/synthetic-article', { articleId, voiceSelect });
     if (data.status === 1) {
       openNotification('success', message.SYNTHETIC_SUCCESS);
     }
@@ -342,19 +338,19 @@ export default function CleanOption(props) {
     <div className={classes.root}>
       <Breadcrumb style={{ marginBottom: 10 }}>
         <Breadcrumb.Item>
-          Dashboard
+          Bảng điều khiển
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href="/dashboard/list-valid-articles">Valid Articles</a>
+          <a href="/dashboard/list-valid-articles">Danh sách bài báo hợp lệ</a>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          Clean Article
+          Bài báo chuẩn hoá
         </Breadcrumb.Item>
       </Breadcrumb>
       <Row gutter={16}>
         <Col span={8}>
           {
-          cleanArticle.linkAudio && (
+          article.linkAudio && (
             <audio controls style={{ width: 400 }}>
               <source src={`${audioLink}`} />
             </audio>
@@ -392,10 +388,10 @@ export default function CleanOption(props) {
 
       <Row gutter={16}>
         <Col span={12}>
-          {showArticleText(cleanArticle)}
+          {showArticleText(article)}
         </Col>
         <Col span={12}>
-          {showCleanText(cleanArticle)}
+          {showCleanText(article)}
         </Col>
       </Row>
     </div>

@@ -241,10 +241,10 @@ export default function ListInValidArticles() {
     <div className={classes.root}>
       <Breadcrumb style={{ marginBottom: 10 }}>
         <Breadcrumb.Item>
-          <a href="/dashboard/configuration">Dashboard</a>
+          <a href="/dashboard/configuration">Bảng điều khiển</a>
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href="/dashboard/list-invalid-articles">Invalid Articles</a>
+          <a href="/dashboard/list-invalid-articles">Bài báo không hợp lệ</a>
         </Breadcrumb.Item>
       </Breadcrumb>
       <Form

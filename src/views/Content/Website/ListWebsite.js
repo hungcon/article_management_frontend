@@ -196,10 +196,10 @@ export default function ListWebsite() {
     <div className={classes.root}>
       <Breadcrumb style={{ marginBottom: 10 }}>
         <Breadcrumb.Item>
-          Dashboard
+          Bảng điều khiển
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          <a href="/dashboard/list-website">List Website</a>
+          <a href="/dashboard/list-website">Danh sách đầu báo</a>
         </Breadcrumb.Item>
       </Breadcrumb>
       <Button

@@ -193,10 +193,10 @@ export default function ListAccounts(props) {
     <div className={classes.root}>
       <Breadcrumb style={{ marginBottom: 10 }}>
         <Breadcrumb.Item>
-          Dashboard
+          Bảng điều khiển
         </Breadcrumb.Item>
         <Breadcrumb.Item>
-          List Accounts
+          Danh sách tài khoản
         </Breadcrumb.Item>
       </Breadcrumb>
       <Button

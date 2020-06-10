@@ -95,7 +95,7 @@ export default function AddArticle(props) {
           rules={[
             {
               required: true,
-              message: 'Please input category name',
+              message: 'Hãy chọn chuyên mục',
             },
           ]}
         >
