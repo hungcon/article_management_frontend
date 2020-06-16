@@ -76,21 +76,14 @@ export default function SignIn(props) {
     const { accessToken } = (await axios.post('http://localhost:8000/sign-in', { userName, password })).data;
     if (accessToken) {
       if (!accessToken.success) {
-        // setSnackbar({
-        //   message: accessToken.err,
-        //   open: true,
-        // });
-        openNotification('error', accessToken.message);
+        console.log(accessToken);
+        openNotification('error', accessToken.err);
       } else {
         localStorage.setItem('userName', userName);
         localStorage.setItem('token', accessToken.token);
         props.history.push('/dashboard');
       }
     } else {
-      // setSnackbar({
-      //   message: 'Internal server error',
-      //   open: true,
-      // });
       openNotification('error', 'Server đang có lỗi');
     }
   };

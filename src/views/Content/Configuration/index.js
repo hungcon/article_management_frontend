@@ -11,7 +11,7 @@ import {
 import { css } from 'emotion';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import SourceForm from '../Form/SourceForm';
+import GeneralForm from '../Form/GeneralForm';
 import allActions from '../../../store/actions/allActions';
 import MoreInfo from '../MoreInfo';
 import openNotification from '../../Notifications';
@@ -298,7 +298,7 @@ export default function Configuration(props) {
         bordered
         scroll={{ y: 400 }}
       />
-      <SourceForm
+      <GeneralForm
         visible={sourceVisible}
         onCreate={onCreate}
         onCancel={handleCancel}

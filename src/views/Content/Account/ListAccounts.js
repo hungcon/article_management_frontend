@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react';
@@ -16,6 +17,7 @@ import {
   DeleteOutlined,
   ExclamationCircleOutlined,
   PlusCircleOutlined,
+  EditOutlined,
 } from '@ant-design/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { css } from 'emotion';
@@ -116,12 +118,13 @@ export default function ListAccounts(props) {
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
-      const listAccount = (await axios.post('http://localhost:8000/get-list-accounts')).data;
-      for (let i = 0; i < listAccount.length; i += 1) {
-        listAccount[i].key = i + 1;
+      const listAccounts = (await axios.post('http://localhost:8000/get-list-accounts')).data;
+      for (let i = 0; i < listAccounts.length; i += 1) {
+        listAccounts[i].key = i + 1;
       }
       if (!ignore) {
-        setData(listAccount);
+        console.log(listAccounts);
+        setData(listAccounts);
       }
     }
     fetchData();
@@ -130,23 +133,19 @@ export default function ListAccounts(props) {
 
   const columns = [
     {
-      title: 'Họ',
-      dataIndex: 'firstName',
-      key: 'firstName',
-    },
-    {
-      title: 'Tên',
-      dataIndex: 'lastName',
-      key: 'lastName',
-    },
-    {
       title: 'Vai trò',
       dataIndex: 'role',
       key: 'role',
+      width: '15%',
       render: (value) => {
         let color = 'green';
         if (value === 'admin') {
           color = 'red';
+        } else if (value === 'editor') {
+          color = 'orange';
+          value = 'Biên tập viên';
+        } else {
+          value = 'Tổng biên tập';
         }
         return (
           <Tag color={color} key={value}>
@@ -158,15 +157,37 @@ export default function ListAccounts(props) {
     {
       title: 'Tên đăng nhập',
       key: 'userName',
+      width: '15%',
       dataIndex: 'userName',
+    },
+    {
+      title: 'Đầu báo quản lý',
+      key: 'websites',
+      width: '25%',
+      dataIndex: 'websites',
+      render: (values) => (
+        <span>
+          {values.map((value) => (
+            <Tag color="#3498DB" key={value.name}>
+              {value.name.toUpperCase()}
+            </Tag>
+          ))}
+        </span>
+      ),
     },
     {
       title: 'Hành động',
       key: 'action',
-      width: '30%',
       align: 'center',
       render: (record) => (
         <div>
+          <Button
+            onClick={() => props.history.push(`/dashboard/list-accounts/edit-account/${record._id}`)}
+            style={{ marginRight: 15 }}
+            icon={<EditOutlined />}
+          >
+            Cập nhật
+          </Button>
           <Button
             onClick={() => showResetPasswordModal(record.userName)}
             style={{ marginRight: 15 }}
@@ -176,8 +197,6 @@ export default function ListAccounts(props) {
           </Button>
           <Button
             danger
-            disabled={record.role === 'admin'}
-            style={{ width: 155 }}
             onClick={() => showDeleteConfirm(record._id)}
             icon={<DeleteOutlined />}
           >

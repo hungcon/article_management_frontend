@@ -37,7 +37,6 @@ const useStyles = makeStyles(() => ({
 export default function NormalizeWord(props) {
   const classes = useStyles();
   const { articleId, word, type } = useParams();
-  const [article, setArticle] = useState();
   const [contexts, setContexts] = useState([]);
   const [expansion, setExpansion] = useState();
   const [isChange, setIsChange] = useState();
@@ -98,7 +97,7 @@ export default function NormalizeWord(props) {
         return expansion;
       };
 
-      const getNUmberOfWord = (allophones, word) => {
+      const getNumberOfWord = (allophones, word) => {
         const $ = cheerio.load(allophones, { xmlMode: true, decodeEntities: false });
         const $mtu = cheerio.load($.html($('mtu')));
         let number = 0;
@@ -131,7 +130,7 @@ export default function NormalizeWord(props) {
         });
         const contexts = [];
         for (let i = 0; i < listSentences.length; i += 1) {
-          const numberOfWords = getNUmberOfWord(listSentences[i].allophones, word);
+          const numberOfWords = getNumberOfWord(listSentences[i].allophones, word);
           if (numberOfWords > 1) {
             for (let j = 0; j < numberOfWords; j += 1) {
               const context = {
@@ -157,7 +156,6 @@ export default function NormalizeWord(props) {
           }
         }
         setContexts(contexts);
-        setArticle(article);
       }
     }
     fetchData();

@@ -26,19 +26,17 @@ const useStyles = makeStyles(styles);
 export default function Dashboard(props) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState({ firstName: '', lastName: '', role: '' });
+  const [currentUser, setCurrentUser] = useState({ role: '' });
 
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
       const user = (await axios.post('http://localhost:8000/get-user-info', { userName: localStorage.getItem('userName') })).data;
       const {
-        firstName,
-        lastName,
         role,
-      } = user;
+      } = user.currentUser;
       if (!ignore) {
-        setCurrentUser({ firstName, lastName, role });
+        setCurrentUser({ role });
       }
     }
     fetchData();
@@ -89,7 +87,7 @@ export default function Dashboard(props) {
       >
         <div className={classes.toolbarIcon}>
           <Avatar alt="Avatar" src="src" style={{ marginRight: '15px' }} />
-          <Typography className={classes.text} style={{ marginRight: '15px', color: '#FFF', fontFamily: 'Source Sans Pro' }}>{`${currentUser.firstName} ${currentUser.lastName}`}</Typography>
+          <Typography className={classes.text} style={{ marginRight: '15px', color: '#FFF', fontFamily: 'Source Sans Pro' }}>{`${currentUser.role}`}</Typography>
           <IconButton onClick={handleDrawerClose} className={classes.menuIcon}>
             <ChevronLeftIcon />
           </IconButton>

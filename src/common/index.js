@@ -6,10 +6,12 @@ export const message = {
   ERROR: 'Đã có lỗi xảy ra',
   UNAUTHORIZED: 'Không có quyền',
   RECRAWL_SUCCESS: 'Thu thập lại thành công',
-  RUN_SUCCESS: 'Chạy thu thập thành công',
   RERUN_SUCCESS: 'Chạy lại lịch thành công',
+  RESYNTHETIC_SUCCESS: 'Tổng hợp lại thành công',
+  RENORMALIZE_SUCCESS: 'Chuẩn hoá lại thành công',
+  RUN_SUCCESS: 'Chạy thu thập thành công',
   ALERT: 'Bạn phải nhập cách đọc',
   NORMALIZE_SUCCESS: 'Chuẩn hoá từ thành công, cách đọc sẽ cập nhật sớm nhất',
   SYNTHETIC_SUCCESS: 'Tổng hợp thành công, audio sẽ cập nhật sớm nhất',
-  FINISH_NORMALIZE: 'Đã cập nhật trạng thái bài báo thành đã chuẩn hoá tay'
+  FINISH_NORMALIZE: 'Đã cập nhật trạng thái bài báo thành đã chuẩn hoá tay',
 };

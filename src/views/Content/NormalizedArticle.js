@@ -176,7 +176,7 @@ export default function CleanOption(props) {
         });
       });
       return (
-        <div key={sentence.sentenceId} style={{ padding: 10 }}>
+        <div key={sentence.sentenceId} style={{ height: 100 }}>
           {words.map((word, index) => {
             if (highlights.includes(word)) {
               return (
@@ -292,7 +292,7 @@ export default function CleanOption(props) {
         });
       });
       return (
-        <div key={sentence.sentenceId} style={{ padding: 10 }}>
+        <div key={sentence.sentenceId} style={{ height: 100 }}>
           {words.map((word, index) => {
             const orig = word.word;
             const { type } = word;

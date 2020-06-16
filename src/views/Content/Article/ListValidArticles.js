@@ -12,6 +12,8 @@ import { FileSearchOutlined, ReloadOutlined } from '@ant-design/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { css } from 'emotion';
 import axios from 'axios';
+import openNotification from '../../Notifications';
+import { message } from '../../../common';
 
 
 const { Option } = Select;
@@ -81,14 +83,18 @@ export default function ListValidArticles(props) {
   ];
 
   const reCleanArticle = async (articleId) => {
-    const result = await axios.post('http://localhost:8000/clean-article', { articleId });
-    console.log(result.data);
+    const { data } = await axios.post('http://localhost:8000/clean-article', { articleId });
+    if (data.status === 1) {
+      openNotification('success', message.RENORMALIZE_SUCCESS);
+    }
   };
 
   const reSyntheticArticle = async (articleId) => {
-    const result = await axios.post('http://localhost:8000/synthetic-article',
+    const { data } = await axios.post('http://localhost:8000/synthetic-article',
       { articleId, voiceSelect: 'vbee-tts-voice-hn_male_manhdung_news_48k-h' });
-    console.log(result.data);
+    if (data.status === 1) {
+      openNotification('success', message.RESYNTHETIC_SUCCESS);
+    }
   };
 
   useEffect(() => {
