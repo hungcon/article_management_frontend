@@ -124,28 +124,37 @@ export default function ListInValidArticles() {
 
   useEffect(() => {
     let ignore = false;
-
     async function fetchData() {
-      const website = filters ? filters.website : '';
+      const user = (await axios.post('http://localhost:8000/get-user-info', { userName: localStorage.getItem('userName') })).data;
+      const {
+        websites,
+      } = user.currentUser;
+      for (let i = 0; i < websites.length; i += 1) {
+        websites[i].key = i + 1;
+      }
+      setWebsites(websites);
+      const website = filters ? filters.website : websites;
       const category = filters ? filters.category : '';
+      const status = filters ? filters.status : '';
       const date = {
         startDate: startDate || '',
         endDate: endDate || '',
       };
-      const result = await axios.post('http://localhost:8000/get-invalid-articles', { website, category, date });
+      const result = await axios.post('http://localhost:8000/get-invalid-articles', {
+        website, category, date, status,
+      });
       const articleData = result.data;
-      setCounts(articleData.length);
       for (let i = 0; i < articleData.length; i += 1) {
         articleData[i].key = i;
       }
-      setData(articleData);
+      if (!ignore) {
+        setCounts(articleData.length);
+        setData(articleData);
+      }
     }
-    if (!ignore) {
-      fetchData();
-    }
-
+    fetchData();
     return () => { ignore = true; };
-  }, [filters, reload, startDate, endDate]);
+  }, [filters, startDate, endDate]);
 
   const columns = [
     {
@@ -268,7 +277,7 @@ export default function ListInValidArticles() {
                 allowClear
               >
                 {websites.map((website) => (
-                  <Option key={website.key} value={website.name}>{website.name}</Option>
+                  <Option key={website.key} value={website._id}>{website.name}</Option>
                 ))}
               </Select>
             </Form.Item>
@@ -286,7 +295,7 @@ export default function ListInValidArticles() {
                 allowClear
               >
                 {categories.map((category) => (
-                  <Option key={category.key} value={category.name}>{category.name}</Option>
+                  <Option key={category.key} value={category._id}>{category.name}</Option>
                 ))}
               </Select>
             </Form.Item>

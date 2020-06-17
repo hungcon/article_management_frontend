@@ -222,7 +222,7 @@ export default function ListCategory() {
         visible={visible}
         title={action === 'add' ? 'Thêm mới chuyên mục' : 'Cập nhật chuyên mục'}
         okText={action === 'add' ? 'Thêm mới' : 'Cập nhật'}
-        cancelText="Cancel"
+        cancelText="Huỷ"
         onCancel={onCancel}
         onOk={() => {
           form

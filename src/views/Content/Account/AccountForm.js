@@ -83,6 +83,7 @@ export default function AccountForm(props) {
     }).then((addResult) => {
       if (addResult.data.status === 1) {
         openNotification('success', !accountId ? message.ADD_SUCCESS : message.UPDATE_SUCCESS);
+        // localStorage.setItem('websites', JSON.stringify(values.websites));
         dispatch(allActions.configAction.reload());
         props.history.push('/dashboard/list-accounts');
       } else {

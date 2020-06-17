@@ -1,82 +1,20 @@
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable no-console */
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable react/jsx-filename-extension */
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import {
-  Snackbar,
-  Avatar,
-  Button,
-  CssBaseline,
-  TextField,
-  Paper,
-  Grid,
-  Typography,
-} from '@material-ui/core';
-import { useForm } from 'react-hook-form';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { makeStyles } from '@material-ui/core/styles';
-import { useSelector, useDispatch } from 'react-redux';
+  Form, Input, Button,
+} from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import './index.css';
 import axios from 'axios';
 import image from '../../assets/images/login.jpg';
-import allActions from '../../store/actions/allActions';
 import openNotification from '../Notifications';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    height: '100vh',
-  },
-  image: {
-    backgroundImage: `url(${image})`,
-    backgroundRepeat: 'no-repeat',
-    backgroundColor:
-      theme.palette.type === 'dark' ? theme.palette.grey[900] : theme.palette.grey[50],
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  },
-  paper: {
-    margin: theme.spacing(8, 4),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  link: {
-    textDecoration: 'none',
-    '&:hover': {
-      textDecoration: 'none',
-      color: 'black',
-    },
-  },
-}));
 
 
 export default function SignIn(props) {
-  const count = useSelector((state) => state.config);
-  const dispatch = useDispatch();
-  const classes = useStyles();
-  const { handleSubmit, register, errors } = useForm();
-  const [snackbar, setSnackbar] = useState({});
-
-  const onSubmit = async (values) => {
+  const onFinish = async (values) => {
     const { userName, password } = values;
     const { accessToken } = (await axios.post('http://localhost:8000/sign-in', { userName, password })).data;
     if (accessToken) {
       if (!accessToken.success) {
-        console.log(accessToken);
         openNotification('error', accessToken.err);
       } else {
         localStorage.setItem('userName', userName);
@@ -88,83 +26,45 @@ export default function SignIn(props) {
     }
   };
 
-  const closeSnackbar = () => {
-    setSnackbar({
-      message: '',
-      open: false,
-    });
-  };
-
   return (
-    <Grid container component="main" className={classes.root}>
-      <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
+    <div className="limiter">
+      <div className="container-login100" style={{ backgroundImage: `url(${image})` }}>
+        <div className="wrap-login100 p-t-30 p-b-50">
+          <span className="login100-form-title p-b-41">
             Đăng nhập
-          </Typography>
-          <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
-            <TextField
+          </span>
+          <Form
+            style={{ marginTop: 25 }}
+            name="normal_login"
+            onFinish={onFinish}
+            size="large"
+          >
+            <Form.Item
               name="userName"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              error={!!(errors && errors.userName)}
-              helperText={(errors && errors.userName) ? errors.userName.message : ''}
-              id="userName"
-              label="Tên đăng nhập"
-              autoFocus
-              inputRef={register({
-                required: 'Required',
-
-              })}
-            />
-
-            <TextField
-              name="password"
-              variant="outlined"
-              error={!!(errors && errors.password)}
-              helperText={(errors && errors.password) ? errors.password.message : ''}
-              margin="normal"
-              fullWidth
-              label="Mật khẩu"
-              type="password"
-              id="password"
-              inputRef={register({
-                required: 'Required',
-                maxLength: {
-                  value: 15,
-                  message: 'Mật khẩu phải nhỏ hơn 15 ký tự',
-                },
-                minLength: {
-                  value: 6,
-                  message: 'Mật khẩu phải lớn hơn 6 ký tự',
-                },
-              })}
-            />
-
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
+              style={{ marginBottom: 30 }}
+              rules={[{ required: true, message: 'Hãy nhập tên tài khoản' }]}
             >
-              Đăng nhập
-            </Button>
-          </form>
+              <Input prefix={<UserOutlined />} placeholder="Tên tài khoản" />
+            </Form.Item>
+            <Form.Item
+              name="password"
+              style={{ marginBottom: 30 }}
+              rules={[{ required: true, message: 'Hãy nhập mật khẩu' }]}
+            >
+              <Input
+                prefix={<LockOutlined />}
+                type="password"
+                placeholder="Mật khẩu"
+              />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" style={{ width: '100%', fontSize: 18 }}>
+                Đăng nhập
+              </Button>
+            </Form.Item>
+          </Form>
         </div>
-      </Grid>
-      {/* <Snackbar
-        autoHideDuration={2000}
-        message={snackbar.message}
-        open={snackbar.open}
-        onClose={closeSnackbar}
-      /> */}
-    </Grid>
+      </div>
+    </div>
   );
 }

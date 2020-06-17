@@ -100,17 +100,36 @@ export default function ListValidArticles(props) {
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
-      const listWebsite = (await axios.post('http://localhost:8000/get-websites')).data;
-      for (let i = 0; i < listWebsite.length; i += 1) {
-        listWebsite[i].key = i + 1;
+      const user = (await axios.post('http://localhost:8000/get-user-info', { userName: localStorage.getItem('userName') })).data;
+      const {
+        websites,
+      } = user.currentUser;
+      for (let i = 0; i < websites.length; i += 1) {
+        websites[i].key = i + 1;
+      }
+      setWebsites(websites);
+      const website = filters ? filters.website : websites;
+      const category = filters ? filters.category : '';
+      const status = filters ? filters.status : '';
+      const date = {
+        startDate: startDate || '',
+        endDate: endDate || '',
+      };
+      const result = await axios.post('http://localhost:8000/get-valid-articles', {
+        website, category, date, status,
+      });
+      const articleData = result.data;
+      for (let i = 0; i < articleData.length; i += 1) {
+        articleData[i].key = i;
       }
       if (!ignore) {
-        setWebsites(listWebsite);
+        setCounts(articleData.length);
+        setData(articleData);
       }
     }
     fetchData();
     return () => { ignore = true; };
-  }, []);
+  }, [filters, startDate, endDate]);
 
   useEffect(() => {
     let ignore = false;
@@ -127,32 +146,6 @@ export default function ListValidArticles(props) {
     return () => { ignore = true; };
   }, []);
 
-  useEffect(() => {
-    let ignore = false;
-
-    async function fetchData() {
-      const website = filters ? filters.website : '';
-      const category = filters ? filters.category : '';
-      const status = filters ? filters.status : '';
-      const date = {
-        startDate: startDate || '',
-        endDate: endDate || '',
-      };
-      const result = await axios.post('http://localhost:8000/get-valid-articles', {
-        website, category, date, status,
-      });
-      const articleData = result.data;
-      for (let i = 0; i < articleData.length; i += 1) {
-        articleData[i].key = i;
-      }
-      setCounts(articleData.length);
-      setData(articleData);
-    }
-    if (!ignore) {
-      fetchData();
-    }
-    return () => { ignore = true; };
-  }, [filters, startDate, endDate]);
 
   const columns = [
     {
@@ -329,7 +322,7 @@ export default function ListValidArticles(props) {
                 allowClear
               >
                 {websites.map((website) => (
-                  <Option key={website.key} value={website.name}>{website.name}</Option>
+                  <Option key={website.key} value={website._id}>{website.name}</Option>
                 ))}
               </Select>
             </Form.Item>
@@ -347,7 +340,7 @@ export default function ListValidArticles(props) {
                 allowClear
               >
                 {categories.map((category) => (
-                  <Option key={category.key} value={category.name}>{category.name}</Option>
+                  <Option key={category.key} value={category._id}>{category.name}</Option>
                 ))}
               </Select>
             </Form.Item>

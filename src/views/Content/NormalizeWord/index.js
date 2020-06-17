@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-return-assign */
 /* eslint-disable no-undef */
 /* eslint-disable func-names */
 /* eslint-disable no-restricted-syntax */
@@ -7,7 +9,7 @@
 /* eslint-disable no-shadow */
 import React, { useState, useEffect } from 'react';
 import {
-  Table, Input, Button, Col, Row,
+  Table, Input, Button, Col, Row, Select,
 } from 'antd';
 import cheerio from 'cheerio';
 import ButtonGroup from 'antd/lib/button/button-group';
@@ -20,6 +22,7 @@ import {
 import openNotification from '../../Notifications';
 import { message } from '../../../common';
 
+const { Option } = Select;
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -33,6 +36,17 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const listTypeWord = [
+  'loanword',
+  'abbreviation',
+  'date_dm',
+  'date_my',
+  'number_integer',
+  'number_float',
+  'read_as_sequence',
+  'range',
+];
+
 
 export default function NormalizeWord(props) {
   const classes = useStyles();
@@ -40,6 +54,13 @@ export default function NormalizeWord(props) {
   const [contexts, setContexts] = useState([]);
   const [expansion, setExpansion] = useState();
   const [isChange, setIsChange] = useState();
+
+  const renderSelectTag = (defaultValue) => (
+    <Select defaultValue={defaultValue}>
+      {listTypeWord
+        .map((typeWord) => <Option key={typeWord} value={typeWord}>{typeWord}</Option>) }
+    </Select>
+  );
 
 
   const handleSetExpansion = (e) => {
@@ -92,6 +113,7 @@ export default function NormalizeWord(props) {
           .each(function () {
             if ($(this).attr('nsw') === type && $(this).attr('orig') === word) {
               expansion = $(this).text().trim().replace(/\s+/g, ' ');
+              setExpansion(expansion);
             }
           });
         return expansion;
@@ -249,6 +271,7 @@ export default function NormalizeWord(props) {
       width: 50,
       key: 1,
       dataIndex: 'key',
+      render: (value) => (value += 1),
     },
     {
       title: 'Câu',
@@ -258,8 +281,14 @@ export default function NormalizeWord(props) {
       render: (value, record) => getSentences(value, record.index),
     },
     {
-      title: 'Cách đọc',
+      title: 'Loại từ',
       key: 3,
+      width: 200,
+      render: () => renderSelectTag(type),
+    },
+    {
+      title: 'Cách đọc',
+      key: 4,
       width: 200,
       align: 'center',
       render: (record) => (
@@ -300,6 +329,13 @@ export default function NormalizeWord(props) {
             {'   '}
           </b>
           <Input style={{ width: '50%' }} value={expansion} onChange={handleSetExpansion} />
+        </Col>
+        <Col span={6}>
+          <b>
+            Loại từ:
+            {'   '}
+          </b>
+          { renderSelectTag(type) }
         </Col>
         <Col span={6}>
           <Button type="primary" onClick={handleApply}>

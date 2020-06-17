@@ -23,76 +23,70 @@ export default function ListItems(props) {
   const classes = useStyles();
   return (
     <div>
-      {/* {props.currentUser.role === 'admin'
-        ? ( */}
+      {props.currentUser.role === 'admin'
+        ? (
+          <div>
+            <NavLink to="/dashboard/list-accounts" className={classes.link} activeClassName={classes.active}>
+              <ListItem button className={clsx(props.open && classes.button)}>
+                <ListItemIcon>
+                  <AccountCircleIcon className={classes.icon} />
+                </ListItemIcon>
+                <ListItemText primary="Người dùng" className={classes.text} />
+              </ListItem>
+            </NavLink>
+            <NavLink to="/dashboard/list-website" className={classes.link} activeClassName={classes.active}>
+              <ListItem button className={clsx(props.open && classes.button)}>
+                <ListItemIcon>
+                  <LanguageIcon className={classes.icon} />
+                </ListItemIcon>
+                <ListItemText primary="Đầu báo" className={classes.text} />
+              </ListItem>
+            </NavLink>
+            <NavLink to="/dashboard/list-category" className={classes.link} activeClassName={classes.active}>
+              <ListItem button className={clsx(props.open && classes.button)}>
+                <ListItemIcon>
+                  <CategoryIcon className={classes.icon} />
+                </ListItemIcon>
+                <ListItemText primary="Chuyên mục" className={classes.text} />
+              </ListItem>
+            </NavLink>
+            <NavLink to="/dashboard/configuration" className={classes.link} activeClassName={classes.active}>
+              <ListItem button className={clsx(props.open && classes.button)}>
+                <ListItemIcon>
+                  <BuildIcon className={classes.icon} />
+                </ListItemIcon>
+                <ListItemText primary="Cấu hình" className={classes.text} />
+              </ListItem>
+            </NavLink>
+          </div>
+        )
+        : (<div />)}
       <div>
-        <NavLink to="/dashboard/list-accounts" className={classes.link} activeClassName={classes.active}>
+        <NavLink to="/dashboard/list-valid-articles" className={classes.link} activeClassName={classes.active}>
           <ListItem button className={clsx(props.open && classes.button)}>
             <ListItemIcon>
-              <AccountCircleIcon className={classes.icon} />
+              <DescriptionIcon className={classes.icon} />
             </ListItemIcon>
-            <ListItemText primary="Người dùng" className={classes.text} />
+            <ListItemText primary="Báo hợp lệ" className={classes.text} />
           </ListItem>
         </NavLink>
-        <NavLink to="/dashboard/list-website" className={classes.link} activeClassName={classes.active}>
+        <NavLink to="/dashboard/list-invalid-articles" className={classes.link} activeClassName={classes.active}>
           <ListItem button className={clsx(props.open && classes.button)}>
             <ListItemIcon>
-              <LanguageIcon className={classes.icon} />
+              <ErrorOutlineIcon className={classes.icon} />
             </ListItemIcon>
-            <ListItemText primary="Đầu báo" className={classes.text} />
+            <ListItemText primary="Báo không hợp lệ" className={classes.text} />
           </ListItem>
         </NavLink>
-        <NavLink to="/dashboard/list-category" className={classes.link} activeClassName={classes.active}>
+        <NavLink to="/dashboard/statistics" className={classes.link} activeClassName={classes.active}>
           <ListItem button className={clsx(props.open && classes.button)}>
             <ListItemIcon>
-              <CategoryIcon className={classes.icon} />
+              <PieChartIcon className={classes.icon} />
             </ListItemIcon>
-            <ListItemText primary="Chuyên mục" className={classes.text} />
-          </ListItem>
-        </NavLink>
-        <NavLink to="/dashboard/configuration" className={classes.link} activeClassName={classes.active}>
-          <ListItem button className={clsx(props.open && classes.button)}>
-            <ListItemIcon>
-              <BuildIcon className={classes.icon} />
-            </ListItemIcon>
-            <ListItemText primary="Cấu hình" className={classes.text} />
+            <ListItemText primary="Thống kê" className={classes.text} />
           </ListItem>
         </NavLink>
       </div>
-      {/* // )
-        // : (<div />)} */}
-      <NavLink to="/dashboard/list-valid-articles" className={classes.link} activeClassName={classes.active}>
-        <ListItem button className={clsx(props.open && classes.button)}>
-          <ListItemIcon>
-            <DescriptionIcon className={classes.icon} />
-          </ListItemIcon>
-          <ListItemText primary="Báo hợp lệ" className={classes.text} />
-        </ListItem>
-      </NavLink>
-      <NavLink to="/dashboard/list-invalid-articles" className={classes.link} activeClassName={classes.active}>
-        <ListItem button className={clsx(props.open && classes.button)}>
-          <ListItemIcon>
-            <ErrorOutlineIcon className={classes.icon} />
-          </ListItemIcon>
-          <ListItemText primary="Báo không hợp lệ" className={classes.text} />
-        </ListItem>
-      </NavLink>
-      <NavLink to="/dashboard/statistics" className={classes.link} activeClassName={classes.active}>
-        <ListItem button className={clsx(props.open && classes.button)}>
-          <ListItemIcon>
-            <PieChartIcon className={classes.icon} />
-          </ListItemIcon>
-          <ListItemText primary="Thống kê" className={classes.text} />
-        </ListItem>
-      </NavLink>
-      {/* <NavLink to="/dashboard/clean-text" className={classes.link} activeClassName={classes.active}>
-        <ListItem button className={clsx(props.open && classes.button)}>
-          <ListItemIcon>
-            <LayersIcon className={classes.icon} />
-          </ListItemIcon>
-          <ListItemText primary="Chuẩn hoá" className={classes.text} />
-        </ListItem>
-      </NavLink> */}
     </div>
   );
 }

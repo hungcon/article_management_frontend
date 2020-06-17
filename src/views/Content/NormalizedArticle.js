@@ -22,6 +22,17 @@ import openNotification from '../Notifications';
 
 const { Option } = Select;
 
+const listTypeWord = [
+  'loanword',
+  'abbreviation',
+  'date_dm',
+  'date_my',
+  'number_integer',
+  'number_float',
+  'read_as_sequence',
+  'range',
+];
+
 
 // const tokenizer = new Tokenizer('Chuck');
 const useStyles = makeStyles(() => ({
@@ -116,49 +127,21 @@ export default function CleanOption(props) {
       const $phrase = cheerio.load($.html($('phrase')));
       const words = [];
       const $mtu = cheerio.load($.html($('mtu')));
-      const listLoanwords = [];
-      const listAbbreviations = [];
+      const highlights = [];
       $mtu('body')
         .children()
       // eslint-disable-next-line func-names
         .each(function () {
-          if ($(this).attr('nsw') === 'abbreviation') {
-            const abbreviation = {
-              // type: 'abbreviation',
-              // index,
-              orig: $(this).attr('orig'),
-              normalize: $(this).children().text().trim()
-                .replace(/\s\s+/g, ' ')
-                .replace(/\t/g, ' ')
-                .replace(/\n/g, ' '),
-            };
-            listAbbreviations.push(abbreviation);
-          }
-          if ($(this).attr('nsw') === 'loanword') {
-            const loanword = {
-              // type: 'loanword',
-              // index,
-              orig: $(this).attr('orig'),
-              normalize: $(this).children().text().trim()
-                .replace(/\s\s+/g, ' ')
-                .replace(/\t/g, ' ')
-                .replace(/\n/g, ' '),
-            };
-            listLoanwords.push(loanword);
+          if (listTypeWord.includes($(this).attr('nsw'))) {
+            highlights.push($(this).children().text().trim()
+              .replace(/\s\s+/g, ' ')
+              .replace(/\t/g, ' ')
+              .replace(/\n/g, ' '));
           }
         });
-      const highlights = [];
-      for (const loanword of listLoanwords) {
-        highlights.push(loanword.normalize);
-      }
-      for (const abbreviation of listAbbreviations) {
-        highlights.push(abbreviation.normalize);
-      }
       $phrase('body').children().each(function () {
         $(this).children().each(function () {
           if ($(this).get(0).name === 'mtu') {
-            // console.log($(this).attr('orig'));
-            // words.push($(this).text().trim().replace(/\s+/g, ' '));
             if ($(this).find('mtu').length !== 0) {
               $(this).children().each(function () {
                 if ($(this).get(0).name === 'mtu') {
@@ -217,44 +200,15 @@ export default function CleanOption(props) {
       const $phrase = cheerio.load($.html($('phrase')));
       const words = [];
       const $mtu = cheerio.load($.html($('mtu')));
-      const listLoanwords = [];
-      const listAbbreviations = [];
+      const highlights = [];
       $mtu('body')
         .children()
       // eslint-disable-next-line func-names
         .each(function () {
-          if ($(this).attr('nsw') === 'abbreviation') {
-            const abbreviation = {
-              // type: 'abbreviation',
-              // index,
-              orig: $(this).attr('orig'),
-              normalize: $(this).children().text().trim()
-                .replace(/\s\s+/g, ' ')
-                .replace(/\t/g, ' ')
-                .replace(/\n/g, ' '),
-            };
-            listAbbreviations.push(abbreviation);
-          }
-          if ($(this).attr('nsw') === 'loanword') {
-            const loanword = {
-              // type: 'loanword',
-              // index,
-              orig: $(this).attr('orig'),
-              normalize: $(this).children().text().trim()
-                .replace(/\s\s+/g, ' ')
-                .replace(/\t/g, ' ')
-                .replace(/\n/g, ' '),
-            };
-            listLoanwords.push(loanword);
+          if (listTypeWord.includes($(this).attr('nsw'))) {
+            highlights.push($(this).attr('orig'));
           }
         });
-      const highlights = [];
-      for (const loanword of listLoanwords) {
-        highlights.push(loanword.orig);
-      }
-      for (const abbreviation of listAbbreviations) {
-        highlights.push(abbreviation.orig);
-      }
       $phrase('body').children().each(function () {
         $(this).children().each(function () {
           if ($(this).get(0).name === 'mtu') {
@@ -272,7 +226,6 @@ export default function CleanOption(props) {
                     word: $(this).text().trim().replace(/\s+/g, ' '),
                   };
                   words.push(word);
-                  // words.push($(this).text().trim().replace(/\s+/g, ' '));
                 }
               });
             } else {

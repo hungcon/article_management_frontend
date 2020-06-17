@@ -1,5 +1,6 @@
-const signIn = () => ({
+const signIn = (currentUser) => ({
   type: 'SIGN_IN',
+  currentUser,
 });
 
 const signOut = () => ({

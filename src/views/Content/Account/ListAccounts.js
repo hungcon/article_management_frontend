@@ -123,7 +123,6 @@ export default function ListAccounts(props) {
         listAccounts[i].key = i + 1;
       }
       if (!ignore) {
-        console.log(listAccounts);
         setData(listAccounts);
       }
     }
