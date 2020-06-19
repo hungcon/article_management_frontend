@@ -34,51 +34,10 @@ const listTypeWord = [
 ];
 
 
-// const tokenizer = new Tokenizer('Chuck');
 const useStyles = makeStyles(() => ({
   root: {
     width: '100%',
     fontFamily: 'Montserrat',
-  },
-  input: {
-    width: 250,
-  },
-  inputAll: {
-    width: 150,
-    margin: '0 auto',
-  },
-  words: {
-    float: 'left',
-    width: '10%',
-  },
-  positions: {
-    float: 'left',
-    width: '60%',
-  },
-  replaceAll: {
-    float: 'left',
-    width: '30%',
-  },
-  table: {
-    display: 'table',
-    width: '100%',
-  },
-  row: {
-    display: 'table-row',
-  },
-  cell: {
-    display: 'table-cell',
-  },
-  cellPosition: {
-    display: 'table-cell',
-    width: 100,
-  },
-  highlight: {
-    color: 'red',
-    padding: '3px 10px',
-    background: 'yellow',
-    fontWeight: 600,
-    margin: '0 5px',
   },
 }));
 
@@ -89,7 +48,7 @@ export default function CleanOption(props) {
   const { articleId } = useParams();
   const [article, setArticle] = useState(
     {
-      sentences: [],
+      paragraphs: [],
     },
   );
   const [audioLink, setAudioLink] = useState();
@@ -120,161 +79,159 @@ export default function CleanOption(props) {
   }, [articleId]);
 
   const showCleanText = (article) => {
-    const { sentences } = article;
-    return sentences.map((sentence) => {
-      const { allophones } = sentence;
-      const $ = cheerio.load(allophones, { xmlMode: true, decodeEntities: false });
-      const $phrase = cheerio.load($.html($('phrase')));
-      const words = [];
-      const $mtu = cheerio.load($.html($('mtu')));
-      const highlights = [];
-      $mtu('body')
-        .children()
-      // eslint-disable-next-line func-names
-        .each(function () {
-          if (listTypeWord.includes($(this).attr('nsw'))) {
-            highlights.push($(this).children().text().trim()
-              .replace(/\s\s+/g, ' ')
-              .replace(/\t/g, ' ')
-              .replace(/\n/g, ' '));
-          }
-        });
-      $phrase('body').children().each(function () {
-        $(this).children().each(function () {
-          if ($(this).get(0).name === 'mtu') {
-            if ($(this).find('mtu').length !== 0) {
-              $(this).children().each(function () {
-                if ($(this).get(0).name === 'mtu') {
-                  words.push($(this).text().trim().replace(/\s+/g, ' '));
-                } else {
-                  words.push($(this).text().trim().replace(/\s+/g, ' '));
-                }
-              });
-            } else {
-              words.push($(this).text().trim().replace(/\s+/g, ' '));
-            }
-          } else {
-            words.push($(this).text().trim().replace(/\s+/g, ' '));
-          }
-        });
-      });
+    const { paragraphs } = article;
+    return paragraphs.map((paragraph) => {
+      const { sentences } = paragraph;
       return (
-        <div key={sentence.sentenceId} style={{ height: 100 }}>
-          {words.map((word, index) => {
-            if (highlights.includes(word)) {
-              return (
-                // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-                <span
-                  key={index}
-                  style={{
-                    color: 'white',
-                    background: '#208ef0',
-                    paddingLeft: '4px',
-                    margin: '4px',
-                    fontWeight: 400,
-                  }}
-                >
-                  {word}
-                  {' '}
-                </span>
-              );
-            }
-            return (
-              <span key={index}>
-                {word}
-                {' '}
-              </span>
-            );
-          })}
-        </div>
-      );
-    });
-  };
-
-
-  const showArticleText = (article) => {
-    const { sentences } = article;
-    return sentences.map((sentence) => {
-      const { allophones } = sentence;
-      const $ = cheerio.load(allophones, { xmlMode: true, decodeEntities: false });
-      const $phrase = cheerio.load($.html($('phrase')));
-      const words = [];
-      const $mtu = cheerio.load($.html($('mtu')));
-      const highlights = [];
-      $mtu('body')
-        .children()
-      // eslint-disable-next-line func-names
-        .each(function () {
-          if (listTypeWord.includes($(this).attr('nsw'))) {
-            highlights.push($(this).attr('orig'));
-          }
-        });
-      $phrase('body').children().each(function () {
-        $(this).children().each(function () {
-          if ($(this).get(0).name === 'mtu') {
-            if ($(this).find('mtu').length !== 0) {
-              $(this).children().each(function () {
-                if ($(this).get(0).name === 'mtu') {
-                  const word = {
-                    type: $(this).attr('nsw'),
-                    word: $(this).attr('orig'),
-                  };
-                  words.push(word);
-                } else {
-                  const word = {
-                    type: 'normal',
-                    word: $(this).text().trim().replace(/\s+/g, ' '),
-                  };
-                  words.push(word);
-                }
+        <div key={paragraph._id}>
+          {
+            sentences.map((sentence) => {
+              const { allophones } = sentence;
+              const $ = cheerio.load(allophones, { xmlMode: true, decodeEntities: false });
+              const $phrase = cheerio.load($.html($('phrase')));
+              const words1 = [];
+              const words2 = [];
+              const $mtu = cheerio.load($.html($('mtu')));
+              const highlights1 = [];
+              const highlights2 = [];
+              $mtu('body')
+                .children()
+              // eslint-disable-next-line func-names
+                .each(function () {
+                  if (listTypeWord.includes($(this).attr('nsw'))) {
+                    highlights1.push($(this).attr('orig'));
+                    highlights2.push($(this).children().text().trim()
+                      .replace(/\s\s+/g, ' ')
+                      .replace(/\t/g, ' ')
+                      .replace(/\n/g, ' '));
+                  }
+                });
+              $phrase('body').children().each(function () {
+                $(this).children().each(function () {
+                  if ($(this).get(0).name === 'mtu') {
+                    if ($(this).find('mtu').length !== 0) {
+                      $(this).children().each(function () {
+                        if ($(this).get(0).name === 'mtu') {
+                          const word = {
+                            type: $(this).attr('nsw'),
+                            word: $(this).attr('orig'),
+                          };
+                          words1.push(word);
+                          words2.push($(this).text().trim().replace(/\s+/g, ' '));
+                        } else {
+                          const word = {
+                            type: 'normal',
+                            word: $(this).text().trim().replace(/\s+/g, ' '),
+                          };
+                          words1.push(word);
+                          words2.push($(this).text().trim().replace(/\s+/g, ' '));
+                        }
+                      });
+                    } else {
+                      const word = {
+                        type: $(this).attr('nsw'),
+                        word: $(this).attr('orig'),
+                      };
+                      words1.push(word);
+                      words2.push($(this).text().trim().replace(/\s+/g, ' '));
+                    }
+                  } else {
+                    const word = {
+                      type: 'normal',
+                      word: $(this).text().trim().replace(/\s+/g, ' '),
+                    };
+                    words1.push(word);
+                    words2.push($(this).text().trim().replace(/\s+/g, ' '));
+                  }
+                });
               });
-            } else {
-              const word = {
-                type: $(this).attr('nsw'),
-                word: $(this).attr('orig'),
-              };
-              words.push(word);
-            }
-          } else {
-            const word = {
-              type: 'normal',
-              word: $(this).text().trim().replace(/\s+/g, ' '),
-            };
-            words.push(word);
-          }
-        });
-      });
-      return (
-        <div key={sentence.sentenceId} style={{ height: 100 }}>
-          {words.map((word, index) => {
-            const orig = word.word;
-            const { type } = word;
-            if (highlights.includes(word.word)) {
               return (
-                // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-                <span
-                  key={index}
-                  style={{
-                    color: 'white',
-                    background: '#ee4035',
-                    margin: '4px',
-                    paddingLeft: '4px',
-                    fontWeight: 400,
+                <div key={sentence._id}>
+                  <div style={{
+                    paddingTop: 15,
+                    paddingBottom: 15,
+                    display: 'inline-block',
+                    width: '46%',
+                    textAlign: 'justify',
+                    borderBottom: '1px solid gray',
                   }}
-                  onClick={() => props.history.push(`/dashboard/list-valid-articles/${article._id}/${type}/${orig}`)}
-                >
-                  {word.word}
-                  {' '}
-                </span>
+                  >
+                    {words1.map((word, index) => {
+                      let orig = word.word;
+                      orig = orig.replace('/', '~');
+                      const { type } = word;
+                      if (highlights1.includes(word.word)) {
+                        return (
+                        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+                          <span
+                            key={index}
+                            style={{
+                              color: 'white',
+                              background: '#ee4035',
+                              margin: '4px',
+                              paddingLeft: '4px',
+                              fontWeight: 400,
+                            }}
+                            onClick={() => props.history.push(`/dashboard/list-valid-articles/${article._id}/${type}/${orig}`)}
+                          >
+                            {word.word}
+                            {' '}
+                          </span>
+                        );
+                      }
+                      return (
+                        <span key={index}>
+                          {word.word}
+                          {' '}
+                        </span>
+                      );
+                    })}
+                  </div>
+                  <div style={{
+                    width: '5%', display: 'inline-block',
+                  }}
+                  />
+                  <div style={{
+                    paddingTop: 15,
+                    paddingBottom: 15,
+                    display: 'inline-block',
+                    width: '46%',
+                    textAlign: 'justify',
+                    alignContent: 'center',
+                    borderBottom: '1px solid gray',
+                  }}
+                  >
+                    {words2.map((word, index) => {
+                      if (highlights2.includes(word)) {
+                        return (
+                        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+                          <span
+                            key={index}
+                            style={{
+                              color: 'white',
+                              background: '#208ef0',
+                              paddingLeft: '4px',
+                              margin: '4px',
+                              fontWeight: 400,
+                            }}
+                          >
+                            {word}
+                            {' '}
+                          </span>
+                        );
+                      }
+                      return (
+                        <span key={index}>
+                          {word}
+                          {' '}
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
               );
-            }
-            return (
-              <span key={index}>
-                {word.word}
-                {' '}
-              </span>
-            );
-          })}
+            })
+          }
         </div>
       );
     });
@@ -340,11 +297,24 @@ export default function CleanOption(props) {
       </Row>
 
       <Row gutter={16}>
-        <Col span={12}>
-          {showArticleText(article)}
-        </Col>
-        <Col span={12}>
-          {showCleanText(article)}
+        {/* <Col span={12}>
+          <div style={{
+            borderSpacing: 0,
+            borderCollapse: 'collapse',
+            borderRight: '3px solid black',
+          }}
+          >
+            {showArticleText(article)}
+          </div>
+        </Col> */}
+        <Col span={24}>
+          <div style={{
+            borderSpacing: 0,
+            borderCollapse: 'collapse',
+          }}
+          >
+            {showCleanText(article)}
+          </div>
         </Col>
       </Row>
     </div>

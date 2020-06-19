@@ -53,27 +53,48 @@ export default function NormalizeWord(props) {
   const { articleId, word, type } = useParams();
   const [contexts, setContexts] = useState([]);
   const [expansion, setExpansion] = useState();
-  const [isChange, setIsChange] = useState();
+  const [wordType, setWordType] = useState(type);
+  // const [isChange, setIsChange] = useState();
+
+  const handleSetTypeChange = (value) => {
+    setWordType(value);
+    // setIsChange(true);
+  };
+
+  const handleSetTypeChangeRow = (value, sentenceId, word, index) => {
+    setContexts(
+      contexts.map((ctx) => {
+        if (ctx.id === sentenceId && ctx.index === index) {
+          return {
+            ...ctx, isChange: true, word, wordType: value,
+          };
+        }
+        return ctx;
+      }),
+    );
+  };
 
   const renderSelectTag = (defaultValue) => (
-    <Select defaultValue={defaultValue}>
+    <Select value={defaultValue} onChange={handleSetTypeChange}>
       {listTypeWord
         .map((typeWord) => <Option key={typeWord} value={typeWord}>{typeWord}</Option>) }
     </Select>
   );
 
+  // const renderSelectTagRow = (defaultValue, sentenceId, word, index) => (
+  // );
 
   const handleSetExpansion = (e) => {
     setExpansion(e.target.value);
-    setIsChange(true);
+    // setIsChange(true);
   };
 
-  const handleChangeExpansionRow = (e, sentenceId, word, index) => {
+  const handleChangeExpansionRow = (e, sentenceId, word, index, wordType) => {
     setContexts(
       contexts.map((ctx) => {
         if (ctx.id === sentenceId && ctx.index === index) {
           return {
-            ...ctx, expansion: e.target.value, isChange: true, word, type,
+            ...ctx, expansion: e.target.value, isChange: true, word, wordType,
           };
         }
         return ctx;
@@ -82,23 +103,25 @@ export default function NormalizeWord(props) {
   };
 
   const handleApply = () => {
-    if (expansion === undefined) {
-      openNotification('warning', message.ALERT);
-    } else {
-      setContexts(
-        contexts.map((ctx) => ({
-          ...ctx, expansion, isChange, word, type,
-        })),
-      );
-    }
+    setContexts(
+      contexts.map((ctx) => {
+        if (ctx.wordType !== wordType || ctx.expansion !== expansion) {
+          return {
+            ...ctx, expansion, isChange: true, word, wordType,
+          };
+        }
+        return ctx;
+      }),
+    );
   };
 
   const handleSave = async () => {
     const listExpansionChange = contexts.filter((ctx) => ctx.isChange === true);
-    const { data } = await axios.post('http://localhost:8000/normalize-word', { listExpansionChange, articleId });
-    if (data.status === 1) {
-      openNotification('success', message.NORMALIZE_SUCCESS);
-    }
+    console.log(listExpansionChange);
+    // const { data } = await axios.post('http://localhost:8000/normalize-word', { listExpansionChange, articleId });
+    // if (data.status === 1) {
+    //   openNotification('success', message.NORMALIZE_SUCCESS);
+    // }
   };
 
   useEffect(() => {
@@ -111,12 +134,27 @@ export default function NormalizeWord(props) {
         $mtu('body')
           .children()
           .each(function () {
-            if ($(this).attr('nsw') === type && $(this).attr('orig') === word) {
+            // $(this).attr('nsw') === type &&
+            if ($(this).attr('orig') === word) {
               expansion = $(this).text().trim().replace(/\s+/g, ' ');
               setExpansion(expansion);
             }
           });
         return expansion;
+      };
+      const getTypeOfWord = (allophones, word) => {
+        const $ = cheerio.load(allophones, { xmlMode: true, decodeEntities: false });
+        const $mtu = cheerio.load($.html($('mtu')));
+        let type = '';
+        $mtu('body')
+          .children()
+          .each(function () {
+            // $(this).attr('nsw') === type &&
+            if ($(this).attr('orig') === word) {
+              type = $(this).attr('nsw');
+            }
+          });
+        return type;
       };
 
       const getNumberOfWord = (allophones, word) => {
@@ -134,32 +172,37 @@ export default function NormalizeWord(props) {
       };
       const article = (await axios.post('http://localhost:8000/get-valid-article-by-id', { articleId })).data;
       if (!ignore) {
-        const { sentences } = article;
+        const { paragraphs } = article;
         const listSentences = [];
-        sentences.forEach((sentence) => {
-          const { allophones } = sentence;
-          const $ = cheerio.load(allophones, { xmlMode: true, decodeEntities: false });
-          const $mtu = cheerio.load($.html($('mtu')));
-          $mtu('body')
-            .children()
-            .each(function () {
-              if ($(this).attr('nsw') === type && $(this).attr('orig') === word) {
-                if (!listSentences.some((temp) => temp._id === sentence._id)) {
-                  listSentences.push(sentence);
+        paragraphs.forEach((paragraph) => {
+          const { sentences } = paragraph;
+          sentences.forEach((sentence) => {
+            const { allophones } = sentence;
+            const $ = cheerio.load(allophones, { xmlMode: true, decodeEntities: false });
+            const $mtu = cheerio.load($.html($('mtu')));
+            $mtu('body')
+              .children()
+              .each(function () {
+                // $(this).attr('nsw') === type
+                if ($(this).attr('orig') === word.replace('~', '/')) {
+                  if (!listSentences.some((temp) => temp._id === sentence._id)) {
+                    listSentences.push(sentence);
+                  }
                 }
-              }
-            });
+              });
+          });
         });
         const contexts = [];
         for (let i = 0; i < listSentences.length; i += 1) {
-          const numberOfWords = getNumberOfWord(listSentences[i].allophones, word);
+          const numberOfWords = getNumberOfWord(listSentences[i].allophones, word.replace('~', '/'));
           if (numberOfWords > 1) {
             for (let j = 0; j < numberOfWords; j += 1) {
               const context = {
                 id: listSentences[i]._id,
                 key: i,
                 allophones: listSentences[i].allophones,
-                expansion: getExpansionOfWord(listSentences[i].allophones, word),
+                wordType: getTypeOfWord(listSentences[i].allophones, word.replace('~', '/')),
+                expansion: getExpansionOfWord(listSentences[i].allophones, word.replace('~', '/')),
                 isChange: false,
                 index: j,
               };
@@ -170,7 +213,8 @@ export default function NormalizeWord(props) {
               id: listSentences[i]._id,
               key: i,
               allophones: listSentences[i].allophones,
-              expansion: getExpansionOfWord(listSentences[i].allophones, word),
+              wordType: getTypeOfWord(listSentences[i].allophones, word.replace('~', '/')),
+              expansion: getExpansionOfWord(listSentences[i].allophones, word.replace('~', '/')),
               isChange: false,
               index: 0,
             };
@@ -225,7 +269,8 @@ export default function NormalizeWord(props) {
     });
     let i = 0;
     for (const temp of words) {
-      if (temp.type === type && temp.word === word) {
+      // temp.type === type
+      if (temp.word === word.replace('~', '/')) {
         i += 1;
       }
       if (i === (position + 1)) {
@@ -236,7 +281,8 @@ export default function NormalizeWord(props) {
     return (
       <div style={{ padding: 10 }}>
         {words.map((temp, index) => {
-          if (temp.word === word && temp.type === type && temp.mark) {
+          // && temp.type === type
+          if (temp.word === word.replace('~', '/') && temp.mark) {
             return (
               // eslint-disable-next-line jsx-a11y/no-static-element-interactions
               <span
@@ -284,7 +330,16 @@ export default function NormalizeWord(props) {
       title: 'Loại từ',
       key: 3,
       width: 200,
-      render: () => renderSelectTag(type),
+      dataIndex: 'wordType',
+      render: (value, record) => (
+        <Select
+          value={record.wordType}
+          onChange={(value1) => handleSetTypeChangeRow(value1, record.id, word, record.index)}
+        >
+          {listTypeWord
+            .map((typeWord) => <Option key={typeWord} value={typeWord}>{typeWord}</Option>) }
+        </Select>
+      ),
     },
     {
       title: 'Cách đọc',
@@ -295,7 +350,7 @@ export default function NormalizeWord(props) {
         <Input
           style={{ width: 150 }}
           value={record.expansion}
-          onChange={(e) => handleChangeExpansionRow(e, record.id, word, record.index)}
+          onChange={(e) => handleChangeExpansionRow(e, record.id, word.replace('~', '/'), record.index, record.wordType)}
         />
       ),
     },
@@ -320,8 +375,15 @@ export default function NormalizeWord(props) {
           <div style={{ marginTop: 7 }}>
             <b>Từ cần chuẩn hoá:</b>
             {' '}
-            <span className={classes.word}>{word}</span>
+            <span className={classes.word}>{word.replace('~', '/')}</span>
           </div>
+        </Col>
+        <Col span={6}>
+          <b>
+            Loại từ:
+            {'   '}
+          </b>
+          { renderSelectTag(wordType) }
         </Col>
         <Col span={6}>
           <b>
@@ -329,13 +391,6 @@ export default function NormalizeWord(props) {
             {'   '}
           </b>
           <Input style={{ width: '50%' }} value={expansion} onChange={handleSetExpansion} />
-        </Col>
-        <Col span={6}>
-          <b>
-            Loại từ:
-            {'   '}
-          </b>
-          { renderSelectTag(type) }
         </Col>
         <Col span={6}>
           <Button type="primary" onClick={handleApply}>

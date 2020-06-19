@@ -147,7 +147,7 @@ const General = ({ onCreate, general }) => {
       </Form.Item>
       <Form.Item
         name="schedules"
-        label="Schedule"
+        label="Lịch chạy"
         rules={[
           {
             required: true,

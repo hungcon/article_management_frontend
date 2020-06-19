@@ -43,23 +43,23 @@ export const init = {
   INIT_SCHEDULES: {
     scheduleDefault: [
       {
-        key: 'Every 5 minutes',
+        key: 'Mỗi 5 phút',
         value: '0 */5 * * * *',
       },
       {
-        key: 'Every 10 minutes',
+        key: 'Mỗi 10 phút',
         value: '0 */10 * * * *',
       },
       {
-        key: 'Every 15 minutes',
+        key: 'Mỗi 15 phút',
         value: '0 */15 * * * *',
       },
       {
-        key: 'Every 30 minutes',
+        key: 'Mỗi 30 phút',
         value: '0 */30 * * * *',
       },
       {
-        key: 'Every 1 hour',
+        key: 'Mỗi 1 giờ',
         value: '0 * * * * *',
       },
     ],

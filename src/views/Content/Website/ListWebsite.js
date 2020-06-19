@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  Table, Button, Breadcrumb, Modal, Form, Input,
+  Table, Button, Breadcrumb, Modal, Form, Input, Select, InputNumber,
 } from 'antd';
 import {
   EditOutlined, DeleteOutlined, PlusCircleOutlined, ExclamationCircleOutlined,
@@ -13,6 +13,7 @@ import { message } from '../../../common';
 import openNotification from '../../Notifications';
 
 const { confirm } = Modal;
+const { Option } = Select;
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -54,9 +55,10 @@ export default function ListWebsite() {
   };
 
   const onWebsiteCreate = (values) => {
+    const websiteInfo = values;
     switch (action) {
       case 'add':
-        axios.post('http://localhost:8000/add-website', { name: values.name }, {
+        axios.post('http://localhost:8000/add-website', { websiteInfo }, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -165,8 +167,12 @@ export default function ListWebsite() {
     {
       title: 'Đầu báo',
       dataIndex: 'name',
-      width: '65%',
       key: 'name',
+    },
+    {
+      title: 'AppId',
+      dataIndex: 'appId',
+      key: 'appId',
     },
     {
       title: 'Hành động',
@@ -241,6 +247,11 @@ export default function ListWebsite() {
           form={form}
           initialValues={{
             name: website.name,
+            appId: website.appId,
+            bitRate: website.bitRate || 128000,
+            sapoTime: website.sapoTime || 0.5,
+            titleTime: website.titleTime || 0.5,
+            paragraphTime: website.paragraphTime || 0.5,
           }}
         >
           <Form.Item
@@ -263,6 +274,69 @@ export default function ListWebsite() {
             ]}
           >
             <Input />
+          </Form.Item>
+          <Form.Item
+            name="appId"
+            label="AppId"
+            rules={[
+              {
+                required: true,
+                message: 'Hãy nhập AppId',
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="bitRate"
+            label="Chất lượng âm thanh"
+            rules={[
+              {
+                required: true,
+                message: 'Hãy chọn chất lượng âm thanh',
+              },
+            ]}
+          >
+            <Select>
+              <Option key={1} value={64000}>64000</Option>
+              <Option key={2} value={128000}>128000</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="titleTime"
+            label="Thời gian nghỉ sau tiêu đề"
+            rules={[
+              {
+                required: true,
+                message: 'Hãy nhập thời gian nghỉ sau tiêu đề',
+              },
+            ]}
+          >
+            <InputNumber min={0.3} max={1} step={0.1} style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item
+            name="sapoTime"
+            label="Thời gian nghỉ sau sapo"
+            rules={[
+              {
+                required: true,
+                message: 'Hãy nhập thời gian nghỉ sau sapo',
+              },
+            ]}
+          >
+            <InputNumber min={0.3} max={1} step={0.1} style={{ width: '100%' }} />
+          </Form.Item>
+          <Form.Item
+            name="paragraphTime"
+            label="Thời gian nghỉ giữa mỗi đoạn văn"
+            rules={[
+              {
+                required: true,
+                message: 'Hãy nhập thời gian nghỉ giữa mỗi đoạn văn',
+              },
+            ]}
+          >
+            <InputNumber min={0.3} max={1} step={0.1} style={{ width: '100%' }} />
           </Form.Item>
         </Form>
       </Modal>

@@ -34,7 +34,7 @@ export default function ContentRoute() {
       <PrivateRoute path="/dashboard/list-valid-articles/:articleId/:type/:word" exact component={NormalizeWord} />
       <PrivateRoute path="/dashboard/add-article" exact component={AddArticle} />
       <PrivateRoute path="/dashboard/statistics" exact component={Statistics} />
-      <Redirect to="/dashboard/list-valid-articles" />
+      {/* <Redirect to="/dashboard/list-valid-articles" /> */}
     </Switch>
   );
 }
