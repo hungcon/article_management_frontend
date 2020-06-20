@@ -117,11 +117,10 @@ export default function NormalizeWord(props) {
 
   const handleSave = async () => {
     const listExpansionChange = contexts.filter((ctx) => ctx.isChange === true);
-    console.log(listExpansionChange);
-    // const { data } = await axios.post('http://localhost:8000/normalize-word', { listExpansionChange, articleId });
-    // if (data.status === 1) {
-    //   openNotification('success', message.NORMALIZE_SUCCESS);
-    // }
+    const { data } = await axios.post('http://localhost:8000/normalize-word', { listExpansionChange, articleId });
+    if (data.status === 1) {
+      openNotification('success', message.NORMALIZE_SUCCESS);
+    }
   };
 
   useEffect(() => {
@@ -184,7 +183,7 @@ export default function NormalizeWord(props) {
               .children()
               .each(function () {
                 // $(this).attr('nsw') === type
-                if ($(this).attr('orig') === word.replace('~', '/')) {
+                if ($(this).attr('orig') === word.replace(/~/g, '/')) {
                   if (!listSentences.some((temp) => temp._id === sentence._id)) {
                     listSentences.push(sentence);
                   }
@@ -194,15 +193,15 @@ export default function NormalizeWord(props) {
         });
         const contexts = [];
         for (let i = 0; i < listSentences.length; i += 1) {
-          const numberOfWords = getNumberOfWord(listSentences[i].allophones, word.replace('~', '/'));
+          const numberOfWords = getNumberOfWord(listSentences[i].allophones, word.replace(/~/g, '/'));
           if (numberOfWords > 1) {
             for (let j = 0; j < numberOfWords; j += 1) {
               const context = {
                 id: listSentences[i]._id,
                 key: i,
                 allophones: listSentences[i].allophones,
-                wordType: getTypeOfWord(listSentences[i].allophones, word.replace('~', '/')),
-                expansion: getExpansionOfWord(listSentences[i].allophones, word.replace('~', '/')),
+                wordType: getTypeOfWord(listSentences[i].allophones, word.replace(/~/g, '/')),
+                expansion: getExpansionOfWord(listSentences[i].allophones, word.replace(/~/g, '/')),
                 isChange: false,
                 index: j,
               };
@@ -213,8 +212,8 @@ export default function NormalizeWord(props) {
               id: listSentences[i]._id,
               key: i,
               allophones: listSentences[i].allophones,
-              wordType: getTypeOfWord(listSentences[i].allophones, word.replace('~', '/')),
-              expansion: getExpansionOfWord(listSentences[i].allophones, word.replace('~', '/')),
+              wordType: getTypeOfWord(listSentences[i].allophones, word.replace(/~/g, '/')),
+              expansion: getExpansionOfWord(listSentences[i].allophones, word.replace(/~/g, '/')),
               isChange: false,
               index: 0,
             };
@@ -270,7 +269,7 @@ export default function NormalizeWord(props) {
     let i = 0;
     for (const temp of words) {
       // temp.type === type
-      if (temp.word === word.replace('~', '/')) {
+      if (temp.word === word.replace(/~/g, '/')) {
         i += 1;
       }
       if (i === (position + 1)) {
@@ -282,7 +281,7 @@ export default function NormalizeWord(props) {
       <div style={{ padding: 10 }}>
         {words.map((temp, index) => {
           // && temp.type === type
-          if (temp.word === word.replace('~', '/') && temp.mark) {
+          if (temp.word === word.replace(/~/g, '/') && temp.mark) {
             return (
               // eslint-disable-next-line jsx-a11y/no-static-element-interactions
               <span
@@ -350,7 +349,7 @@ export default function NormalizeWord(props) {
         <Input
           style={{ width: 150 }}
           value={record.expansion}
-          onChange={(e) => handleChangeExpansionRow(e, record.id, word.replace('~', '/'), record.index, record.wordType)}
+          onChange={(e) => handleChangeExpansionRow(e, record.id, word.replace(/~/g, '/'), record.index, record.wordType)}
         />
       ),
     },
@@ -375,7 +374,7 @@ export default function NormalizeWord(props) {
           <div style={{ marginTop: 7 }}>
             <b>Từ cần chuẩn hoá:</b>
             {' '}
-            <span className={classes.word}>{word.replace('~', '/')}</span>
+            <span className={classes.word}>{word.replace(/~/g, '/')}</span>
           </div>
         </Col>
         <Col span={6}>

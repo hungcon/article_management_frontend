@@ -26,8 +26,10 @@ const listTypeWord = [
   'loanword',
   'abbreviation',
   'date_dm',
+  'date_dmy',
   'date_my',
   'number_integer',
+  'number_digits',
   'number_float',
   'read_as_sequence',
   'range',
@@ -83,7 +85,7 @@ export default function CleanOption(props) {
     return paragraphs.map((paragraph) => {
       const { sentences } = paragraph;
       return (
-        <div key={paragraph._id}>
+        <div key={paragraph._id} style={{ borderBottom: '1px solid #a1a1a1' }}>
           {
             sentences.map((sentence) => {
               const { allophones } = sentence;
@@ -153,12 +155,12 @@ export default function CleanOption(props) {
                     display: 'inline-block',
                     width: '46%',
                     textAlign: 'justify',
-                    borderBottom: '1px solid gray',
+                    // borderBottom: '1px solid gray',
                   }}
                   >
                     {words1.map((word, index) => {
                       let orig = word.word;
-                      orig = orig.replace('/', '~');
+                      orig = orig.replace(/\//g, '~');
                       const { type } = word;
                       if (highlights1.includes(word.word)) {
                         return (
@@ -198,7 +200,6 @@ export default function CleanOption(props) {
                     width: '46%',
                     textAlign: 'justify',
                     alignContent: 'center',
-                    borderBottom: '1px solid gray',
                   }}
                   >
                     {words2.map((word, index) => {
