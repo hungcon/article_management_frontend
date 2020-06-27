@@ -323,7 +323,7 @@ const MoreInfo = ({ record, props }) => {
             if (schedule === '0 */30 * * * *') {
               return (
                 <Text mark key={schedule} value={schedule}>
-                  Mỗi 15 phút
+                  Mỗi 30 phút
                   <br />
                 </Text>
               );

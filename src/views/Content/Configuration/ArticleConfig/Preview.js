@@ -44,19 +44,6 @@ export default function Preview({ content }) {
               <b>Description:</b>
                 {article.sapo && article.sapo}
               <br />
-              <b>Tags:</b>
-                {article.tags && article.tags.join(', ')}
-              <br />
-              <b>Thumbnail:</b>
-              <br />
-              <img src={article.thumbnail} />
-              <br />
-              <b>Images:</b>
-              <br />
-                {article.images.map((image) => (
-                  <img key={image} src={image} />
-                ))}
-              <br />
             </div>
           )
         }

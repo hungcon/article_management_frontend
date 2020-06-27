@@ -8,7 +8,7 @@ export const init = {
       titleSelector: 'title',
       linkSelector: 'link',
       sapoSelector: 'description',
-      publishDateSelector: 'pubDate',
+      publicDateSelector: 'pubDate',
     },
   },
   INIT_HTML: {
@@ -30,11 +30,6 @@ export const init = {
     sapoRedundancySelectors: [],
     titleSelector: '',
     titleRedundancySelectors: [],
-    thumbnailSelector: '',
-    thumbnailRedundancySelectors: [],
-    tagsSelector: '',
-    tagsRedundancySelectors: [
-    ],
     contentSelector: '',
     contentRedundancySelectors: [],
     textRedundancySelectors: [],

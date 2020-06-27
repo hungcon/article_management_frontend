@@ -21,7 +21,6 @@ import { useDispatch } from 'react-redux';
 import styles from '../../assets/styles/dashboardStyles';
 import ContentRoute from '../../router/Route/ContentRoute';
 import ListItems from './ListItems';
-import allActions from '../../store/actions/allActions';
 
 const useStyles = makeStyles(styles);
 
@@ -29,7 +28,6 @@ export default function Dashboard(props) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState({ role: '' });
-  const dispatch = useDispatch();
 
   useEffect(() => {
     let ignore = false;
@@ -40,12 +38,11 @@ export default function Dashboard(props) {
       } = user.currentUser;
       if (!ignore) {
         setCurrentUser({ role });
-        dispatch(allActions.userActions.signIn(user.currentUser));
       }
     }
     fetchData();
     return () => { ignore = true; };
-  }, [dispatch]);
+  }, []);
 
   const handleDrawerOpen = () => {
     setOpen(true);

@@ -57,7 +57,7 @@ export default function ListAccounts(props) {
   const [data, setData] = useState([]);
   const [visible, setVisible] = useState(false);
   const [currenUserName, setCurrentUserName] = useState();
-  const reload = useSelector((state) => state.config.reload);
+  const reload = useSelector((state) => state.account.reload);
   const dispatch = useDispatch();
 
 
@@ -100,7 +100,7 @@ export default function ListAccounts(props) {
           },
         }).then((result) => {
           if (result.data.status === 1) {
-            dispatch(allActions.configAction.reload());
+            dispatch(allActions.accountAction.reload());
             openNotification('success', message.DELETE_SUCCESS);
           } else {
             openNotification('error', message.ERROR);

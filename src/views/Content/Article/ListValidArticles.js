@@ -220,10 +220,21 @@ export default function ListValidArticles(props) {
       align: 'center',
       render: (value, record) => (
         <div>
+          {record.status === 1 && (
+          <Button
+            onClick={() => console.log(record._id)}
+            style={{ marginRight: 10, width: 180 }}
+            type="primary"
+            danger
+            icon={<ReloadOutlined />}
+          >
+            Chuẩn hoá tự động
+          </Button>
+          )}
           {record.status === 2 && (
           <Button
             onClick={() => reCleanArticle(record._id)}
-            style={{ marginRight: 10, width: 165 }}
+            style={{ marginRight: 10, width: 180 }}
             type="primary"
             danger
             icon={<ReloadOutlined />}
@@ -240,7 +251,7 @@ export default function ListValidArticles(props) {
           && (
           <Button
             onClick={() => props.history.push(`/dashboard/list-valid-articles/${record._id}`)}
-            style={{ marginRight: 10, width: 165 }}
+            style={{ marginRight: 10, width: 180 }}
             type="primary"
             icon={<FileSearchOutlined />}
           >
@@ -250,7 +261,7 @@ export default function ListValidArticles(props) {
           {record.status === 7 && (
           <Button
             onClick={() => reSyntheticArticle(record._id)}
-            style={{ marginRight: 10, width: 165 }}
+            style={{ marginRight: 10, width: 180 }}
           >
             Tổng hợp lại
           </Button>

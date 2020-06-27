@@ -41,7 +41,7 @@ const RssForm = ({
           titleSelector: record.configuration.titleSelector,
           linkSelector: record.configuration.linkSelector,
           sapoSelector: record.configuration.sapoSelector,
-          publishDateSelector: record.configuration.publishDateSelector,
+          publicDateSelector: record.configuration.publicDateSelector,
         }}
       >
         <Form.Item
@@ -105,12 +105,12 @@ const RssForm = ({
           <Input />
         </Form.Item>
         <Form.Item
-          name="publishDateSelector"
-          label="Publish Date"
+          name="publicDateSelector"
+          label="Public Date"
           rules={[
             {
               required: true,
-              message: 'Hãy nhập publish date selector',
+              message: 'Hãy nhập public date selector',
             },
           ]}
         >

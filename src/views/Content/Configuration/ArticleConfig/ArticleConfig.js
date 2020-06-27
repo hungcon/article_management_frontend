@@ -42,10 +42,6 @@ const ArticleConfig = (props) => {
           sapoRedundancySelectors: values.sapoRedundancySelectors,
           titleSelector: values.titleSelector,
           titleRedundancySelectors: values.titleRedundancySelectors,
-          thumbnailSelector: values.thumbnailSelector,
-          thumbnailRedundancySelectors: values.thumbnailRedundancySelectors,
-          tagsSelector: values.tagsSelector,
-          tagsRedundancySelectors: values.tagsRedundancySelectors,
           contentSelector: values.contentSelector,
           contentRedundancySelectors: values.contentRedundancySelectors,
           textRedundancySelectors: values.textRedundancySelectors,
@@ -67,10 +63,6 @@ const ArticleConfig = (props) => {
       sapoRedundancySelectors: values.sapoRedundancySelectors,
       titleSelector: values.titleSelector,
       titleRedundancySelectors: values.titleRedundancySelectors,
-      thumbnailSelector: values.thumbnailSelector,
-      thumbnailRedundancySelectors: values.thumbnailRedundancySelectors,
-      tagsSelector: values.tagsSelector,
-      tagsRedundancySelectors: values.tagsRedundancySelectors,
       contentSelector: values.contentSelector,
       contentRedundancySelectors: values.contentRedundancySelectors,
       textRedundancySelectors: values.textRedundancySelectors,
@@ -110,10 +102,6 @@ const ArticleConfig = (props) => {
             sapoRedundancySelectors: data.sapoRedundancySelectors,
             titleSelector: data.titleSelector,
             titleRedundancySelectors: data.titleRedundancySelectors,
-            thumbnailSelector: data.thumbnailSelector,
-            thumbnailRedundancySelectors: data.thumbnailRedundancySelectors,
-            tagsSelector: data.tagsSelector,
-            tagsRedundancySelectors: data.tagsRedundancySelectors,
             contentSelector: data.contentSelector,
             contentRedundancySelectors: data.contentRedundancySelectors,
             textRedundancySelectors: data.textRedundancySelectors,
@@ -151,10 +139,6 @@ const ArticleConfig = (props) => {
             sapoRedundancySelectors: article.sapoRedundancySelectors,
             titleSelector: article.titleSelector,
             titleRedundancySelectors: article.titleRedundancySelectors,
-            thumbnailSelector: article.thumbnailSelector,
-            thumbnailRedundancySelectors: article.thumbnailRedundancySelectors,
-            tagsSelector: article.tagsSelector,
-            tagsRedundancySelectors: article.tagsRedundancySelectors,
             contentSelector: article.contentSelector,
             contentRedundancySelectors: article.contentRedundancySelectors,
             textRedundancySelectors: article.textRedundancySelectors,
@@ -197,40 +181,6 @@ const ArticleConfig = (props) => {
           </Form.Item>
 
           <Form.Item name="titleRedundancySelectors" label="Title Redundancy">
-            {renderSelectTag()}
-          </Form.Item>
-
-          <Form.Item
-            name="thumbnailSelector"
-            label="Thumbnail"
-            rules={[
-              {
-                required: true,
-                message: 'Hãy nhập thumbnail selector',
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item name="thumbnailRedundancySelectors" label="Thumbnail Redundancy">
-            {renderSelectTag()}
-          </Form.Item>
-
-          <Form.Item
-            name="tagsSelector"
-            label="Tags"
-            rules={[
-              {
-                required: true,
-                message: 'Hãy nhập tags selector',
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item name="tagsRedundancySelectors" label="Tags Redundancy">
             {renderSelectTag()}
           </Form.Item>
 

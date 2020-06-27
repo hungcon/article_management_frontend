@@ -27,7 +27,7 @@ const RssConfig = ({
         titleSelector: rssVal.configuration.titleSelector,
         linkSelector: rssVal.configuration.linkSelector,
         sapoSelector: rssVal.configuration.sapoSelector,
-        publishDateSelector: rssVal.configuration.publishDateSelector,
+        publicDateSelector: rssVal.configuration.publicDateSelector,
       }}
       onFinish={onSubmit}
     >
@@ -92,12 +92,12 @@ const RssConfig = ({
         <Input />
       </Form.Item>
       <Form.Item
-        name="publishDateSelector"
-        label="Publish Date"
+        name="publicDateSelector"
+        label="Public Date"
         rules={[
           {
             required: true,
-            message: 'Hãy nhập publish date selector',
+            message: 'Hãy nhập public date selector',
           },
         ]}
       >

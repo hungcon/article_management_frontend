@@ -33,17 +33,17 @@ const ArticleConfig = ({
       form={form}
       id="article_form"
       initialValues={{
-        sapoSelector: 'meta[name="description"]',
-        sapoRedundancySelectors: [],
-        titleSelector: 'title',
-        titleRedundancySelectors: [],
-        thumbnailSelector: 'meta[property="og:image"]',
-        thumbnailRedundancySelectors: [],
-        tagsSelector: 'meta[name="keywords"]',
-        tagsRedundancySelectors: [],
-        contentSelector: '',
-        contentRedundancySelectors: [],
-        textRedundancySelectors: [],
+        // sapoSelector: '',
+        // sapoRedundancySelectors: [],
+        // titleSelector: 'title',
+        // titleRedundancySelectors: [],
+        // thumbnailSelector: '',
+        // thumbnailRedundancySelectors: [],
+        // tagsSelector: '',
+        // tagsRedundancySelectors: [],
+        // contentSelector: '',
+        // contentRedundancySelectors: [],
+        // textRedundancySelectors: [],
       }}
       onFinish={onSubmit}
     >
@@ -75,36 +75,6 @@ const ArticleConfig = ({
         <Input />
       </Form.Item>
       <Form.Item name="titleRedundancySelectors" label="Title Redundancy">
-        {renderSelectTag()}
-      </Form.Item>
-      <Form.Item
-        name="thumbnailSelector"
-        label="Thumbnail"
-        rules={[
-          {
-            required: true,
-            message: 'Hãy nhập thumbnail selector',
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item name="thumbnailRedundancySelectors" label="Thumbnail Redundancy">
-        {renderSelectTag()}
-      </Form.Item>
-      <Form.Item
-        name="tagsSelector"
-        label="Tags"
-        rules={[
-          {
-            required: true,
-            message: 'Hãy nhập tags selector',
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item name="tagsRedundancySelectors" label="Tags Redundancy">
         {renderSelectTag()}
       </Form.Item>
       <Form.Item

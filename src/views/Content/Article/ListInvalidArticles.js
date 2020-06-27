@@ -354,7 +354,7 @@ export default function ListInValidArticles() {
           summary={() => (
 
             <tr>
-              <th>Total documents</th>
+              <th>Tổng số bài báo</th>
               <td colSpan={2}>
                 <Text type="danger">{counts}</Text>
               </td>

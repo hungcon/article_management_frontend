@@ -1,8 +1,8 @@
-import userActions from './userActions';
+import accountAction from './accountAction';
 import configAction from './configAction';
 
 const allActions = {
-  userActions,
+  accountAction,
   configAction,
 };
 

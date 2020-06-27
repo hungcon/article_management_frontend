@@ -85,7 +85,7 @@ export default function AddConfig(props) {
         titleSelector: values.titleSelector,
         linkSelector: values.linkSelector,
         sapoSelector: values.sapoSelector,
-        publishDateSelector: values.publishDateSelector,
+        publicDateSelector: values.publicDateSelector,
       },
     };
     setRss(rssVal);
@@ -98,10 +98,6 @@ export default function AddConfig(props) {
       sapoRedundancySelectors: values.sapoRedundancySelectors,
       titleSelector: values.titleSelector,
       titleRedundancySelectors: values.titleRedundancySelectors,
-      thumbnailSelector: values.thumbnailSelector,
-      thumbnailRedundancySelectors: values.thumbnailRedundancySelectors,
-      tagsSelector: values.tagsSelector,
-      tagsRedundancySelectors: values.tagsRedundancySelectors,
       contentSelector: values.contentSelector,
       contentRedundancySelectors: values.contentRedundancySelectors,
       textRedundancySelectors: values.textRedundancySelectors,
@@ -119,7 +115,7 @@ export default function AddConfig(props) {
       if (addResult.data.status === 1) {
         dispatch(allActions.configAction.reload());
         openNotification('success', message.ADD_SUCCESS);
-        props.history.push('/dashboard/configuration');
+        // props.history.push('/dashboard/configuration');
       } else {
         openNotification('error', message.ERROR);
       }

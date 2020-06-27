@@ -259,21 +259,21 @@ export default function CleanOption(props) {
         </Breadcrumb.Item>
       </Breadcrumb>
       <Row gutter={16}>
-        <Col span={8}>
+        <Col xl={8} lg={6}>
           {
           article.linkAudio && (
-            <audio controls style={{ width: 400 }}>
+            <audio controls style={{ width: '80%' }}>
               <source src={`${audioLink}`} />
             </audio>
           )
           }
         </Col>
-        <Col span={8}>
+        <Col xl={8} lg={6}>
           Chọn giọng
           {': '}
           <Select
             defaultValue="vbee-tts-voice-hn_male_manhdung_news_48k-h"
-            style={{ width: 300, marginTop: 10 }}
+            style={{ width: '60%', marginTop: 10 }}
             onChange={handleChange}
           >
             {listVoice.map((voice) => (
@@ -281,7 +281,7 @@ export default function CleanOption(props) {
             ))}
           </Select>
         </Col>
-        <Col span={8}>
+        <Col xl={8} lg={12}>
           <Button
             style={{ marginRight: 10 }}
             onClick={() => props.history.push('/dashboard/list-valid-articles')}

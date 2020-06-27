@@ -51,7 +51,12 @@ const HtmlForm = ({
       centered: true,
       async onOk() {
         console.log('block: ', blockConfigId, htmlConfigId);
-        const result = await Axios.post('http://localhost:8000/delete-block-config', { htmlConfigId, blockConfigId, configId });
+        const result = await Axios.post('http://localhost:8000/delete-block-config', { htmlConfigId, blockConfigId, configId },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          });
         if (result.data.status === 1) {
           dispatch(allActions.configAction.reload());
           onCancel();
@@ -91,7 +96,11 @@ const HtmlForm = ({
     setBlock(blockConfig);
     switch (type.type) {
       case 'serverUpdate':
-        const result = await Axios.post('http://localhost:8000/update-block-config', { blockConfigId: type.blockId, block: blockConfig, configId });
+        const result = await Axios.post('http://localhost:8000/update-block-config', { blockConfigId: type.blockId, block: blockConfig, configId }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
         if (result.data.status === 1) {
           dispatch(allActions.configAction.reload());
           handleCancel();
@@ -170,7 +179,7 @@ const HtmlForm = ({
           <Form.Item name="contentRedundancySelectors" label="Content Redundancy">
             {renderSelectTag()}
           </Form.Item>
-          <Form.Item label="Block Config">
+          <Form.Item label="Cấu hình Block">
             <Input.Group>
               {record.blocksConfiguration.map((config, index) => (
               // eslint-disable-next-line react/no-array-index-key
@@ -201,7 +210,7 @@ const HtmlForm = ({
                     style={{ marginBottom: 10 }}
                     icon={<EditOutlined />}
                   >
-                    Cấu hình block
+                    Cấu hình block mới
                     {' '}
                     {index + 1}
                   </Button>

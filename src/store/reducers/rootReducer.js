@@ -1,9 +1,9 @@
 /* eslint-disable import/prefer-default-export */
 import { combineReducers } from 'redux';
-import user from './userReducer';
+import account from './accountReducer';
 import config from './configReducer';
 
 export const rootReducer = combineReducers({
-  user,
+  account,
   config,
 });
