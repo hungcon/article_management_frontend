@@ -26,6 +26,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import openNotification from '../../Notifications';
 import { message } from '../../../common';
 import allActions from '../../../store/actions/allActions';
+import { API_ENDPOINT } from '../../../common/apis';
 
 const { confirm } = Modal;
 
@@ -67,7 +68,7 @@ export default function ListAccounts(props) {
   };
 
   const onNewPasswordCreate = (userName, password) => {
-    axios.post('http://localhost:8000/update-password', { userName, password }, {
+    axios.post(API_ENDPOINT.UPDATE_PASSWORD, { userName, password }, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
@@ -94,7 +95,7 @@ export default function ListAccounts(props) {
       cancelText: 'Không',
       centered: true,
       async onOk() {
-        axios.post('http://localhost:8000/delete-account', { accountId }, {
+        axios.post(API_ENDPOINT.DELETE_ACCOUNT, { accountId }, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -118,7 +119,7 @@ export default function ListAccounts(props) {
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
-      const listAccounts = (await axios.post('http://localhost:8000/get-list-accounts')).data;
+      const listAccounts = (await axios.post(API_ENDPOINT.GET_LIST_ACCOUNTS)).data;
       for (let i = 0; i < listAccounts.length; i += 1) {
         listAccounts[i].key = i + 1;
       }

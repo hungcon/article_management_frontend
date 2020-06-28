@@ -21,6 +21,7 @@ import {
 } from 'react-router-dom';
 import openNotification from '../../Notifications';
 import { message } from '../../../common';
+import { API_ENDPOINT } from '../../../common/apis';
 import { listTypeWord } from '../../../common/listTypeWord';
 
 const { Option } = Select;
@@ -114,7 +115,10 @@ export default function NormalizeWord(props) {
 
   const handleSave = async () => {
     const listExpansionChange = contexts.filter((ctx) => ctx.isChange === true);
-    const { data } = await axios.post('http://localhost:8000/normalize-word', { listExpansionChange, articleId });
+    const { data } = await axios.post(
+      API_ENDPOINT.NORMALIZE_WORD,
+      { listExpansionChange, articleId },
+    );
     if (data.status === 1) {
       openNotification('success', message.NORMALIZE_SUCCESS);
     }
@@ -166,7 +170,7 @@ export default function NormalizeWord(props) {
           });
         return number;
       };
-      const article = (await axios.post('http://localhost:8000/get-valid-article-by-id', { articleId })).data;
+      const article = (await axios.post(API_ENDPOINT.GET_VALID_ARTICLE_BY_ID, { articleId })).data;
       if (!ignore) {
         const { paragraphs } = article;
         const listSentences = [];

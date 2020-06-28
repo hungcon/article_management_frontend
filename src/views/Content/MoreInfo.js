@@ -14,6 +14,7 @@ import openNotification from '../Notifications';
 import allActions from '../../store/actions/allActions';
 import { message } from '../../common';
 import { init } from '../../common/init';
+import { API_ENDPOINT } from '../../common/apis';
 
 const { confirm } = Modal;
 const { Text } = Typography;
@@ -30,11 +31,14 @@ const MoreInfo = ({ record, props }) => {
   const onRssCreate = async (values, rssConfigId) => {
     switch (rssAction) {
       case 'update':
-        axios.post('http://localhost:8000/update-rss-config', { rssConfig: values, rssConfigId, configId: record._id }, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        axios.post(
+          API_ENDPOINT.UPDATE_RSS_CONFIG,
+          { rssConfig: values, rssConfigId, configId: record._id }, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
           },
-        }).then((updateRssResult) => {
+        ).then((updateRssResult) => {
           if (updateRssResult.data.status === 1) {
             dispatch(allActions.configAction.reload());
             openNotification('success', message.UPDATE_SUCCESS);
@@ -47,7 +51,7 @@ const MoreInfo = ({ record, props }) => {
         });
         break;
       case 'add':
-        axios.post('http://localhost:8000/add-rss-config', { rssConfig: values, configId: record._id }, {
+        axios.post(API_ENDPOINT.ADD_RSS_CONFIG, { rssConfig: values, configId: record._id }, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -73,11 +77,15 @@ const MoreInfo = ({ record, props }) => {
     switch (htmlAction) {
       case 'update':
         if (addBlock.length === 0) {
-          axios.post('http://localhost:8000/update-html-config', { html: values, htmlId, configId: record._id }, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
+          axios.post(
+            API_ENDPOINT.UPDATE_HTML_CONFIG,
+            { html: values, htmlId, configId: record._id },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+              },
             },
-          }).then((updateResult) => {
+          ).then((updateResult) => {
             if (updateResult.data.status === 1) {
               dispatch(allActions.configAction.reload());
               openNotification('success', message.UPDATE_SUCCESS);
@@ -90,7 +98,7 @@ const MoreInfo = ({ record, props }) => {
           });
         } else {
           addBlock.map(async (block) => {
-            axios.post('http://localhost:8000/add-block-config', {
+            axios.post(API_ENDPOINT.ADD_BLOCK_CONFIG, {
               html: values, htmlId, block, configId: record._id,
             }, {
               headers: {
@@ -111,7 +119,7 @@ const MoreInfo = ({ record, props }) => {
         }
         break;
       case 'add':
-        axios.post('http://localhost:8000/add-html-config', { html: values, addBlock, configId: record._id }, {
+        axios.post(API_ENDPOINT.ADD_HTML_CONFIG, { html: values, addBlock, configId: record._id }, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -157,7 +165,7 @@ const MoreInfo = ({ record, props }) => {
       async onOk() {
         if (type === 'rss') {
           console.log('rssId :', deleteId, 'configId: ', configId);
-          axios.post('http://localhost:8000/delete-rss-config', { rssConfigId: deleteId, configId }, {
+          axios.post(API_ENDPOINT.DELETE_RSS_CONFIG, { rssConfigId: deleteId, configId }, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
@@ -174,7 +182,7 @@ const MoreInfo = ({ record, props }) => {
           });
         } else {
           console.log('html: ', deleteId, 'htmlId: ', configId);
-          axios.post('http://localhost:8000/delete-html-config', { htmlConfigId: deleteId, configId }, {
+          axios.post(API_ENDPOINT.DELETE_HTML_CONFIG, { htmlConfigId: deleteId, configId }, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },

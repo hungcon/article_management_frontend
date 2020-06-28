@@ -13,7 +13,6 @@ import LanguageIcon from '@material-ui/icons/Language';
 import PieChartIcon from '@material-ui/icons/PieChart';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import DescriptionIcon from '@material-ui/icons/Description';
-// import LayersIcon from '@material-ui/icons/Layers';
 import { NavLink } from 'react-router-dom';
 import styles from '../../assets/styles/dashboardStyles';
 

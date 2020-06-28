@@ -17,10 +17,10 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { Avatar } from '@material-ui/core';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
 import styles from '../../assets/styles/dashboardStyles';
 import ContentRoute from '../../router/Route/ContentRoute';
 import ListItems from './ListItems';
+import { API_ENDPOINT } from '../../common/apis';
 
 const useStyles = makeStyles(styles);
 
@@ -32,7 +32,7 @@ export default function Dashboard(props) {
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
-      const user = (await axios.post('http://localhost:8000/get-user-info', { userName: localStorage.getItem('userName') })).data;
+      const user = (await axios.post(API_ENDPOINT.GET_USER_INFO, { userName: localStorage.getItem('userName') })).data;
       const {
         role,
       } = user.currentUser;

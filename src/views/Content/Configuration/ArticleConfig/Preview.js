@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react';
 
 import { Tabs } from 'antd';
 // import renderHTML from 'react-render-article';
-import Axios from 'axios';
+import axios from 'axios';
+import { API_ENDPOINT } from '../../../../common/apis';
 
 const { TabPane } = Tabs;
 export default function Preview({ content }) {
@@ -16,7 +17,7 @@ export default function Preview({ content }) {
     let ignore = false;
     async function fetchData() {
       if (content) {
-        const data = await Axios.post('http://localhost:8000/crawl/article', content);
+        const data = await axios.post(API_ENDPOINT.CRAWL_ARTICLE, content);
         if (!ignore) {
           setArticle(data.data);
         }

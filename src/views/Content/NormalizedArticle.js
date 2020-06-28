@@ -17,6 +17,7 @@ import {
 // import Tokenizer from 'sentence-tokenizer';
 import cheerio from 'cheerio';
 import { listVoice } from '../../common/voice';
+import { API_ENDPOINT } from '../../common/apis';
 import { message } from '../../common';
 import { listTypeWord } from '../../common/listTypeWord';
 import openNotification from '../Notifications';
@@ -49,7 +50,7 @@ export default function CleanOption(props) {
   };
 
   const handleFinish = async () => {
-    const { data } = await axios.post('http://localhost:8000/finish-normalize', { articleId });
+    const { data } = await axios.post(API_ENDPOINT.FINISH_NORMALIZE, { articleId });
     if (data.status === 1) {
       openNotification('success', message.FINISH_NORMALIZE);
     }
@@ -58,7 +59,7 @@ export default function CleanOption(props) {
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
-      const { data } = await axios.post('http://localhost:8000/get-valid-article-by-id', { articleId });
+      const { data } = await axios.post(API_ENDPOINT.GET_VALID_ARTICLE_BY_ID, { articleId });
       if (!ignore) {
         setArticle(data);
         setAudioLink(data.linkAudio);
@@ -227,7 +228,7 @@ export default function CleanOption(props) {
   };
 
   const synthetic = async () => {
-    const { data } = await axios.post('http://localhost:8000/synthetic-article', { articleId, voiceSelect });
+    const { data } = await axios.post(API_ENDPOINT.SYNTHETIC_ARTICLE, { articleId, voiceSelect });
     if (data.status === 1) {
       openNotification('success', message.SYNTHETIC_SUCCESS);
     }

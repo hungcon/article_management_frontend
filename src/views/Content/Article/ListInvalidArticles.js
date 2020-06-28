@@ -13,6 +13,7 @@ import { css } from 'emotion';
 import axios from 'axios';
 import { message } from '../../../common';
 import openNotification from '../../Notifications';
+import { API_ENDPOINT } from '../../../common/apis';
 
 
 const { RangePicker } = DatePicker;
@@ -29,15 +30,15 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const listStatus = [
+const listReason = [
   {
     key: 1,
-    name: 'Đã chuẩn hoá máy',
-    value: '3',
+    name: 'Số từ nhỏ hơn 100',
+    value: 1,
   },
   {
     key: 2,
-    name: 'Chuẩn hoá máy lỗi',
+    name: 'Thu thập lỗi',
     value: 2,
   },
 ];
@@ -58,22 +59,7 @@ export default function ListInValidArticles() {
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
-      const listWebsite = (await axios.post('http://localhost:8000/get-websites')).data;
-      for (let i = 0; i < listWebsite.length; i += 1) {
-        listWebsite[i].key = i + 1;
-      }
-      if (!ignore) {
-        setWebsites(listWebsite);
-      }
-    }
-    fetchData();
-    return () => { ignore = true; };
-  }, []);
-
-  useEffect(() => {
-    let ignore = false;
-    async function fetchData() {
-      const listCategories = (await axios.post('http://localhost:8000/get-categories')).data;
+      const listCategories = (await axios.post(API_ENDPOINT.GET_CATEGORIES)).data;
       for (let i = 0; i < listCategories.length; i += 1) {
         listCategories[i].key = i + 1;
       }
@@ -92,8 +78,10 @@ export default function ListInValidArticles() {
     for (const temp of category) {
       listCategory.push(temp._id);
     }
-    const articleConfig = (await axios.post('http://localhost:8000/get-config-by-website', { website, category: category[0] })).data;
-    const reCrawlArticle = (await axios.post('http://localhost:8000/crawl/article', {
+    const articleConfig = (await axios.post(
+      API_ENDPOINT.GET_CONFIG_BY_WEBSITE, { website, category: category[0] },
+    )).data;
+    const reCrawlArticle = (await axios.post(API_ENDPOINT.CRAWL_ARTICLE, {
       link: article.link,
       configuration: articleConfig.article,
     })).data;
@@ -102,17 +90,15 @@ export default function ListInValidArticles() {
       title: article.title,
       sapo: article.sapo,
       publicDate: new Date(article.createdAt),
-      thumbnail: article.thumbnail,
       category: listCategory,
       website: website._id,
-      sourceCode: article.sourceCode,
       text: `${article.title}\n\n${article.text}`,
-      tags: article.tags || [],
       numberOfWords: !article.text ? 0 : article.text.split(' ').length,
-      images: article.images,
     };
     if (reCrawlArticle) {
-      const addResult = await axios.post('http://localhost:8000/add-valid-articles', { article: newValidArticle });
+      const addResult = await axios.post(
+        API_ENDPOINT.ADD_VALID_ARTICLE, { article: newValidArticle },
+      );
       if (addResult.data.status === 1) {
         setReload(!reload);
         openNotification('success', message.RECRAWL_SUCCESS);
@@ -125,7 +111,7 @@ export default function ListInValidArticles() {
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
-      const user = (await axios.post('http://localhost:8000/get-user-info', { userName: localStorage.getItem('userName') })).data;
+      const user = (await axios.post(API_ENDPOINT.GET_USER_INFO, { userName: localStorage.getItem('userName') })).data;
       const {
         websites,
       } = user.currentUser;
@@ -135,13 +121,13 @@ export default function ListInValidArticles() {
       setWebsites(websites);
       const website = filters ? filters.website : websites;
       const category = filters ? filters.category : '';
-      const status = filters ? filters.status : '';
+      const reason = filters ? filters.reason : '';
       const date = {
         startDate: startDate || '',
         endDate: endDate || '',
       };
-      const result = await axios.post('http://localhost:8000/get-invalid-articles', {
-        website, category, date, status,
+      const result = await axios.post(API_ENDPOINT.GET_INVALID_ARTICLES, {
+        website, category, date, reason,
       });
       const articleData = result.data;
       for (let i = 0; i < articleData.length; i += 1) {
@@ -197,7 +183,7 @@ export default function ListInValidArticles() {
       render: (value, record) => (
         <div>
           <Button
-            disabled={record.reason === 'Number of words less than 100.'}
+            disabled={record.reason === 'Số từ nhỏ hơn 100'}
             onClick={() => crawlArticle(record)}
             danger
             type="primary"
@@ -315,8 +301,8 @@ export default function ListInValidArticles() {
           </Col>
           <Col span={6}>
             <Form.Item
-              name="status"
-              label="Trạng thái"
+              name="reason"
+              label="Lý do"
             >
               <Select
                 showSearch
@@ -325,8 +311,8 @@ export default function ListInValidArticles() {
             }
                 allowClear
               >
-                {listStatus.map((status) => (
-                  <Option key={status.key} value={status.value}>{status.name}</Option>
+                {listReason.map((reason) => (
+                  <Option key={reason.key} value={reason.value}>{reason.name}</Option>
                 ))}
               </Select>
             </Form.Item>

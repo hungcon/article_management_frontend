@@ -10,6 +10,7 @@ import {
 import { css } from 'emotion';
 import axios from 'axios';
 import { message } from '../../../common';
+import { API_ENDPOINT } from '../../../common/apis';
 import openNotification from '../../Notifications';
 
 const { confirm } = Modal;
@@ -46,7 +47,7 @@ export default function ListCategory() {
   const [form] = Form.useForm();
 
   const checkCategoryExisted = async (name) => {
-    const { data } = await axios.post('http://localhost:8000/is-category-existed', { name });
+    const { data } = await axios.post(API_ENDPOINT.CHECK_CATEGORY_EXIST, { name });
     if (data) {
       return true;
     }
@@ -56,7 +57,7 @@ export default function ListCategory() {
   const onCategoryCreate = (values) => {
     switch (action) {
       case 'add':
-        axios.post('http://localhost:8000/add-category', { name: values.name }, {
+        axios.post(API_ENDPOINT.ADD_CATEGORY, { name: values.name }, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -73,7 +74,7 @@ export default function ListCategory() {
         });
         break;
       case 'update':
-        axios.post('http://localhost:8000/update-category', { name: values.name, categoryId: category._id }, {
+        axios.post(API_ENDPOINT.UPDATE_CATEGORY, { name: values.name, categoryId: category._id }, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -108,7 +109,7 @@ export default function ListCategory() {
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
-      const listCategories = (await axios.post('http://localhost:8000/get-categories')).data;
+      const listCategories = (await axios.post(API_ENDPOINT.GET_CATEGORIES)).data;
       for (let i = 0; i < listCategories.length; i += 1) {
         listCategories[i].key = i + 1;
       }
@@ -130,7 +131,7 @@ export default function ListCategory() {
       cancelText: 'Không',
       centered: true,
       async onOk() {
-        axios.post('http://localhost:8000/delete-category', { categoryId }, {
+        axios.post(API_ENDPOINT.DELETE_CATEGORY, { categoryId }, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },

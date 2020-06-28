@@ -14,6 +14,7 @@ import allActions from '../../../../store/actions/allActions';
 import './index.css';
 import { init } from '../../../../common/init';
 import { message } from '../../../../common';
+import { API_ENDPOINT } from '../../../../common/apis';
 
 const ArticleConfig = (props) => {
   const [article, setArticle] = useState(init.INIT_ARTICLE);
@@ -68,7 +69,7 @@ const ArticleConfig = (props) => {
       textRedundancySelectors: values.textRedundancySelectors,
     };
     const { articleDemoLink } = values;
-    Axios.post('http://localhost:8000/update-article-config', { articleVal, articleDemoLink, configId }, {
+    Axios.post(API_ENDPOINT.UPDATE_ARTICLE_CONFIG, { articleVal, articleDemoLink, configId }, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
@@ -90,7 +91,7 @@ const ArticleConfig = (props) => {
     let ignore = false;
 
     async function fetchData() {
-      const articleConfig = await Axios.post('http://localhost:8000/get-article-config', { configId });
+      const articleConfig = await Axios.post(API_ENDPOINT.GET_ARTICLE_CONFIG, { configId });
       if (!ignore) {
         const data = articleConfig.data.article;
         data.articleDemoLink = articleConfig.data.articleDemoLink;

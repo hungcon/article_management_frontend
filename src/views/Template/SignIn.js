@@ -7,12 +7,13 @@ import './index.css';
 import axios from 'axios';
 import image from '../../assets/images/login.jpg';
 import openNotification from '../Notifications';
+import { API_ENDPOINT } from '../../common/apis';
 
 
 export default function SignIn(props) {
   const onFinish = async (values) => {
     const { userName, password } = values;
-    const { accessToken } = (await axios.post('http://localhost:8000/sign-in', { userName, password })).data;
+    const { accessToken } = (await axios.post(API_ENDPOINT.SIGN_IN, { userName, password })).data;
     if (accessToken) {
       if (!accessToken.success) {
         openNotification('error', accessToken.err);

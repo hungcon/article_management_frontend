@@ -10,6 +10,7 @@ import { useParams } from 'react-router-dom';
 import allActions from '../../../store/actions/allActions';
 import { message } from '../../../common';
 import openNotification from '../../Notifications';
+import { API_ENDPOINT } from '../../../common/apis';
 
 const { Option } = Select;
 
@@ -31,7 +32,7 @@ export default function AccountForm(props) {
   });
 
   const isAccountExisted = async (userName) => {
-    const accountExisted = (await axios.post('http://localhost:8000/is-account-existed', { userName })).data;
+    const accountExisted = (await axios.post(API_ENDPOINT.CHECK_ACCOUNT_EXIST, { userName })).data;
     if (accountExisted.account) {
       return true;
     }
@@ -45,7 +46,7 @@ export default function AccountForm(props) {
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
-      const listWebsite = (await axios.post('http://localhost:8000/get-websites')).data;
+      const listWebsite = (await axios.post(API_ENDPOINT.GET_WEBSITES)).data;
       for (let i = 0; i < listWebsite.length; i += 1) {
         listWebsite[i].key = i + 1;
       }
@@ -60,7 +61,7 @@ export default function AccountForm(props) {
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
-      const user = (await axios.post('http://localhost:8000/get-account', { accountId })).data;
+      const user = (await axios.post(API_ENDPOINT.GET_ACCOUNT, { accountId })).data;
       for (let i = 0; i < user.currentUser.websites.length; i += 1) {
         user.currentUser.websites[i] = user.currentUser.websites[i]._id;
       }
@@ -76,7 +77,7 @@ export default function AccountForm(props) {
 
   const onFinish = async (values) => {
     const account = values;
-    axios.post(!accountId ? 'http://localhost:8000/add-account' : 'http://localhost:8000/update-account', { account }, {
+    axios.post(!accountId ? API_ENDPOINT.ADD_ACCOUNT : API_ENDPOINT.UPDATE_ACCOUNT, { account }, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },

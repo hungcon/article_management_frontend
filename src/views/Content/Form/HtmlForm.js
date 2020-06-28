@@ -12,13 +12,14 @@ import {
 import {
   EditOutlined, DeleteOutlined, ExclamationCircleOutlined, PlusOutlined,
 } from '@ant-design/icons';
-import Axios from 'axios';
+import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import BlockForm from './BlockForm';
 import openNotification from '../../Notifications';
 import allActions from '../../../store/actions/allActions';
 import { message } from '../../../common';
 import { init } from '../../../common/init';
+import { API_ENDPOINT } from '../../../common/apis';
 
 const { confirm } = Modal;
 
@@ -51,12 +52,14 @@ const HtmlForm = ({
       centered: true,
       async onOk() {
         console.log('block: ', blockConfigId, htmlConfigId);
-        const result = await Axios.post('http://localhost:8000/delete-block-config', { htmlConfigId, blockConfigId, configId },
+        const result = await axios.post(
+          API_ENDPOINT.DELETE_BLOCK_CONFIG, { htmlConfigId, blockConfigId, configId },
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
-          });
+          },
+        );
         if (result.data.status === 1) {
           dispatch(allActions.configAction.reload());
           onCancel();
@@ -96,11 +99,14 @@ const HtmlForm = ({
     setBlock(blockConfig);
     switch (type.type) {
       case 'serverUpdate':
-        const result = await Axios.post('http://localhost:8000/update-block-config', { blockConfigId: type.blockId, block: blockConfig, configId }, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        const result = await axios.post(
+          API_ENDPOINT.UPDATE_BLOCK_CONFIG,
+          { blockConfigId: type.blockId, block: blockConfig, configId }, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
           },
-        });
+        );
         if (result.data.status === 1) {
           dispatch(allActions.configAction.reload());
           handleCancel();

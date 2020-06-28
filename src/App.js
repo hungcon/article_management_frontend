@@ -6,6 +6,7 @@ import Dashboard from './views/Dashboard/Dashboard';
 import SignIn from './views/Template/SignIn';
 import PrivateRoute from './PrivateRoute';
 
+
 function App() {
   return (
     <Switch>

@@ -10,7 +10,6 @@ import AddConfig from '../../views/Content/Configuration/AddConfig/AddConfig';
 import ArticleConfig from '../../views/Content/Configuration/ArticleConfig/ArticleConfig';
 import Statistics from '../../views/Content/Statistics';
 import PrivateRoute from '../../PrivateRoute';
-import AddArticle from '../../views/Article/AddArticle';
 import ListWebsite from '../../views/Content/Website/ListWebsite';
 import ListCategory from '../../views/Content/Category/ListCategory';
 import ListAccounts from '../../views/Content/Account/ListAccounts';
@@ -32,7 +31,6 @@ export default function ContentRoute() {
       <PrivateRoute path="/dashboard/list-valid-articles/:articleId" exact component={NormalizedArticle} />
       <PrivateRoute path="/dashboard/list-invalid-articles" exact component={ListInvalidArticles} />
       <PrivateRoute path="/dashboard/list-valid-articles/:articleId/:type/:word" exact component={NormalizeWord} />
-      <PrivateRoute path="/dashboard/add-article" exact component={AddArticle} />
       <PrivateRoute path="/dashboard/statistics" exact component={Statistics} />
       <Redirect to="/dashboard/list-valid-articles" />
     </Switch>

@@ -7,6 +7,7 @@ import {
 import { isValidCron } from 'cron-validator';
 import axios from 'axios';
 import { init } from '../../../../common/init';
+import { API_ENDPOINT } from '../../../../common/apis';
 
 const { Option } = Select;
 
@@ -18,7 +19,7 @@ const General = ({ onCreate, general }) => {
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
-      const listWebsite = (await axios.post('http://localhost:8000/get-websites')).data;
+      const listWebsite = (await axios.post(API_ENDPOINT.GET_WEBSITES)).data;
       for (let i = 0; i < listWebsite.length; i += 1) {
         listWebsite[i].key = i + 1;
       }
@@ -33,7 +34,7 @@ const General = ({ onCreate, general }) => {
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
-      const listCategories = (await axios.post('http://localhost:8000/get-categories')).data;
+      const listCategories = (await axios.post(API_ENDPOINT.GET_CATEGORIES)).data;
       for (let i = 0; i < listCategories.length; i += 1) {
         listCategories[i].key = i + 1;
       }

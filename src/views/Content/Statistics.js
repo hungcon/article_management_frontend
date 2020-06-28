@@ -13,6 +13,7 @@ import PieChart from 'highcharts-react-official';
 import axios from 'axios';
 import openNotification from '../Notifications';
 import { message } from '../../common/index';
+import { API_ENDPOINT } from '../../common/apis';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -37,7 +38,7 @@ export default function Statistics() {
   const [error, setError] = useState(false);
 
   const reRunSchedule = () => {
-    axios.post('http://localhost:8000/crawl/re-run', null, {
+    axios.post(API_ENDPOINT.RE_RUN_SCHEDULES, null, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
@@ -59,7 +60,7 @@ export default function Statistics() {
 
     async function fetchData() {
       if (!ignore) {
-        const { statisticResult } = (await axios.post('http://localhost:8000/statistic')).data;
+        const { statisticResult } = (await axios.post(API_ENDPOINT.STATISTIC)).data;
         const properties = [];
         const listArticlesInfo = [];
         // Number of articles by website and category => filter by website
@@ -125,7 +126,7 @@ export default function Statistics() {
 
     async function fetchData() {
       if (!ignore) {
-        const { statisticResult } = (await axios.post('http://localhost:8000/statistic-by-type')).data;
+        const { statisticResult } = (await axios.post(API_ENDPOINT.STATISTIC_BY_TYPE)).data;
         const listData = [];
         for (const website of statisticResult) {
           const data = {
@@ -148,7 +149,7 @@ export default function Statistics() {
     async function fetchData() {
       let queueLengthReturn;
       if (!ignore) {
-        const { data } = (await axios.post('http://localhost:8000/get-queue-length'));
+        const { data } = (await axios.post(API_ENDPOINT.GET_QUEUE_LENGTH));
         const queueLengthNum = data.queueLength;
         setQueueLength(queueLengthNum);
         queueLengthReturn = queueLengthNum;

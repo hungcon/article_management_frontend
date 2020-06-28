@@ -16,6 +16,7 @@ import allActions from '../../../store/actions/allActions';
 import MoreInfo from '../MoreInfo';
 import openNotification from '../../Notifications';
 import { message } from '../../../common';
+import { API_ENDPOINT } from '../../../common/apis';
 
 const { confirm } = Modal;
 
@@ -78,7 +79,7 @@ export default function Configuration(props) {
   };
 
   const onCreate = async (values) => {
-    axios.post('http://localhost:8000/update-config', { configId, config: values }, {
+    axios.post(API_ENDPOINT.UPDATE_CONFIG, { configId, config: values }, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
@@ -106,7 +107,7 @@ export default function Configuration(props) {
       cancelText: 'Không',
       centered: true,
       async onOk() {
-        axios.post('http://localhost:8000/delete-config', { configId: toDelete._id }, {
+        axios.post(API_ENDPOINT.DELETE_CONFIG, { configId: toDelete._id }, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -208,7 +209,7 @@ export default function Configuration(props) {
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
-      const result = await axios.post('http://localhost:8000/get-configuration');
+      const result = await axios.post(API_ENDPOINT.GET_CONFIGURATION);
       const configData = result.data;
       for (let i = 0; i < configData.length; i += 1) {
         configData[i].key = i;
@@ -220,40 +221,6 @@ export default function Configuration(props) {
     fetchData();
     return () => { ignore = true; };
   }, [reload, dispatch]);
-
-  // const runSchedule = async () => {
-  //   axios.post('http://localhost:8000/crawl/run', null, {
-  //     headers: {
-  //       Authorization: `Bearer ${localStorage.getItem('token')}`,
-  //     },
-  //   }).then((result) => {
-  //     if (result.data.status === 1) {
-  //       openNotification('success', message.RUN_SUCCESS);
-  //     } else {
-  //       openNotification('error', message.ERROR);
-  //     }
-  //   }).catch((err) => {
-  //     console.log(err);
-  //     openNotification('error', message.UNAUTHORIZED);
-  //   });
-  // };
-
-  // const stopSchedule = async () => {
-  //   axios.post('http://localhost:8000/crawl/stop', null, {
-  //     headers: {
-  //       Authorization: `Bearer ${localStorage.getItem('token')}`,
-  //     },
-  //   }).then((result) => {
-  //     if (result.data.status === 1) {
-  //       openNotification('success', message.RUN_SUCCESS);
-  //     } else {
-  //       openNotification('error', message.ERROR);
-  //     }
-  //   }).catch((err) => {
-  //     console.log(err);
-  //     openNotification('error', message.UNAUTHORIZED);
-  //   });
-  // };
 
   return (
     <div className={classes.root}>

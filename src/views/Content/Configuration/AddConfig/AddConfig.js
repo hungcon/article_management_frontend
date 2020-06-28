@@ -14,6 +14,7 @@ import ArticleConfig from './ArticleConfig';
 import openNotification from '../../../Notifications';
 import allActions from '../../../../store/actions/allActions';
 import { message } from '../../../../common';
+import { API_ENDPOINT } from '../../../../common/apis';
 import { init } from '../../../../common/init';
 
 const useStyles = makeStyles(() => ({
@@ -107,7 +108,7 @@ export default function AddConfig(props) {
       config: general.crawlType === 'HTML' ? html : rss,
       article,
     };
-    Axios.post('http://localhost:8000/add-config', data, {
+    Axios.post(API_ENDPOINT.ADD_CONFIG, data, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },

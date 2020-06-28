@@ -14,6 +14,7 @@ import { css } from 'emotion';
 import axios from 'axios';
 import openNotification from '../../Notifications';
 import { message } from '../../../common';
+import { API_ENDPOINT } from '../../../common/apis';
 
 
 const { Option } = Select;
@@ -83,14 +84,14 @@ export default function ListValidArticles(props) {
   ];
 
   const reNormalizeArticle = async (articleId) => {
-    const { data } = await axios.post('http://localhost:8000/normalize-article', { articleId });
+    const { data } = await axios.post(API_ENDPOINT.NORMALIZE_ARTICLE, { articleId });
     if (data.status === 1) {
       openNotification('success', message.RENORMALIZE_SUCCESS);
     }
   };
 
   const reSyntheticArticle = async (articleId) => {
-    const { data } = await axios.post('http://localhost:8000/synthetic-article',
+    const { data } = await axios.post(API_ENDPOINT.SYNTHETIC_ARTICLE,
       { articleId, voiceSelect: 'vbee-tts-voice-hn_male_manhdung_news_48k-h' });
     if (data.status === 1) {
       openNotification('success', message.RESYNTHETIC_SUCCESS);
@@ -100,7 +101,7 @@ export default function ListValidArticles(props) {
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
-      const user = (await axios.post('http://localhost:8000/get-user-info', { userName: localStorage.getItem('userName') })).data;
+      const user = (await axios.post(API_ENDPOINT.GET_USER_INFO, { userName: localStorage.getItem('userName') })).data;
       const {
         websites,
       } = user.currentUser;
@@ -115,7 +116,7 @@ export default function ListValidArticles(props) {
         startDate: startDate || '',
         endDate: endDate || '',
       };
-      const result = await axios.post('http://localhost:8000/get-valid-articles', {
+      const result = await axios.post(API_ENDPOINT.GET_VALID_ARTICLES, {
         website, category, date, status,
       });
       const articleData = result.data;
@@ -134,7 +135,7 @@ export default function ListValidArticles(props) {
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
-      const listCategories = (await axios.post('http://localhost:8000/get-categories')).data;
+      const listCategories = (await axios.post(API_ENDPOINT.GET_CATEGORIES)).data;
       for (let i = 0; i < listCategories.length; i += 1) {
         listCategories[i].key = i + 1;
       }

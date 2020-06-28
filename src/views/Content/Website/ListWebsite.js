@@ -10,6 +10,7 @@ import {
 import { css } from 'emotion';
 import axios from 'axios';
 import { message } from '../../../common';
+import { API_ENDPOINT } from '../../../common/apis';
 import openNotification from '../../Notifications';
 
 const { confirm } = Modal;
@@ -47,7 +48,7 @@ export default function ListWebsite() {
   const [form] = Form.useForm();
 
   const checkWebsiteExisted = async (name) => {
-    const { data } = await axios.post('http://localhost:8000/is-website-existed', { name });
+    const { data } = await axios.post(API_ENDPOINT.CHECK_WEBSITE_EXIST, { name });
     if (data) {
       return true;
     }
@@ -58,7 +59,7 @@ export default function ListWebsite() {
     const websiteInfo = values;
     switch (action) {
       case 'add':
-        axios.post('http://localhost:8000/add-website', { websiteInfo }, {
+        axios.post(API_ENDPOINT.ADD_WEBSITE, { websiteInfo }, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -75,7 +76,7 @@ export default function ListWebsite() {
         });
         break;
       case 'update':
-        axios.post('http://localhost:8000/update-website', { websiteInfo, websiteId: website._id }, {
+        axios.post(API_ENDPOINT.UPDATE_WEBSITE, { websiteInfo, websiteId: website._id }, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -110,7 +111,7 @@ export default function ListWebsite() {
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
-      const listWebsite = (await axios.post('http://localhost:8000/get-websites')).data;
+      const listWebsite = (await axios.post(API_ENDPOINT.GET_WEBSITES)).data;
       for (let i = 0; i < listWebsite.length; i += 1) {
         listWebsite[i].key = i + 1;
       }
@@ -132,7 +133,7 @@ export default function ListWebsite() {
       cancelText: 'Không',
       centered: true,
       async onOk() {
-        axios.post('http://localhost:8000/delete-website', { websiteId }, {
+        axios.post(API_ENDPOINT.DELETE_WEBSITE, { websiteId }, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
