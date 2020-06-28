@@ -82,8 +82,8 @@ export default function ListValidArticles(props) {
     },
   ];
 
-  const reCleanArticle = async (articleId) => {
-    const { data } = await axios.post('http://localhost:8000/clean-article', { articleId });
+  const reNormalizeArticle = async (articleId) => {
+    const { data } = await axios.post('http://localhost:8000/normalize-article', { articleId });
     if (data.status === 1) {
       openNotification('success', message.RENORMALIZE_SUCCESS);
     }
@@ -202,7 +202,7 @@ export default function ListValidArticles(props) {
           return 'Đang chuẩn hoá tay';
         }
         if (value === 5) {
-          return 'Đã chuẩn hoá tay';
+          return 'Đang chờ phê duyệt';
         }
         if (value === 6) {
           return 'Đang chuyển audio';
@@ -222,7 +222,7 @@ export default function ListValidArticles(props) {
         <div>
           {record.status === 1 && (
           <Button
-            onClick={() => console.log(record._id)}
+            onClick={() => reNormalizeArticle(record._id)}
             style={{ marginRight: 10, width: 180 }}
             type="primary"
             danger
@@ -233,7 +233,7 @@ export default function ListValidArticles(props) {
           )}
           {record.status === 2 && (
           <Button
-            onClick={() => reCleanArticle(record._id)}
+            onClick={() => reNormalizeArticle(record._id)}
             style={{ marginRight: 10, width: 180 }}
             type="primary"
             danger
@@ -262,6 +262,9 @@ export default function ListValidArticles(props) {
           <Button
             onClick={() => reSyntheticArticle(record._id)}
             style={{ marginRight: 10, width: 180 }}
+            type="primary"
+            danger
+            icon={<ReloadOutlined />}
           >
             Tổng hợp lại
           </Button>

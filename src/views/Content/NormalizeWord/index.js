@@ -21,6 +21,7 @@ import {
 } from 'react-router-dom';
 import openNotification from '../../Notifications';
 import { message } from '../../../common';
+import { listTypeWord } from '../../../common/listTypeWord';
 
 const { Option } = Select;
 
@@ -35,17 +36,6 @@ const useStyles = makeStyles(() => ({
     color: 'red',
   },
 }));
-
-const listTypeWord = [
-  'loanword',
-  'abbreviation',
-  'date_dm',
-  'date_my',
-  'number_integer',
-  'number_float',
-  'read_as_sequence',
-  'range',
-];
 
 
 export default function NormalizeWord(props) {
@@ -75,9 +65,16 @@ export default function NormalizeWord(props) {
   };
 
   const renderSelectTag = (defaultValue) => (
-    <Select value={defaultValue} onChange={handleSetTypeChange}>
+    <Select style={{ width: '70%' }} value={defaultValue} onChange={handleSetTypeChange}>
       {listTypeWord
-        .map((typeWord) => <Option key={typeWord} value={typeWord}>{typeWord}</Option>) }
+        .map((typeWord, key) => (
+          <Option
+            key={key}
+            value={typeWord.type}
+          >
+            {typeWord.name}
+          </Option>
+        )) }
     </Select>
   );
 
@@ -129,17 +126,17 @@ export default function NormalizeWord(props) {
       const getExpansionOfWord = (allophones, word) => {
         const $ = cheerio.load(allophones, { xmlMode: true, decodeEntities: false });
         const $mtu = cheerio.load($.html($('mtu')));
-        let expansion = '';
+        let expansionVal = '';
         $mtu('body')
           .children()
           .each(function () {
             // $(this).attr('nsw') === type &&
             if ($(this).attr('orig') === word) {
-              expansion = $(this).text().trim().replace(/\s+/g, ' ');
-              setExpansion(expansion);
+              expansionVal = $(this).text().trim().replace(/\s+/g, ' ');
+              setExpansion(expansionVal);
             }
           });
-        return expansion;
+        return expansionVal;
       };
       const getTypeOfWord = (allophones, word) => {
         const $ = cheerio.load(allophones, { xmlMode: true, decodeEntities: false });
@@ -332,11 +329,19 @@ export default function NormalizeWord(props) {
       dataIndex: 'wordType',
       render: (value, record) => (
         <Select
+          style={{ width: '85%' }}
           value={record.wordType}
           onChange={(value1) => handleSetTypeChangeRow(value1, record.id, word, record.index)}
         >
           {listTypeWord
-            .map((typeWord) => <Option key={typeWord} value={typeWord}>{typeWord}</Option>) }
+            .map((typeWord, key) => (
+              <Option
+                key={key}
+                value={typeWord.type}
+              >
+                {typeWord.name}
+              </Option>
+            )) }
         </Select>
       ),
     },

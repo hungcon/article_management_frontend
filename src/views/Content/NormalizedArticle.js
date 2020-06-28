@@ -18,22 +18,10 @@ import {
 import cheerio from 'cheerio';
 import { listVoice } from '../../common/voice';
 import { message } from '../../common';
+import { listTypeWord } from '../../common/listTypeWord';
 import openNotification from '../Notifications';
 
 const { Option } = Select;
-
-const listTypeWord = [
-  'loanword',
-  'abbreviation',
-  'date_dm',
-  'date_dmy',
-  'date_my',
-  'number_integer',
-  'number_digits',
-  'number_float',
-  'read_as_sequence',
-  'range',
-];
 
 
 const useStyles = makeStyles(() => ({
@@ -100,7 +88,7 @@ export default function CleanOption(props) {
                 .children()
               // eslint-disable-next-line func-names
                 .each(function () {
-                  if (listTypeWord.includes($(this).attr('nsw'))) {
+                  if (listTypeWord.some((type) => type.type === ($(this).attr('nsw')))) {
                     highlights1.push($(this).attr('orig'));
                     highlights2.push($(this).children().text().trim()
                       .replace(/\s\s+/g, ' ')

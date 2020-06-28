@@ -75,7 +75,7 @@ export default function ListWebsite() {
         });
         break;
       case 'update':
-        axios.post('http://localhost:8000/update-website', { name: values.name, websiteId: website._id }, {
+        axios.post('http://localhost:8000/update-website', { websiteInfo, websiteId: website._id }, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
@@ -267,13 +267,16 @@ export default function ListWebsite() {
                   if (!(await checkWebsiteExisted(value))) {
                     return Promise.resolve();
                   }
+                  if (action === 'update') {
+                    return Promise.resolve();
+                  }
                   // eslint-disable-next-line prefer-promise-reject-errors
                   return Promise.reject('Đầu báo đã tồn tại');
                 },
               }),
             ]}
           >
-            <Input />
+            <Input disabled={action === 'update'} />
           </Form.Item>
           <Form.Item
             name="appId"
