@@ -1,7 +1,7 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-filename-extension */
 import React from 'react';
-import { Switch, Redirect } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import Configuration from '../../views/Content/Configuration';
 import ListValidArticles from '../../views/Content/Article/ListValidArticles';
 import ListInvalidArticles from '../../views/Content/Article/ListInvalidArticles';
@@ -15,6 +15,7 @@ import ListCategory from '../../views/Content/Category/ListCategory';
 import ListAccounts from '../../views/Content/Account/ListAccounts';
 import AccountForm from '../../views/Content/Account/AccountForm';
 import NormalizeWord from '../../views/Content/NormalizeWord';
+import PendingArticles from '../../views/Content/Article/PendingArticles';
 
 export default function ContentRoute() {
   return (
@@ -27,12 +28,13 @@ export default function ContentRoute() {
       <PrivateRoute path="/dashboard/list-category" exact component={ListCategory} />
       <PrivateRoute path="/dashboard/configuration/add-config" exact component={AddConfig} />
       <PrivateRoute path="/dashboard/configuration/article-config/:configId" exact component={ArticleConfig} />
+      <PrivateRoute path="/dashboard/pending-articles" exact component={PendingArticles} />
       <PrivateRoute path="/dashboard/list-valid-articles" exact component={ListValidArticles} />
       <PrivateRoute path="/dashboard/list-valid-articles/:articleId" exact component={NormalizedArticle} />
       <PrivateRoute path="/dashboard/list-invalid-articles" exact component={ListInvalidArticles} />
       <PrivateRoute path="/dashboard/list-valid-articles/:articleId/:type/:word" exact component={NormalizeWord} />
       <PrivateRoute path="/dashboard/statistics" exact component={Statistics} />
-      <Redirect to="/dashboard/list-valid-articles" />
+      {/* <Redirect to="/dashboard/list-valid-articles" /> */}
     </Switch>
   );
 }

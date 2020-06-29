@@ -12,6 +12,7 @@ export const message = {
   RUN_SUCCESS: 'Chạy thu thập thành công',
   ALERT: 'Bạn phải nhập cách đọc',
   NORMALIZE_SUCCESS: 'Chuẩn hoá từ thành công',
-  SYNTHETIC_SUCCESS: 'Tổng hợp thành công, audio sẽ cập nhật sớm nhất',
-  FINISH_NORMALIZE: 'Đã cập nhật trạng thái bài báo thành đã chuẩn hoá tay',
+  SYNTHETIC_SUCCESS: 'Yêu cầu tổng hợp thành công',
+  DENY_SUCCESS: 'Đã yêu cầu chuẩn hoá tay lại',
+  FINISH_NORMALIZE: 'Đã cập nhật trạng thái bài báo thành đang chờ phê duyệt',
 };

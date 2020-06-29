@@ -14,7 +14,6 @@ import axios from 'axios';
 import {
   useParams,
 } from 'react-router-dom';
-// import Tokenizer from 'sentence-tokenizer';
 import cheerio from 'cheerio';
 import { listVoice } from '../../common/voice';
 import { API_ENDPOINT } from '../../common/apis';
@@ -43,6 +42,7 @@ export default function CleanOption(props) {
     },
   );
   const [audioLink, setAudioLink] = useState();
+  const [role, setRole] = useState();
   const [voiceSelect, setVoiceSelect] = useState('vbee-tts-voice-hn_male_manhdung_news_48k-h');
 
   const handleChange = (value) => {
@@ -55,6 +55,19 @@ export default function CleanOption(props) {
       openNotification('success', message.FINISH_NORMALIZE);
     }
   };
+
+  useEffect(() => {
+    let ignore = false;
+    async function fetchData() {
+      const user = (await axios.post(API_ENDPOINT.GET_USER_INFO, { userName: localStorage.getItem('userName') })).data;
+      const roleVal = user.currentUser.role;
+      if (!ignore) {
+        setRole(roleVal);
+      }
+    }
+    fetchData();
+    return () => { ignore = true; };
+  }, []);
 
   useEffect(() => {
     let ignore = false;
@@ -234,6 +247,13 @@ export default function CleanOption(props) {
     }
   };
 
+  const deny = async () => {
+    const { data } = await axios.post(API_ENDPOINT.DENY_ARTICLE, { articleId });
+    if (data.status === 1) {
+      openNotification('success', message.DENY_SUCCESS);
+    }
+  };
+
   return (
     <div className={classes.root}>
       <Breadcrumb style={{ marginBottom: 10 }}>
@@ -257,46 +277,52 @@ export default function CleanOption(props) {
           )
           }
         </Col>
-        <Col xl={8} lg={6}>
-          Chọn giọng
-          {': '}
-          <Select
-            defaultValue="vbee-tts-voice-hn_male_manhdung_news_48k-h"
-            style={{ width: '60%', marginTop: 10 }}
-            onChange={handleChange}
-          >
-            {listVoice.map((voice) => (
-              <Option key={voice.key} value={voice.value}>{voice.name}</Option>
-            ))}
-          </Select>
-        </Col>
+        {role === 'manager' && (
+          <Col xl={8} lg={6}>
+            Chọn giọng
+            {': '}
+            <Select
+              defaultValue="vbee-tts-voice-hn_male_manhdung_news_48k-h"
+              style={{ width: '60%', marginTop: 10 }}
+              onChange={handleChange}
+            >
+              {listVoice.map((voice) => (
+                <Option key={voice.key} value={voice.value}>{voice.name}</Option>
+              ))}
+            </Select>
+          </Col>
+        )}
+
         <Col xl={8} lg={12}>
           <Button
             style={{ marginRight: 10 }}
-            onClick={() => props.history.push('/dashboard/list-valid-articles')}
+            onClick={() => props.history.push(
+              role === 'manager'
+                ? '/dashboard/pending-articles'
+                : '/dashboard/list-valid-articles',
+            )}
           >
             Quay lại
           </Button>
+          {role === 'editor' && (
           <Button danger style={{ marginRight: 10 }} type="primary" onClick={handleFinish}>
             Lưu & Hoàn thành
           </Button>
-          <Button style={{ marginTop: 10, marginRight: 10 }} type="primary" onClick={synthetic}>
-            Tổng hợp
-          </Button>
+          )}
+          { role === 'manager' && (
+            <span>
+              <Button style={{ marginTop: 10, marginRight: 10 }} type="primary" danger onClick={deny}>
+                Không duyệt
+              </Button>
+              <Button style={{ marginTop: 10 }} type="primary" onClick={synthetic}>
+                Tổng hợp
+              </Button>
+            </span>
+          )}
         </Col>
       </Row>
 
       <Row gutter={16}>
-        {/* <Col span={12}>
-          <div style={{
-            borderSpacing: 0,
-            borderCollapse: 'collapse',
-            borderRight: '3px solid black',
-          }}
-          >
-            {showArticleText(article)}
-          </div>
-        </Col> */}
         <Col span={24}>
           <div style={{
             borderSpacing: 0,

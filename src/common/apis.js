@@ -15,6 +15,7 @@ export const API_ENDPOINT = {
   GET_USER_INFO: `${API_HEAD}/get-user-info`,
   GET_LIST_ACCOUNTS: `${API_HEAD}/get-list-accounts`,
   GET_VALID_ARTICLES: `${API_HEAD}/get-valid-articles`,
+  GET_PENDING_ARTICLES: `${API_HEAD}/get-pending-articles`,
   GET_INVALID_ARTICLES: `${API_HEAD}/get-invalid-articles`,
   GET_CONFIG_BY_WEBSITE: `${API_HEAD}/get-config-by-website`,
   GET_ARTICLE_CONFIG: `${API_HEAD}/get-article-config`,
@@ -65,6 +66,7 @@ export const API_ENDPOINT = {
   NORMALIZE_ARTICLE: `${API_HEAD}/normalize-article`,
   NORMALIZE_WORD: `${API_HEAD}/normalize-word`,
   SYNTHETIC_ARTICLE: `${API_HEAD}/synthetic-article`,
+  DENY_ARTICLE: `${API_HEAD}/deny-article`,
   FINISH_NORMALIZE: `${API_HEAD}/finish-normalize`,
   RE_RUN_SCHEDULES: `${API_HEAD}/crawl/re-run`,
 };
