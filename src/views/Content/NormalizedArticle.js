@@ -163,6 +163,7 @@ export default function CleanOption(props) {
                     {words1.map((word, index) => {
                       let orig = word.word;
                       orig = orig.replace(/\//g, '~');
+                      orig = encodeURI(orig);
                       const { type } = word;
                       if (highlights1.includes(word.word)) {
                         return (
