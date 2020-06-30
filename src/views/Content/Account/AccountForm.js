@@ -117,6 +117,7 @@ export default function AccountForm(props) {
               rules={[
                 {
                   required: true,
+                  message: 'Hãy nhập tên tài khoản',
                 },
                 () => ({
                   async validator(rule, value) {
@@ -142,6 +143,7 @@ export default function AccountForm(props) {
               rules={[
                 {
                   required: true,
+                  message: 'Hãy nhập mật khẩu',
                 },
               ]}
             >
@@ -157,6 +159,7 @@ export default function AccountForm(props) {
               rules={[
                 {
                   required: true,
+                  message: 'Hãy nhập xác nhận mật khẩu',
                 },
                 ({ getFieldValue }) => ({
                   validator(rule, value) {
@@ -178,6 +181,7 @@ export default function AccountForm(props) {
               rules={[
                 {
                   required: true,
+                  message: 'Hãy chọn loại tài khoản',
                 },
               ]}
             >
