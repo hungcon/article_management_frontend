@@ -45,6 +45,17 @@ export default function CleanOption(props) {
   const [role, setRole] = useState();
   const [voiceSelect, setVoiceSelect] = useState('vbee-tts-voice-hn_male_manhdung_news_48k-h');
 
+  useEffect(() => {
+    const position = localStorage.getItem('position');
+    window.scroll(0, position);
+  });
+
+  const handleWordClick = (e, type, orig) => {
+    localStorage.setItem('position', e.currentTarget.offsetTop);
+    props.history.push(`/dashboard/list-valid-articles/${article._id}/${type}/${orig}`);
+  };
+
+
   const handleChange = (value) => {
     setVoiceSelect(value);
   };
@@ -177,7 +188,7 @@ export default function CleanOption(props) {
                               paddingLeft: '4px',
                               fontWeight: 400,
                             }}
-                            onClick={() => props.history.push(`/dashboard/list-valid-articles/${article._id}/${type}/${orig}`)}
+                            onClick={(e) => handleWordClick(e, type, orig)}
                           >
                             {word.word}
                             {' '}
