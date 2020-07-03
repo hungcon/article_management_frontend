@@ -30,7 +30,7 @@ export const listTypeWord = [
   },
   {
     type: 'date_dm',
-    name: 'Ngầy tháng',
+    name: 'Ngày tháng',
   },
   {
     type: 'date_d',
