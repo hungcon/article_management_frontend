@@ -46,7 +46,10 @@ export default function CleanOption(props) {
   const [voiceSelect, setVoiceSelect] = useState('vbee-tts-voice-hn_male_manhdung_news_48k-h');
 
   useEffect(() => {
-    const position = localStorage.getItem('position');
+    let position = localStorage.getItem('position');
+    if (!position) {
+      position = 0;
+    }
     if (document.querySelector('main ')) {
       document.querySelector('main ').scrollTo(0, position);
     }
