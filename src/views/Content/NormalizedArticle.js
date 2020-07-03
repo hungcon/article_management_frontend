@@ -47,7 +47,9 @@ export default function CleanOption(props) {
 
   useEffect(() => {
     const position = localStorage.getItem('position');
-    document.querySelector('.makeStyles-content-12').scrollTo(0, position);
+    if (document.querySelector('main ')) {
+      document.querySelector('main ').scrollTo(0, position);
+    }
   });
 
   const handleWordClick = (e, type, orig) => {
