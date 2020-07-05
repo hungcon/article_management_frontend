@@ -60,6 +60,15 @@ export default function CleanOption(props) {
     props.history.push(`/dashboard/list-valid-articles/${article._id}/${type}/${orig}`);
   };
 
+  const handleBack = () => {
+    localStorage.removeItem('position');
+    props.history.push(
+      role === 'manager'
+        ? '/dashboard/pending-articles'
+        : '/dashboard/list-valid-articles',
+    );
+  };
+
 
   const handleChange = (value) => {
     setVoiceSelect(value);
@@ -313,11 +322,7 @@ export default function CleanOption(props) {
         <Col xl={8} lg={12}>
           <Button
             style={{ marginRight: 10 }}
-            onClick={() => props.history.push(
-              role === 'manager'
-                ? '/dashboard/pending-articles'
-                : '/dashboard/list-valid-articles',
-            )}
+            onClick={handleBack}
           >
             Quay lại
           </Button>
