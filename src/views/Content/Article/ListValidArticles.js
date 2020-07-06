@@ -1,8 +1,4 @@
-/* eslint-disable no-await-in-loop */
-/* eslint-disable no-unused-expressions */
 /* eslint-disable no-underscore-dangle */
-/* eslint-disable import/no-named-as-default */
-/* eslint-disable import/no-named-as-default-member */
 /* eslint-disable no-shadow */
 import React, { useState, useEffect } from 'react';
 import {
@@ -203,7 +199,7 @@ export default function ListValidArticles(props) {
           return 'Đang chuẩn hoá tay';
         }
         if (value === 5) {
-          return 'Đang chờ phê duyệt';
+          return 'Đang chờ phê duyệt ';
         }
         if (value === 6) {
           return 'Đang chuyển audio';
