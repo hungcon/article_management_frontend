@@ -199,7 +199,7 @@ export default function ListValidArticles(props) {
           return 'Đang chuẩn hoá tay';
         }
         if (value === 5) {
-          return 'Đang chờ phê duyệt ';
+          return 'Đang chờ phê duyệt';
         }
         if (value === 6) {
           return 'Đang chuyển audio';
