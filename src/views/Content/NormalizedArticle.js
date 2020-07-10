@@ -74,12 +74,12 @@ export default function CleanOption(props) {
     setVoiceSelect(value);
   };
 
-  const handleFinish = async () => {
-    const { data } = await axios.post(API_ENDPOINT.FINISH_NORMALIZE, { articleId });
-    if (data.status === 1) {
-      openNotification('success', message.FINISH_NORMALIZE);
-    }
-  };
+  // const handleFinish = async () => {
+  //   const { data } = await axios.post(API_ENDPOINT.FINISH_NORMALIZE, { articleId });
+  //   if (data.status === 1) {
+  //     openNotification('success', message.FINISH_NORMALIZE);
+  //   }
+  // };
 
   useEffect(() => {
     let ignore = false;
@@ -273,12 +273,12 @@ export default function CleanOption(props) {
     }
   };
 
-  const deny = async () => {
-    const { data } = await axios.post(API_ENDPOINT.DENY_ARTICLE, { articleId });
-    if (data.status === 1) {
-      openNotification('success', message.DENY_SUCCESS);
-    }
-  };
+  // const deny = async () => {
+  //   const { data } = await axios.post(API_ENDPOINT.DENY_ARTICLE, { articleId });
+  //   if (data.status === 1) {
+  //     openNotification('success', message.DENY_SUCCESS);
+  //   }
+  // };
 
   return (
     <div className={classes.root}>
@@ -303,22 +303,19 @@ export default function CleanOption(props) {
           )
           }
         </Col>
-        {role === 'manager' && (
-          <Col xl={8} lg={6}>
-            Chọn giọng
-            {': '}
-            <Select
-              defaultValue="vbee-tts-voice-hn_male_manhdung_news_48k-h"
-              style={{ width: '60%', marginTop: 10 }}
-              onChange={handleChange}
-            >
-              {listVoice.map((voice) => (
-                <Option key={voice.key} value={voice.value}>{voice.name}</Option>
-              ))}
-            </Select>
-          </Col>
-        )}
-
+        <Col xl={8} lg={6}>
+          Chọn giọng
+          {': '}
+          <Select
+            defaultValue="vbee-tts-voice-hn_male_manhdung_news_48k-h"
+            style={{ width: '60%', marginTop: 10 }}
+            onChange={handleChange}
+          >
+            {listVoice.map((voice) => (
+              <Option key={voice.key} value={voice.value}>{voice.name}</Option>
+            ))}
+          </Select>
+        </Col>
         <Col xl={8} lg={12}>
           <Button
             style={{ marginRight: 10 }}
@@ -326,21 +323,19 @@ export default function CleanOption(props) {
           >
             Quay lại
           </Button>
-          {role === 'editor' && (
+          {/* {role === 'editor' && (
           <Button danger style={{ marginRight: 10 }} type="primary" onClick={handleFinish}>
             Lưu & Hoàn thành
           </Button>
-          )}
-          { role === 'manager' && (
-            <span>
-              <Button style={{ marginTop: 10, marginRight: 10 }} type="primary" danger onClick={deny}>
-                Không duyệt
-              </Button>
-              <Button style={{ marginTop: 10 }} type="primary" onClick={synthetic}>
-                Tổng hợp
-              </Button>
-            </span>
-          )}
+          )} */}
+          {/* { role === 'manager' && (
+          <Button style={{ marginTop: 10, marginRight: 10 }} type="primary" danger onClick={deny}>
+            Không duyệt
+          </Button>
+          )} */}
+          <Button style={{ marginTop: 10 }} type="primary" onClick={synthetic}>
+            Tổng hợp
+          </Button>
         </Col>
       </Row>
 

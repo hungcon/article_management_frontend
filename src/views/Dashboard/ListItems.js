@@ -87,14 +87,40 @@ export default function ListItems(props) {
         )
         : (
           props.currentUser.role === 'manager' ? (
-            <NavLink to="/dashboard/pending-articles" className={classes.link} activeClassName={classes.active}>
-              <ListItem button className={clsx(props.open && classes.button)}>
-                <ListItemIcon>
-                  <HourglassEmptyIcon className={classes.icon} />
-                </ListItemIcon>
-                <ListItemText primary="Duyệt bài báo" className={classes.text} />
-              </ListItem>
-            </NavLink>
+            <div>
+              <NavLink to="/dashboard/pending-articles" className={classes.link} activeClassName={classes.active}>
+                <ListItem button className={clsx(props.open && classes.button)}>
+                  <ListItemIcon>
+                    <HourglassEmptyIcon className={classes.icon} />
+                  </ListItemIcon>
+                  <ListItemText primary="Duyệt bài báo" className={classes.text} />
+                </ListItem>
+              </NavLink>
+              <NavLink to="/dashboard/list-valid-articles" className={classes.link} activeClassName={classes.active}>
+                <ListItem button className={clsx(props.open && classes.button)}>
+                  <ListItemIcon>
+                    <DescriptionIcon className={classes.icon} />
+                  </ListItemIcon>
+                  <ListItemText primary="Báo hợp lệ" className={classes.text} />
+                </ListItem>
+              </NavLink>
+              <NavLink to="/dashboard/list-invalid-articles" className={classes.link} activeClassName={classes.active}>
+                <ListItem button className={clsx(props.open && classes.button)}>
+                  <ListItemIcon>
+                    <ErrorOutlineIcon className={classes.icon} />
+                  </ListItemIcon>
+                  <ListItemText primary="Báo không hợp lệ" className={classes.text} />
+                </ListItem>
+              </NavLink>
+              <NavLink to="/dashboard/statistics" className={classes.link} activeClassName={classes.active}>
+                <ListItem button className={clsx(props.open && classes.button)}>
+                  <ListItemIcon>
+                    <PieChartIcon className={classes.icon} />
+                  </ListItemIcon>
+                  <ListItemText primary="Thống kê" className={classes.text} />
+                </ListItem>
+              </NavLink>
+            </div>
           ) : (
             <div>
               <NavLink to="/dashboard/list-valid-articles" className={classes.link} activeClassName={classes.active}>
