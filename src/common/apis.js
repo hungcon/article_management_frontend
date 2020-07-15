@@ -43,6 +43,7 @@ export const API_ENDPOINT = {
   UPDATE_RSS_CONFIG: `${REACT_APP_API_URL}/update-rss-config`,
 
   // delete
+  DELETE_VALID_ARTICLE: `${REACT_APP_API_URL}/delete-valid-article`,
   DELETE_ACCOUNT: `${REACT_APP_API_URL}/delete-account`,
   DELETE_WEBSITE: `${REACT_APP_API_URL}/delete-website`,
   DELETE_CATEGORY: `${REACT_APP_API_URL}/delete-category`,

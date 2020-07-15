@@ -2,9 +2,11 @@
 /* eslint-disable no-shadow */
 import React, { useState, useEffect } from 'react';
 import {
-  Table, Tag, Form, Select, Button, Typography, Breadcrumb, DatePicker, Row, Col,
+  Table, Tag, Form, Select, Button, Typography, Breadcrumb, DatePicker, Row, Col, Modal,
 } from 'antd';
-import { FileSearchOutlined, ReloadOutlined } from '@ant-design/icons';
+import {
+  FileSearchOutlined, ReloadOutlined, DeleteOutlined, ExclamationCircleOutlined,
+} from '@ant-design/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { css } from 'emotion';
 import axios from 'axios';
@@ -16,6 +18,7 @@ import { API_ENDPOINT } from '../../../common/apis';
 const { Option } = Select;
 const { Text } = Typography;
 const { RangePicker } = DatePicker;
+const { confirm } = Modal;
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -29,6 +32,7 @@ export default function ListValidArticles(props) {
   const classes = useStyles();
   const [form] = Form.useForm();
   const [data, setData] = useState();
+  const [reload, setReload] = useState();
   const [filters, setFilters] = useState();
   const [counts, setCounts] = useState();
   const [startDate, setStartDate] = useState();
@@ -94,6 +98,37 @@ export default function ListValidArticles(props) {
     }
   };
 
+  const showDeleteConfirm = (id) => {
+    confirm({
+      title: 'Bạn có chắc chắn xoá bài báo này không?',
+      // eslint-disable-next-line react/jsx-filename-extension
+      icon: <ExclamationCircleOutlined />,
+      okText: 'Có',
+      okType: 'danger',
+      cancelText: 'Không',
+      centered: true,
+      async onOk() {
+        axios.post(API_ENDPOINT.DELETE_VALID_ARTICLE, { id }, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }).then((result) => {
+          if (result.data.status === 1) {
+            setReload(!reload);
+            openNotification('success', message.DELETE_SUCCESS);
+          } else {
+            openNotification('error', message.ERROR);
+          }
+        }).catch((err) => {
+          console.log(err);
+          openNotification('error', message.UNAUTHORIZED);
+        });
+      },
+      onCancel() {
+      },
+    });
+  };
+
   useEffect(() => {
     let ignore = false;
     async function fetchData() {
@@ -126,7 +161,7 @@ export default function ListValidArticles(props) {
     }
     fetchData();
     return () => { ignore = true; };
-  }, [filters, startDate, endDate]);
+  }, [filters, startDate, endDate, reload]);
 
   useEffect(() => {
     let ignore = false;
@@ -213,7 +248,7 @@ export default function ListValidArticles(props) {
     {
       title: 'Hành động',
       key: 'actions',
-      width: '20%',
+      width: '30%',
       align: 'center',
       render: (value, record) => (
         <div>
@@ -266,7 +301,16 @@ export default function ListValidArticles(props) {
             Tổng hợp lại
           </Button>
           )}
+          <Button
+            onClick={() => showDeleteConfirm(record._id)}
+            style={{ marginRight: 10 }}
+            danger
+            icon={<DeleteOutlined />}
+          >
+            Xoá
+          </Button>
         </div>
+
       ),
     },
   ];
